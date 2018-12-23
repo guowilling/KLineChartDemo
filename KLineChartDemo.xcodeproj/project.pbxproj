@@ -1,0 +1,578 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6E90689A21CE76F700C12760 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E90689921CE76F700C12760 /* AppDelegate.swift */; };
+		6E90689F21CE76F700C12760 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E90689D21CE76F700C12760 /* Main.storyboard */; };
+		6E9068A121CE76F900C12760 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E9068A021CE76F900C12760 /* Assets.xcassets */; };
+		6E9068A421CE76F900C12760 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E9068A221CE76F900C12760 /* LaunchScreen.storyboard */; };
+		6E9068D121CE776100C12760 /* CHExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068AC21CE776100C12760 /* CHExtension.swift */; };
+		6E9068D221CE776100C12760 /* CHAxisModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068AD21CE776100C12760 /* CHAxisModel.swift */; };
+		6E9068D321CE776100C12760 /* CHSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068AE21CE776100C12760 /* CHSeries.swift */; };
+		6E9068D421CE776100C12760 /* CHSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068AF21CE776100C12760 /* CHSection.swift */; };
+		6E9068D521CE776100C12760 /* CHChartModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B021CE776100C12760 /* CHChartModel.swift */; };
+		6E9068D621CE776100C12760 /* CHKLineChartStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B121CE776100C12760 /* CHKLineChartStyle.swift */; };
+		6E9068D721CE776100C12760 /* CHKLineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B221CE776100C12760 /* CHKLineChartView.swift */; };
+		6E9068D821CE776100C12760 /* CHChartImageGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B321CE776100C12760 /* CHChartImageGenerator.swift */; };
+		6E9068D921CE776100C12760 /* CHShapeLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B421CE776100C12760 /* CHShapeLayer.swift */; };
+		6E9068DA21CE776100C12760 /* CHDynamicItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B521CE776100C12760 /* CHDynamicItem.swift */; };
+		6E9068DB21CE776100C12760 /* CHChartAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B621CE776100C12760 /* CHChartAlgorithm.swift */; };
+		6E9068DC21CE776100C12760 /* SeriesSettingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B721CE776100C12760 /* SeriesSettingDetailViewController.swift */; };
+		6E9068DD21CE776100C12760 /* DemoSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B821CE776100C12760 /* DemoSelectViewController.swift */; };
+		6E9068DE21CE776100C12760 /* ChartDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BA21CE776100C12760 /* ChartDataFetcher.swift */; };
+		6E9068DF21CE776100C12760 /* KLineChartPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BB21CE776100C12760 /* KLineChartPoint.swift */; };
+		6E9068E021CE776100C12760 /* SeriesParam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BC21CE776100C12760 /* SeriesParam.swift */; };
+		6E9068E121CE776100C12760 /* Double+exension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BE21CE776100C12760 /* Double+exension.swift */; };
+		6E9068E221CE776100C12760 /* UIColor+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BF21CE776100C12760 /* UIColor+extension.swift */; };
+		6E9068E321CE776100C12760 /* Int+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C021CE776100C12760 /* Int+extension.swift */; };
+		6E9068E421CE776100C12760 /* String+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C121CE776100C12760 /* String+extension.swift */; };
+		6E9068E521CE776100C12760 /* NSDate+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C221CE776100C12760 /* NSDate+extension.swift */; };
+		6E9068E621CE776100C12760 /* ChartStyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C421CE776100C12760 /* ChartStyleManager.swift */; };
+		6E9068E721CE776100C12760 /* ChartTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C621CE776100C12760 /* ChartTableViewCell.swift */; };
+		6E9068E821CE776100C12760 /* SeriesSettingListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C721CE776100C12760 /* SeriesSettingListCell.swift */; };
+		6E9068E921CE776100C12760 /* ChartCustomTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C821CE776100C12760 /* ChartCustomTopView.swift */; };
+		6E9068EA21CE776100C12760 /* SeriesSettingDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C921CE776100C12760 /* SeriesSettingDetailCell.swift */; };
+		6E9068EB21CE776100C12760 /* ChartSimpleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068CA21CE776100C12760 /* ChartSimpleViewController.swift */; };
+		6E9068EC21CE776100C12760 /* SeriesSettingListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068CB21CE776100C12760 /* SeriesSettingListViewController.swift */; };
+		6E9068ED21CE776100C12760 /* ChartCustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068CC21CE776100C12760 /* ChartCustomViewController.swift */; };
+		6E9068EE21CE776100C12760 /* ChartTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068CD21CE776100C12760 /* ChartTableViewController.swift */; };
+		6E9068EF21CE776100C12760 /* ChartStyleSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068CE21CE776100C12760 /* ChartStyleSettingViewController.swift */; };
+		6E9068F021CE776100C12760 /* ChartImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068CF21CE776100C12760 /* ChartImageViewController.swift */; };
+		6E9068F121CE776100C12760 /* SelectionPopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068D021CE776100C12760 /* SelectionPopViewController.swift */; };
+		BB4DFA15A37A70A6FB360FE3 /* Pods_KLineChartDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7215CC63C3300B18F75FB19 /* Pods_KLineChartDemo.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		28BBDDB6E8E257F55798BE15 /* Pods-KLineChartDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KLineChartDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-KLineChartDemo/Pods-KLineChartDemo.release.xcconfig"; sourceTree = "<group>"; };
+		6E90689621CE76F700C12760 /* KLineChartDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KLineChartDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E90689921CE76F700C12760 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6E90689E21CE76F700C12760 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6E9068A021CE76F900C12760 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6E9068A321CE76F900C12760 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6E9068A521CE76F900C12760 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E9068AC21CE776100C12760 /* CHExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHExtension.swift; sourceTree = "<group>"; };
+		6E9068AD21CE776100C12760 /* CHAxisModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHAxisModel.swift; sourceTree = "<group>"; };
+		6E9068AE21CE776100C12760 /* CHSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHSeries.swift; sourceTree = "<group>"; };
+		6E9068AF21CE776100C12760 /* CHSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHSection.swift; sourceTree = "<group>"; };
+		6E9068B021CE776100C12760 /* CHChartModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHChartModel.swift; sourceTree = "<group>"; };
+		6E9068B121CE776100C12760 /* CHKLineChartStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHKLineChartStyle.swift; sourceTree = "<group>"; };
+		6E9068B221CE776100C12760 /* CHKLineChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHKLineChartView.swift; sourceTree = "<group>"; };
+		6E9068B321CE776100C12760 /* CHChartImageGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHChartImageGenerator.swift; sourceTree = "<group>"; };
+		6E9068B421CE776100C12760 /* CHShapeLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHShapeLayer.swift; sourceTree = "<group>"; };
+		6E9068B521CE776100C12760 /* CHDynamicItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHDynamicItem.swift; sourceTree = "<group>"; };
+		6E9068B621CE776100C12760 /* CHChartAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHChartAlgorithm.swift; sourceTree = "<group>"; };
+		6E9068B721CE776100C12760 /* SeriesSettingDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesSettingDetailViewController.swift; sourceTree = "<group>"; };
+		6E9068B821CE776100C12760 /* DemoSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoSelectViewController.swift; sourceTree = "<group>"; };
+		6E9068BA21CE776100C12760 /* ChartDataFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartDataFetcher.swift; sourceTree = "<group>"; };
+		6E9068BB21CE776100C12760 /* KLineChartPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KLineChartPoint.swift; sourceTree = "<group>"; };
+		6E9068BC21CE776100C12760 /* SeriesParam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesParam.swift; sourceTree = "<group>"; };
+		6E9068BE21CE776100C12760 /* Double+exension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Double+exension.swift"; sourceTree = "<group>"; };
+		6E9068BF21CE776100C12760 /* UIColor+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+extension.swift"; sourceTree = "<group>"; };
+		6E9068C021CE776100C12760 /* Int+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int+extension.swift"; sourceTree = "<group>"; };
+		6E9068C121CE776100C12760 /* String+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+extension.swift"; sourceTree = "<group>"; };
+		6E9068C221CE776100C12760 /* NSDate+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+extension.swift"; sourceTree = "<group>"; };
+		6E9068C421CE776100C12760 /* ChartStyleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartStyleManager.swift; sourceTree = "<group>"; };
+		6E9068C621CE776100C12760 /* ChartTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartTableViewCell.swift; sourceTree = "<group>"; };
+		6E9068C721CE776100C12760 /* SeriesSettingListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesSettingListCell.swift; sourceTree = "<group>"; };
+		6E9068C821CE776100C12760 /* ChartCustomTopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartCustomTopView.swift; sourceTree = "<group>"; };
+		6E9068C921CE776100C12760 /* SeriesSettingDetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesSettingDetailCell.swift; sourceTree = "<group>"; };
+		6E9068CA21CE776100C12760 /* ChartSimpleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartSimpleViewController.swift; sourceTree = "<group>"; };
+		6E9068CB21CE776100C12760 /* SeriesSettingListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesSettingListViewController.swift; sourceTree = "<group>"; };
+		6E9068CC21CE776100C12760 /* ChartCustomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartCustomViewController.swift; sourceTree = "<group>"; };
+		6E9068CD21CE776100C12760 /* ChartTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartTableViewController.swift; sourceTree = "<group>"; };
+		6E9068CE21CE776100C12760 /* ChartStyleSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartStyleSettingViewController.swift; sourceTree = "<group>"; };
+		6E9068CF21CE776100C12760 /* ChartImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartImageViewController.swift; sourceTree = "<group>"; };
+		6E9068D021CE776100C12760 /* SelectionPopViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionPopViewController.swift; sourceTree = "<group>"; };
+		883AD1ABEF346C4E36FFAAC5 /* Pods-KLineChartDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KLineChartDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KLineChartDemo/Pods-KLineChartDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		E7215CC63C3300B18F75FB19 /* Pods_KLineChartDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KLineChartDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6E90689321CE76F700C12760 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB4DFA15A37A70A6FB360FE3 /* Pods_KLineChartDemo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		159676E8A66CD29F17E3D85F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E7215CC63C3300B18F75FB19 /* Pods_KLineChartDemo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6E90688D21CE76F700C12760 = {
+			isa = PBXGroup;
+			children = (
+				6E90689821CE76F700C12760 /* KLineChartDemo */,
+				6E90689721CE76F700C12760 /* Products */,
+				ABAC7C0076BB0215DC414924 /* Pods */,
+				159676E8A66CD29F17E3D85F /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		6E90689721CE76F700C12760 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E90689621CE76F700C12760 /* KLineChartDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6E90689821CE76F700C12760 /* KLineChartDemo */ = {
+			isa = PBXGroup;
+			children = (
+				6E9068B821CE776100C12760 /* DemoSelectViewController.swift */,
+				6E9068AB21CE776100C12760 /* CHKLineChart */,
+				6E9068CC21CE776100C12760 /* ChartCustomViewController.swift */,
+				6E9068CF21CE776100C12760 /* ChartImageViewController.swift */,
+				6E9068CA21CE776100C12760 /* ChartSimpleViewController.swift */,
+				6E9068CE21CE776100C12760 /* ChartStyleSettingViewController.swift */,
+				6E9068CD21CE776100C12760 /* ChartTableViewController.swift */,
+				6E9068D021CE776100C12760 /* SelectionPopViewController.swift */,
+				6E9068B721CE776100C12760 /* SeriesSettingDetailViewController.swift */,
+				6E9068CB21CE776100C12760 /* SeriesSettingListViewController.swift */,
+				6E9068C521CE776100C12760 /* Views */,
+				6E9068B921CE776100C12760 /* Models */,
+				6E9068BD21CE776100C12760 /* Extensions */,
+				6E90689921CE76F700C12760 /* AppDelegate.swift */,
+				6E90689D21CE76F700C12760 /* Main.storyboard */,
+				6E9068A021CE76F900C12760 /* Assets.xcassets */,
+				6E9068A221CE76F900C12760 /* LaunchScreen.storyboard */,
+				6E9068A521CE76F900C12760 /* Info.plist */,
+			);
+			path = KLineChartDemo;
+			sourceTree = "<group>";
+		};
+		6E9068AB21CE776100C12760 /* CHKLineChart */ = {
+			isa = PBXGroup;
+			children = (
+				6E9068AF21CE776100C12760 /* CHSection.swift */,
+				6E9068B021CE776100C12760 /* CHChartModel.swift */,
+				6E9068AE21CE776100C12760 /* CHSeries.swift */,
+				6E9068AD21CE776100C12760 /* CHAxisModel.swift */,
+				6E9068B221CE776100C12760 /* CHKLineChartView.swift */,
+				6E9068B121CE776100C12760 /* CHKLineChartStyle.swift */,
+				6E9068B621CE776100C12760 /* CHChartAlgorithm.swift */,
+				6E9068B421CE776100C12760 /* CHShapeLayer.swift */,
+				6E9068B521CE776100C12760 /* CHDynamicItem.swift */,
+				6E9068B321CE776100C12760 /* CHChartImageGenerator.swift */,
+				6E9068AC21CE776100C12760 /* CHExtension.swift */,
+			);
+			path = CHKLineChart;
+			sourceTree = "<group>";
+		};
+		6E9068B921CE776100C12760 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6E9068BA21CE776100C12760 /* ChartDataFetcher.swift */,
+				6E9068BB21CE776100C12760 /* KLineChartPoint.swift */,
+				6E9068BC21CE776100C12760 /* SeriesParam.swift */,
+				6E9068C421CE776100C12760 /* ChartStyleManager.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		6E9068BD21CE776100C12760 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6E9068C021CE776100C12760 /* Int+extension.swift */,
+				6E9068BE21CE776100C12760 /* Double+exension.swift */,
+				6E9068BF21CE776100C12760 /* UIColor+extension.swift */,
+				6E9068C121CE776100C12760 /* String+extension.swift */,
+				6E9068C221CE776100C12760 /* NSDate+extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		6E9068C521CE776100C12760 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6E9068C621CE776100C12760 /* ChartTableViewCell.swift */,
+				6E9068C721CE776100C12760 /* SeriesSettingListCell.swift */,
+				6E9068C821CE776100C12760 /* ChartCustomTopView.swift */,
+				6E9068C921CE776100C12760 /* SeriesSettingDetailCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		ABAC7C0076BB0215DC414924 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				883AD1ABEF346C4E36FFAAC5 /* Pods-KLineChartDemo.debug.xcconfig */,
+				28BBDDB6E8E257F55798BE15 /* Pods-KLineChartDemo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6E90689521CE76F700C12760 /* KLineChartDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E9068A821CE76F900C12760 /* Build configuration list for PBXNativeTarget "KLineChartDemo" */;
+			buildPhases = (
+				FA9783A1C6513FF32F778E36 /* [CP] Check Pods Manifest.lock */,
+				6E90689221CE76F700C12760 /* Sources */,
+				6E90689321CE76F700C12760 /* Frameworks */,
+				6E90689421CE76F700C12760 /* Resources */,
+				F294043912B409319A23CAD7 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KLineChartDemo;
+			productName = KLineChartDemo;
+			productReference = 6E90689621CE76F700C12760 /* KLineChartDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6E90688E21CE76F700C12760 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1010;
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = SR;
+				TargetAttributes = {
+					6E90689521CE76F700C12760 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = 6E90689121CE76F700C12760 /* Build configuration list for PBXProject "KLineChartDemo" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6E90688D21CE76F700C12760;
+			productRefGroup = 6E90689721CE76F700C12760 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6E90689521CE76F700C12760 /* KLineChartDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6E90689421CE76F700C12760 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E9068A421CE76F900C12760 /* LaunchScreen.storyboard in Resources */,
+				6E9068A121CE76F900C12760 /* Assets.xcassets in Resources */,
+				6E90689F21CE76F700C12760 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		F294043912B409319A23CAD7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-KLineChartDemo/Pods-KLineChartDemo-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/MZAppearance/MZAppearance.framework",
+				"${BUILT_PRODUCTS_DIR}/MZFormSheetPresentationController/MZFormSheetPresentationController.framework",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MZAppearance.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MZFormSheetPresentationController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KLineChartDemo/Pods-KLineChartDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FA9783A1C6513FF32F778E36 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-KLineChartDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6E90689221CE76F700C12760 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E9068EA21CE776100C12760 /* SeriesSettingDetailCell.swift in Sources */,
+				6E9068D421CE776100C12760 /* CHSection.swift in Sources */,
+				6E9068DD21CE776100C12760 /* DemoSelectViewController.swift in Sources */,
+				6E9068EF21CE776100C12760 /* ChartStyleSettingViewController.swift in Sources */,
+				6E9068E521CE776100C12760 /* NSDate+extension.swift in Sources */,
+				6E9068EB21CE776100C12760 /* ChartSimpleViewController.swift in Sources */,
+				6E9068D221CE776100C12760 /* CHAxisModel.swift in Sources */,
+				6E9068DB21CE776100C12760 /* CHChartAlgorithm.swift in Sources */,
+				6E9068E321CE776100C12760 /* Int+extension.swift in Sources */,
+				6E9068DF21CE776100C12760 /* KLineChartPoint.swift in Sources */,
+				6E9068E921CE776100C12760 /* ChartCustomTopView.swift in Sources */,
+				6E9068D621CE776100C12760 /* CHKLineChartStyle.swift in Sources */,
+				6E9068E221CE776100C12760 /* UIColor+extension.swift in Sources */,
+				6E9068D121CE776100C12760 /* CHExtension.swift in Sources */,
+				6E9068E721CE776100C12760 /* ChartTableViewCell.swift in Sources */,
+				6E9068DA21CE776100C12760 /* CHDynamicItem.swift in Sources */,
+				6E9068DC21CE776100C12760 /* SeriesSettingDetailViewController.swift in Sources */,
+				6E9068D721CE776100C12760 /* CHKLineChartView.swift in Sources */,
+				6E9068F121CE776100C12760 /* SelectionPopViewController.swift in Sources */,
+				6E9068EE21CE776100C12760 /* ChartTableViewController.swift in Sources */,
+				6E9068D521CE776100C12760 /* CHChartModel.swift in Sources */,
+				6E9068ED21CE776100C12760 /* ChartCustomViewController.swift in Sources */,
+				6E9068E121CE776100C12760 /* Double+exension.swift in Sources */,
+				6E9068F021CE776100C12760 /* ChartImageViewController.swift in Sources */,
+				6E9068EC21CE776100C12760 /* SeriesSettingListViewController.swift in Sources */,
+				6E9068E021CE776100C12760 /* SeriesParam.swift in Sources */,
+				6E9068E421CE776100C12760 /* String+extension.swift in Sources */,
+				6E9068E821CE776100C12760 /* SeriesSettingListCell.swift in Sources */,
+				6E9068E621CE776100C12760 /* ChartStyleManager.swift in Sources */,
+				6E9068D321CE776100C12760 /* CHSeries.swift in Sources */,
+				6E9068D921CE776100C12760 /* CHShapeLayer.swift in Sources */,
+				6E90689A21CE76F700C12760 /* AppDelegate.swift in Sources */,
+				6E9068DE21CE776100C12760 /* ChartDataFetcher.swift in Sources */,
+				6E9068D821CE776100C12760 /* CHChartImageGenerator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		6E90689D21CE76F700C12760 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6E90689E21CE76F700C12760 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6E9068A221CE76F900C12760 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6E9068A321CE76F900C12760 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6E9068A621CE76F900C12760 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6E9068A721CE76F900C12760 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6E9068A921CE76F900C12760 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 883AD1ABEF346C4E36FFAAC5 /* Pods-KLineChartDemo.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = L8C6M6B8E9;
+				INFOPLIST_FILE = KLineChartDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.willing.KLineChartDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "PP For All";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6E9068AA21CE76F900C12760 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 28BBDDB6E8E257F55798BE15 /* Pods-KLineChartDemo.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = L8C6M6B8E9;
+				INFOPLIST_FILE = KLineChartDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.willing.KLineChartDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "PP For All";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6E90689121CE76F700C12760 /* Build configuration list for PBXProject "KLineChartDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E9068A621CE76F900C12760 /* Debug */,
+				6E9068A721CE76F900C12760 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6E9068A821CE76F900C12760 /* Build configuration list for PBXNativeTarget "KLineChartDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E9068A921CE76F900C12760 /* Debug */,
+				6E9068AA21CE76F900C12760 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6E90688E21CE76F700C12760 /* Project object */;
+}
