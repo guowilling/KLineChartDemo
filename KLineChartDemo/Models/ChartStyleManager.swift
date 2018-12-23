@@ -99,7 +99,7 @@ public extension CHKLineChartStyle {
         style.padding = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
         style.isInnerYAxis = true
         style.showXAxisOnSection = 0
-        style.showYAxisLabel = .right
+        style.yAxisShowPosition = .right
         style.algorithms = [CHChartAlgorithm.timeline,
                             CHChartAlgorithm.ma(5),
                             CHChartAlgorithm.ma(10),
@@ -231,7 +231,7 @@ public extension CHKLineChartStyle {
         style.padding = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
         style.isInnerYAxis = true
         style.showXAxisOnSection = 0
-        style.showYAxisLabel = .right
+        style.yAxisShowPosition = .right
         style.algorithms = [CHChartAlgorithm.timeline,
                             CHChartAlgorithm.ma(5),
                             CHChartAlgorithm.ma(10),
@@ -366,7 +366,7 @@ public extension CHKLineChartStyle {
         style.backgroundColor = UIColor.ch_hex(0x383D49)
         style.selectedBGColor = UIColor(white: 0.4, alpha: 1)
         style.padding = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
-        style.showYAxisLabel = .left
+        style.yAxisShowPosition = .left
         style.showXAxisOnSection = 0
         style.isInnerYAxis = true
         style.isShowAll = true

@@ -1,16 +1,6 @@
-//
-//  CHSeries.swift
-//  CHKLineChart
-//
-//  Created by Chance on 16/9/13.
-//  Copyright © 2016年 Chance. All rights reserved.
-//
 
 import UIKit
 
-/**
- 系列对应的key值
- */
 public struct CHSeriesKey {
     public static let candle = "Candle"
     public static let timeline = "Timeline"
@@ -25,30 +15,29 @@ public struct CHSeriesKey {
     public static let rsi = "RSI"
 }
 
-
 /// 线段组
-/// 在图表中一个要显示的“线段”都是以一个CHSeries进行封装。
-/// 蜡烛图线段：包含一个蜡烛图点线模型（CHCandleModel）
-/// 时分线段：包含一个线点线模型（CHLineModel）
-/// 交易量线段：包含一个交易量点线模型（CHColumnModel）
-/// MA/EMA线段：包含一个线点线模型（CHLineModel）
-/// KDJ线段：包含3个线点线模型（CHLineModel），3个点线的数值根据KDJ指标算法计算所得
-/// MACD线段：包含2个线点线模型（CHLineModel），1个条形点线模型
+/// 图表中一个要显示的线段都是以一个 CHSeries 进行封装
+/// 蜡烛图线段: 包含一个蜡烛图点线模型, CHCandleModel
+/// 时分线段: 包含一个线点线模型, CHLineModel
+/// 交易量线段: 包含一个交易量点线模型, CHColumnModel
+/// MA/EMA 线段: 包含一个线点线模型, CHLineModel
+/// KDJ 线段: 包含3个线点线模型, CHLineModel, 3个点线的数值根据 KDJ 指标算法计算所得
+/// MACD 线段: 包含2个线点线模型, CHLineModel, 1个条形点线模型
 open class CHSeries: NSObject {
     
     open var key = ""
     open var title: String = ""
-    open var chartModels = [CHChartModel]()          //每个系列包含多个点线模型
+    open var chartModels = [CHChartModel]() // 每个系列包含多个点线模型
     open var hidden: Bool = false
-    open var showTitle: Bool = true                                 //是否显示标题文本
-    open var baseValueSticky = false                 //是否以固定基值显示最小或最大值，若超过范围
-    open var symmetrical = false                     //是否以固定基值为中位数，对称显示最大最小值
-    var seriesLayer: CHShapeLayer = CHShapeLayer()      //点线模型的绘图层
+    open var showTitle: Bool = true                  // 是否显示标题文本
+    open var baseValueSticky = false                 // 是否以固定基值显示最小或最大值, 若超过范围
+    open var symmetrical = false                     // 是否以固定基值为中位数, 对称显示最大最小值
     
     public var algorithms: [CHChartAlgorithmProtocol] = [CHChartAlgorithmProtocol]()
     
-    /// 清空图表的子图层
-    func removeLayerView() {
+    var seriesLayer: CHShapeLayer = CHShapeLayer()   // 点线模型的绘图层
+    
+    func removeSeriesLayerSublayers() {
         _ = self.seriesLayer.sublayers?.map { $0.removeFromSuperlayer() }
         self.seriesLayer.sublayers?.removeAll()
     }
@@ -57,13 +46,14 @@ open class CHSeries: NSObject {
 // MARK: - 工厂方法
 extension CHSeries {
     
-    
     /// 返回一个标准的时分价格系列样式
     ///
     /// - Parameters:
     ///   - color: 线段颜色
     ///   - section: 分区
     ///   - showGuide: 是否显示最大最小值
+    ///   - ultimateValueStyle: 最大最小值显示风格
+    ///   - lineWidth: 线宽
     /// - Returns: 线系列模型
     public class func getTimelinePrice(color: UIColor, section: CHSection, showGuide: Bool = false, ultimateValueStyle: CHUltimateValueStyle = .none, lineWidth: CGFloat = 1) -> CHSeries {
         let series = CHSeries()
@@ -79,9 +69,7 @@ extension CHSeries {
         return series
     }
     
-    /**
-     返回一个标准的蜡烛柱价格系列样式
-     */
+    /// 返回一个标准的蜡烛柱价格系列样式
     public class func getCandlePrice(upStyle: (color: UIColor, isSolid: Bool),
                                      downStyle: (color: UIColor, isSolid: Bool),
                                      titleColor: UIColor,
@@ -100,9 +88,7 @@ extension CHSeries {
         return series
     }
     
-    /**
-     返回一个标准的交易量系列样式
-     */
+    /// 返回一个标准的交易量系列样式
     public class func getDefaultVolume(upStyle: (color: UIColor, isSolid: Bool),
                                        downStyle: (color: UIColor, isSolid: Bool),
                                        section: CHSection) -> CHSeries {
@@ -115,18 +101,14 @@ extension CHSeries {
         return series
     }
     
-    
-    /// 获取交易量的MA线
-    ///
+    /// 返回一个交易量的 MA 系列样式
     public class func getVolumeMA(isEMA: Bool = false, num: [Int], colors: [UIColor], section: CHSection) -> CHSeries {
         let valueKey = CHSeriesKey.volume
         let series = self.getMA(isEMA: isEMA, num: num, colors: colors, valueKey: valueKey, section: section)
         return series
     }
     
-    /**
-     返回一个交易量+MA组合系列样式
-     */
+    /// 返回一个交易量和 MA 组合的系列样式
     public class func getVolumeWithMA(upStyle: (color: UIColor, isSolid: Bool),
                                        downStyle: (color: UIColor, isSolid: Bool),
                                        isEMA: Bool = false,
@@ -136,21 +118,17 @@ extension CHSeries {
         let series = CHSeries()
         series.key = CHSeriesKey.volume
         let volumeSeries = CHSeries.getDefaultVolume(upStyle: upStyle, downStyle: downStyle, section: section)
-        
         let volumeMASeries = CHSeries.getVolumeMA(
             isEMA: isEMA,
             num: num,
             colors: colors,
             section: section)
-        
         series.chartModels.append(contentsOf: volumeSeries.chartModels)
         series.chartModels.append(contentsOf: volumeMASeries.chartModels)
         return series
     }
     
-    /**
-     返回一个交易量+SAM组合系列样式
-     */
+    /// 返回一个交易量和 SAM 组合系列样式
     public class func getVolumeWithSAM(upStyle: (color: UIColor, isSolid: Bool),
                                       downStyle: (color: UIColor, isSolid: Bool),
                                       num: Int,
@@ -160,25 +138,20 @@ extension CHSeries {
         let series = CHSeries()
         series.key = CHSeriesKey.sam
         let volumeSeries = CHSeries.getDefaultVolume(upStyle: upStyle, downStyle: downStyle, section: section)
-        
         let volumeSAMSeries = CHSeries.getVolumeSAM(num: num, barStyle: barStyle, lineColor: lineColor, section: section)
-        
         series.chartModels.append(contentsOf: volumeSeries.chartModels)
         series.chartModels.append(contentsOf: volumeSAMSeries.chartModels)
         return series
     }
     
-    /// 获取交易量的MA线
-    ///
+    /// 返回一个价格的 MA 系列样式
     public class func getPriceMA(isEMA: Bool = false, num: [Int], colors: [UIColor], section: CHSection) -> CHSeries {
         let valueKey = CHSeriesKey.timeline
         let series = self.getMA(isEMA: isEMA, num: num, colors: colors, valueKey: valueKey, section: section)
         return series
     }
     
-    /**
-     返回一个移动平均线系列样式
-     */
+    /// 返回一个移动平均线系列样式
     public class func getMA(isEMA: Bool = false, num: [Int], colors: [UIColor], valueKey: String, section: CHSection) -> CHSeries {
         var key = ""
         if isEMA {
@@ -186,11 +159,9 @@ extension CHSeries {
         } else {
             key = CHSeriesKey.ma
         }
-        
         let series = CHSeries()
         series.key = key
         for (i, n) in num.enumerated() {
-            
             let ma = CHChartModel.getLine(colors[i], title: "\(key)\(n)", key: "\(key)_\(n)_\(valueKey)")
             ma.section = section
             series.chartModels.append(ma)
@@ -198,10 +169,7 @@ extension CHSeries {
         return series
     }
     
-        
-    /**
-     返回一个移动平均线系列样式
-     */
+    /// 返回一个 RSI 系列样式
     public class func getRSI(num: [Int], colors: [UIColor], section: CHSection) -> CHSeries {
         let series = CHSeries()
         series.key = CHSeriesKey.rsi
@@ -213,9 +181,7 @@ extension CHSeries {
         return series
     }
     
-    /**
-     返回一个KDJ系列样式
-     */
+    /// 返回一个 KDJ 系列样式
     public class func getKDJ(_ kc: UIColor, dc: UIColor, jc: UIColor, section: CHSection) -> CHSeries {
         let series = CHSeries()
         series.key = CHSeriesKey.kdj
@@ -229,9 +195,7 @@ extension CHSeries {
         return series
     }
     
-    /**
-     返回一个MACD系列样式
-     */
+    /// 返回一个 MACD 系列样式
     public class func getMACD(_ difc: UIColor,
                               deac: UIColor,
                               barc: UIColor,
@@ -250,9 +214,7 @@ extension CHSeries {
         return series
     }
     
-    /**
-     返回一个BOLL系列样式
-     */
+    /// 返回一个 BOLL 系列样式
     public class func getBOLL(_ bollc: UIColor, ubc: UIColor, lbc: UIColor, section: CHSection) -> CHSeries {
         let series = CHSeries()
         series.key = CHSeriesKey.boll
@@ -266,17 +228,12 @@ extension CHSeries {
         return series
     }
     
-    
-    /**
-     返回一个SAR系列样式
-     */
-    public class func getSAR(
-        upStyle: (color: UIColor, isSolid: Bool),
-        downStyle: (color: UIColor, isSolid: Bool),
-        titleColor: UIColor,
-        plotPaddingExt: CGFloat = 0.3,
-        section: CHSection) -> CHSeries {
-        
+    /// 返回一个 SAR 系列样式
+    public class func getSAR(upStyle: (color: UIColor, isSolid: Bool),
+                             downStyle: (color: UIColor, isSolid: Bool),
+                             titleColor: UIColor,
+                             plotPaddingExt: CGFloat = 0.3,
+                             section: CHSection) -> CHSeries {
         let series = CHSeries()
         series.key = CHSeriesKey.sar
         let sar = CHChartModel.getRound(upStyle: upStyle, downStyle: downStyle, titleColor: titleColor, title: "SAR", plotPaddingExt: plotPaddingExt, key: "\(CHSeriesKey.sar)")
@@ -286,8 +243,7 @@ extension CHSeries {
         return series
     }
     
-    /// 获取交易量的SAM线
-    ///
+    /// 返回一个交易量的 SAM 系列样式
     public class func getVolumeSAM(num: Int,
                                    barStyle: (color: UIColor, isSolid: Bool),
                                    lineColor: UIColor,
@@ -305,12 +261,10 @@ extension CHSeries {
         vol.section = section
         
         series.chartModels = [sam, vol]
-        
         return series
     }
     
-    /// 获取主图价格的SAM线
-    ///
+    /// 返回一个主图价格的 SAM 系列样式
     public class func getPriceSAM(num: Int,
                                   barStyle: (color: UIColor, isSolid: Bool),
                                   lineColor: UIColor,
@@ -331,5 +285,4 @@ extension CHSeries {
         series.chartModels = [sam, candle]
         return series
     }
-    
 }

@@ -431,10 +431,10 @@ extension ChartCustomViewController {
         style.isInnerYAxis = styleParam.isInnerYAxis
         
         if styleParam.showYAxisLabel == "Left" {
-            style.showYAxisLabel = .left
+            style.yAxisShowPosition = .left
             style.padding = UIEdgeInsets(top: 16, left: 0, bottom: 4, right: 8)
         } else {
-            style.showYAxisLabel = .right
+            style.yAxisShowPosition = .right
             style.padding = UIEdgeInsets(top: 16, left: 8, bottom: 4, right: 0)
         }
         

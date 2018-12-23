@@ -85,7 +85,7 @@ extension CHKLineChartStyle {
         style.textColor = UIColor(white: 0.8, alpha: 1)
         style.padding = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
         style.isInnerYAxis = true
-        style.showYAxisLabel = .none
+        style.yAxisShowPosition = .none
         style.showXAxisOnSection = 0
         style.showXAxisLabel = false
         style.isShowAll = true

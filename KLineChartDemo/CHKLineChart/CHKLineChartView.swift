@@ -269,7 +269,7 @@ open class CHKLineChartView: UIView {
             self.lineColor = self.style.lineColor
             self.textColor = self.style.textColor
             self.labelFont = self.style.labelFont
-            self.showYAxisLabel = self.style.showYAxisLabel
+            self.showYAxisLabel = self.style.yAxisShowPosition
             self.selectedBGColor = self.style.selectedBGColor
             self.selectedTextColor = self.style.selectedTextColor
             self.isInnerYAxis = self.style.isInnerYAxis
@@ -665,7 +665,7 @@ extension CHKLineChartView {
         for section in self.sections {
             section.removeLayerView()
             for series in section.series {
-                series.removeLayerView()
+                series.removeSeriesLayerSublayers()
             }
         }
         _ = self.drawLayer.sublayers?.map { $0.removeFromSuperlayer() }

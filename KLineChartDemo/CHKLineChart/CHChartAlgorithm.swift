@@ -1,54 +1,26 @@
-//
-//  CHChartAlgorithm.swift
-//  CHKLineChart
-//
-//  Created by Chance on 16/9/14.
-//  Copyright © 2016年 Chance. All rights reserved.
-//
 
 import UIKit
 
-
-
-/// 指标算法协议，用于日后开发者自由扩展编写自己的算法
 public protocol CHChartAlgorithmProtocol {
-    
-    /// 实现该算法的处理
-    /// 通过传入一个基本的K线数据模型集合给委托者，完成指标算法计算，
-    /// 并把结果记录到CHChartItem的extVal字典中
-    /// - Parameter datas: 传入K线数据模型集合
-    /// - Returns: 算法的结果记录到CHChartItem的extVal字典中，返回一个处理后的集合
+    /// 通过传入一个基本的K线数据模型集合给委托者, 完成指标算法计算.
+    ///
+    /// - Parameter datas: K 线数据模型集合
+    /// - Returns: 返回处理后的集合, 算法的结果记录到 CHChartItem 的 extVal 字典中
     func handleAlgorithm(_ datas: [CHChartItem]) -> [CHChartItem]
 }
 
-//MARK: - Equatable
-//public func ==(lhs: CHChartAlgorithm, rhs: CHChartAlgorithm) -> Bool {
-//    return lhs.hashValue == rhs.hashValue
-//}
-
-/**
- 常用技术指标算法
- */
 public enum CHChartAlgorithm: CHChartAlgorithmProtocol {
+    case none                           // 无算法
+    case timeline                       // 时分
+    case ma(Int)                        // 简单移动平均数
+    case ema(Int)                       // 指数移动平均数
+    case kdj(Int, Int, Int)             // 随机指标
+    case macd(Int, Int, Int)            // 指数平滑异同平均线
+    case boll(Int, Int)                 // 布林线
+    case sar(Int, CGFloat, CGFloat)     // 停损转向操作点指标(判定周期，加速因子初值，加速因子最大值)
+    case sam(Int)                       // SAM 指标公式
+    case rsi(Int)                       // RSI 指标公式
     
-    case none                                   // 无算法
-    case timeline                               // 时分
-    case ma(Int)                                // 简单移动平均数
-    case ema(Int)                               // 指数移动平均数
-    case kdj(Int, Int, Int)                     // 随机指标
-    case macd(Int, Int, Int)                    // 指数平滑异同平均线
-    case boll(Int, Int)                         // 布林线
-    case sar(Int, CGFloat, CGFloat)             // 停损转向操作点指标(判定周期，加速因子初值，加速因子最大值)
-    case sam(Int)                               // SAM 指标公式
-    case rsi(Int)                               // RSI 指标公式
-    
-    /**
-     获取Key值的名称
-     
-     - parameter name: 可选的二级key
-     
-     - returns:
-     */
     public func key(_ name: String = "") -> String {
         switch self {
         case .none:
@@ -74,13 +46,6 @@ public enum CHChartAlgorithm: CHChartAlgorithmProtocol {
         }
     }
     
-    /**
-     处理算法
-     
-     - parameter datas:
-     
-     - returns:
-     */
     public func handleAlgorithm(_ datas: [CHChartItem]) -> [CHChartItem] {
         switch self {
         case .none:
@@ -105,10 +70,7 @@ public enum CHChartAlgorithm: CHChartAlgorithmProtocol {
             return self.handleRSI(num, datas: datas)
         }
     }
-    
-    
 }
-
 
 // MARK: - RSI
 extension CHChartAlgorithm {
@@ -125,7 +87,7 @@ extension CHChartAlgorithm {
                 dif = 0
             } else {
                 let k = i - num + 1
-                let wrs:[CGFloat] = self.getAAndB(k, i, datas: datas)
+                let wrs:[CGFloat] = self.getAandB(k, i, datas: datas)
                 sum = wrs[0]
                 dif = wrs[1]
             }
@@ -143,7 +105,7 @@ extension CHChartAlgorithm {
         return datas
     }
     
-    fileprivate func getAAndB(_ a: Int, _ b: Int, datas: [CHChartItem]) -> [CGFloat] { 
+    fileprivate func getAandB(_ a: Int, _ b: Int, datas: [CHChartItem]) -> [CGFloat] {
         var tA = a
         if tA < 0 {
             tA = 0
@@ -251,33 +213,21 @@ extension CHChartAlgorithm {
     }
 }
 
-// MARK: - 《KDJ随机指标》 处理算法
+// MARK: - KDJ
 extension CHChartAlgorithm {
     
-    /**
-     处理KDJ运算
-     
-     - parameter p1:    指标分析周期
-     - parameter p2:    指标分析周期
-     - parameter p3:    指标分析周期
-     - parameter datas: 未处理的集合
-     
-     - returns: 处理好的集合
-     */
     fileprivate func handleKDJ(_ p1: Int, p2: Int,p3: Int, datas: [CHChartItem]) -> [CHChartItem] {
         var prev_k: CGFloat = 50
         var prev_d: CGFloat = 50
         for (index, data) in datas.enumerated() {
-            //计算RSV值
+            // RSV
             if let rsv = self.getRSV(p1, index: index, datas: datas) {
-                //计算K,D,J值
+                // KDJ
                 let k: CGFloat = (2 * prev_k + rsv) / 3
                 let d: CGFloat = (2 * prev_d + k) / 3
                 let j: CGFloat = 3 * k - 2 * d
-                
                 prev_k = k
                 prev_d = d
-                
                 data.extVal["\(self.key("K"))"] = k
                 data.extVal["\(self.key("D"))"] = d
                 data.extVal["\(self.key("J"))"] = j
@@ -286,99 +236,62 @@ extension CHChartAlgorithm {
         return datas
     }
     
-    /**
-     RSV计算
-     
-     - parameter num:   计算天数范围
-     - parameter index: 当前的索引位
-     
-     - returns:
-     */
     fileprivate func getRSV(_ num: Int, index: Int, datas: [CHChartItem]) -> CGFloat? {
         var rsv: CGFloat = 0
         let c = datas[index].closePrice
         var h = datas[index].highPrice
         var l = datas[index].lowPrice
-        
-        let block: (Int) -> Void = {
-            (i) -> Void in
-            
+        let block: (Int) -> Void = { (i) -> Void in
             let item = datas[i]
-            
             if item.highPrice > h {
                 h = item.highPrice
             }
-            
             if item.lowPrice < l {
                 l = item.lowPrice
             }
         }
-        
-        if index + 1 >= num {    //index + 1 >= N，累计N天内的
-            //计算num天数内最低价，最高价
+        if index + 1 >= num { // 计算 num 天数内最低价和最高价
             for i in stride(from: index, through: index + 1 - num, by: -1) {
                 block(i)
             }
-        } else {                //index + 1 < N，累计index + 1天内的
-            //计算index天数内最低价，最高价
+        } else { // 计算 index 天数内最低价和最高价
             for i in stride(from: index, through: 0, by: -1) {
                 block(i)
             }
         }
-        
         if h != l {
             rsv = (c - l) / (h - l) * 100
         }
         return rsv
     }
-    
 }
 
-// MARK: - 《MACD平滑异同移动平均线》 处理算法
+// MARK: - MACD
 extension CHChartAlgorithm {
     
-    /**
-     处理MACD运算
-     EMA（N）=2/（N+1）*（C-昨日EMA）+昨日EMA；
-     EMA（12）=昨日EMA（12）*11/13+C*2/13；
-     - parameter num:   天数
-     - parameter datas: 数据集
-     */
     fileprivate func handleMACD(_ p1: Int, p2: Int,p3: Int, datas: [CHChartItem]) -> [CHChartItem] {
         var pre_dea: CGFloat = 0
         for (index, data) in datas.enumerated() {
-            //EMA（p1）=2/（p1+1）*（C-昨日EMA）+昨日EMA；
+            // EMA（p1）= 2 /（p1+1）*（C-昨日EMA）+ 昨日EMA
             let (ema1, _) = self.getEMA(p1, index: index, datas: datas)
-            //EMA（p2）=2/（p2+1）*（C-昨日EMA）+昨日EMA；
+            // EMA（p2）= 2 /（p2+1）*（C-昨日EMA）+ 昨日EMA
             let (ema2, _) = self.getEMA(p2, index: index, datas: datas)
-            
             if ema1 != nil && ema2 != nil {
-                //DIF=今日EMA（p1）- 今日EMA（p2）
+                // DIF = 今日EMA（p1）- 今日EMA（p2）
                 let dif = ema1! - ema2!
-                //dea（p3）=2/（p3+1）*（dif-昨日dea）+昨日dea；
+                // DEA（p3）= 2 /（p3+1）*（DIF-昨日DEA）+昨日DEA
                 let dea = pre_dea + (dif - pre_dea) * 2 / (CGFloat(p3) + 1)
-                //BAR=2×(DIF－DEA)
+                // BAR = 2 * (DIF－DEA)
                 let bar = 2 * (dif - dea)
-                
                 data.extVal["\(self.key("DIF"))"] = dif
                 data.extVal["\(self.key("DEA"))"] = dea
                 data.extVal["\(self.key("BAR"))"] = bar
-                
                 pre_dea = dea
             }
         }
         return datas
     }
     
-    /**
-     获取某日的EMA数据
-     
-     - parameter num:   天数周期
-     - parameter index:
-     - parameter datas:
-     
-     - returns: //EMA的成交价和成交量
-     */
     fileprivate func getEMA(_ num: Int, index: Int, datas: [CHChartItem]) -> (CGFloat?, CGFloat?) {
         let ema = CHChartAlgorithm.ema(num)
         let data = datas[index]
@@ -387,15 +300,6 @@ extension CHChartAlgorithm {
         return (ema_price, ema_vol)
     }
     
-    /**
-     获取某日的MA数据
-     
-     - parameter num:   天数周期
-     - parameter index:
-     - parameter datas:
-     
-     - returns: //MA的成交价和成交量
-     */
     fileprivate func getMA(_ num: Int, index: Int, datas: [CHChartItem]) -> (CGFloat?, CGFloat?) {
         let ma = CHChartAlgorithm.ma(num)
         let data = datas[index]
@@ -405,26 +309,26 @@ extension CHChartAlgorithm {
     }
 }
 
-// MARK: - 《BOLL布林线》 处理算法
+// MARK: - BOLL
 extension CHChartAlgorithm {
     
+    /// 计算公式:
+    /// 中轨线 = N 日的移动平均线
+    /// 上轨线 = 中轨线 + 两倍的标准差
+    /// 下轨线 = 中轨线 - 两倍的标准差
     
-    /// 布林线处理方法
-    ///
-    /// 计算公式
-    /// 中轨线=N日的移动平均线
-    /// 上轨线=中轨线+两倍的标准差
-    /// 下轨线=中轨线－两倍的标准差
-    /// 计算过程
-    /// （1）计算MA
-    /// MA=N日内的收盘价之和÷N
-    /// （2）计算标准差MD
-    /// MD=平方根（N）日的（C－MA）的两次方之和除以N
-    /// （3）计算MB、UP、DN线
-    /// MB=（N）日的MA
-    /// UP=MB+k×MD
-    /// DN=MB－k×MD
-    /// （K为参数，可根据股票的特性来做相应的调整，一般默认为2）
+    /// 计算过程:
+    /// 1.计算 MA
+    /// MA = N 日内的收盘价之和 ÷ N
+    /// 2.计算标准差 MD
+    /// MD = 平方根(N)日的(C－MA)的两次方之和除以N
+    /// 3.计算 MB、UP、DN 线
+    /// MB = (N)日的 MA
+    /// UP = MB + k * MD
+    /// DN = MB - k * MD
+    /// K 为参数, 可根据股票的特性来做相应的调整, 一般默认为2
+
+    /// BOLL
     ///
     /// - Parameters:
     ///   - num: 天数
@@ -434,52 +338,39 @@ extension CHChartAlgorithm {
     fileprivate func handleBOLL(_ num: Int, k: Int = 2, datas: [CHChartItem]) -> [CHChartItem] {
         var md: CGFloat = 0, mb: CGFloat = 0, up: CGFloat = 0, dn: CGFloat = 0
         for (index, data) in datas.enumerated() {
-            //计算标准差
             md = self.handleBOLLSTD(num, index: index, datas: datas)
             mb = self.getMA(num, index: index, datas: datas).0 ?? 0
             up = mb + CGFloat(k) * md
             dn = mb - CGFloat(k) * md
-            
             data.extVal["\(self.key("BOLL"))"] = mb
             data.extVal["\(self.key("UB"))"] = up
             data.extVal["\(self.key("LB"))"] = dn
         }
-        
         return datas
     }
     
-    
-    /// 计算布林线中的MA平方差
-    ///
-    /// - Parameters:
-    ///   - num: 累计的天数
-    ///   - index: 当天日期
-    ///   - datas: 数据集合
-    /// - Returns: 结果
+    /// 计算布林线中的 MA 平方差
     fileprivate func handleBOLLSTD(_ num: Int, index: Int, datas: [CHChartItem]) -> CGFloat {
         var dx: CGFloat = 0, md: CGFloat = 0
         let ma = self.getMA(num, index: index, datas: datas).0 ?? 0
-        if index + 1 >= num {       //index + 1 >= N，计算N日的平方差
+        if index + 1 >= num { // 计算 N 日的平方差
             for i in stride(from: index, through: index + 1 - num, by: -1) {
                 dx += pow(datas[i].closePrice - ma, 2)
             }
             md = dx / CGFloat(num)
-        } else {                    //index + 1 < N，计算index + 1日的平方差
+        } else { // 计算 index + 1 日的平方差
             for i in stride(from: index, through: 0, by: -1) {
                 dx += pow(datas[i].closePrice - ma, 2)
             }
             md = dx / CGFloat(index + 1)
         }
-        //平方根
         md = pow(md, 0.5)
         return md
     }
 }
 
-// MARK: - 《SAR指标》 处理算法
+// MARK: - SAR
 extension CHChartAlgorithm {
-    
-    
     
     /// SAR指标又叫抛物线指标或停损转向操作点指标
     ///
@@ -514,7 +405,6 @@ extension CHChartAlgorithm {
     /// - Parameter datas: 待处理的数据集合
     /// - Returns: 处理后的数据集合
     fileprivate func handleSAR(_ num: Int, minAF: CGFloat, maxAF: CGFloat, datas: [CHChartItem]) -> [CHChartItem] {
-        
         var sar: CGFloat = 0, af: CGFloat = minAF, ep: CGFloat = 0
         var pre_data: CHChartItem!
         var isUP: Bool = true              //true：上涨趋势，false：下跌趋势
@@ -585,21 +475,17 @@ extension CHChartAlgorithm {
                     af = af + minAF
                 }
             }
-            
+
             if af > maxAF {
                 af = maxAF
             }
             
-
             sar = sar + af * (ep - sar)
             
             //记录明天的sar值
             data.extVal["\(self.key("tomorrow"))"] = sar
             
-
             pre_data = data
-            
-            
         }
         
         return datas
@@ -616,14 +502,12 @@ extension CHChartAlgorithm {
     ///   - datas: 数据集合
     /// - Returns: 最终值，是否行情翻转
     func getFinalSAR(num: Int, sar: CGFloat, index: Int, isUP: Bool, datas: [CHChartItem]) -> (CGFloat, Bool) {
-        
         /// 4、确定今天的SAR值
         /// (a)通过公式SAR(Tn)=SAR(Tn-1)+AF(Tn)*[EP(Tn-1)-SAR(Tn-1)]，计算出Tn周期的值；
         /// (b)若Tn周期为上涨趋势，当SAR(Tn)>Tn周期的收盘价，则Tn周期最终 SAR值应为num天周期段的最高价中的最大值，
         /// 当SAR(Tn)<=Tn周期的收盘价，则Tn周期最终SAR值为SAR(Tn)，即 SAR=SAR(Tn)；
         /// (c)若Tn周期为下跌趋势，当SAR(Tn)<Tn周期的收盘价，则Tn周期最终 SAR值应为num天周期的最低价中的最小值，
         /// 当SAR(Tn)>=Tn周期的收盘价，则Tn周期最终SAR值为SAR(Tn)，即 SAR=SAR(Tn)；
-        
         
         var finalSAR: CGFloat = sar
         var finalIsUP: Bool = isUP
@@ -672,17 +556,14 @@ extension CHChartAlgorithm {
         var max_vol: CGFloat = 0        //最大交易量
         var max_index: Int = 0          //最大交易量的位置
         for (index, data) in datas.enumerated() {
-            
             //超过了num周期都没找到最大值，重新在index后num个寻找
             if index - max_index == num {
                 max_vol_price = 0
                 max_vol = 0
                 max_index = 0
                 for j in (index - num + 1)...index {
-                    
                     let c = datas[j].closePrice
                     let v = datas[j].vol
-                    
                     if v > max_vol {
                         max_vol_price = c
                         max_vol = v
@@ -706,7 +587,6 @@ extension CHChartAlgorithm {
                     max_vol = v
                     max_index = index
                 }
-                
             }
             
             if index > num - 1 {
@@ -737,5 +617,4 @@ extension CHChartAlgorithm {
         
         return datas
     }
-    
 }
