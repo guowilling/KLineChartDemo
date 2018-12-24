@@ -1,7 +1,7 @@
 
 import UIKit
 
-/// 分区图类型
+/// 分区类型
 ///
 /// - master: 主图
 /// - assistant: 副图
@@ -10,7 +10,7 @@ public enum CHSectionValueType {
     case assistant
 }
 
-/// K线的区域
+/// 分区
 open class CHSection: NSObject {
     
     open var upColor: UIColor = UIColor.green
@@ -33,8 +33,8 @@ open class CHSection: NSObject {
     open var ratios: Int = 0                // 分区所占图表的比列, 0代表不使用比列，采用固定高度
     open var fixHeight: CGFloat = 0         // 固定高度, 0则通过 ratio 计算高度
     open var frame: CGRect = CGRect.zero
-    open var yAxis: CHYAxis = CHYAxis()     // Y 轴参数
-    open var xAxis: CHXAxis = CHXAxis()     // X 轴参数
+    open var yAxis: CHYAxis = CHYAxis()     // Y轴参数
+    open var xAxis: CHXAxis = CHXAxis()     // X轴参数
     open var backgroundColor: UIColor = UIColor.black
     open var index: Int = 0
     var titleLayer: CHShapeLayer = CHShapeLayer()   // 标题的绘图层
@@ -49,11 +49,10 @@ open class CHSection: NSObject {
     }
 }
 
-// MARK: - 内部方法
 extension CHSection {
     
     /// 清空图表的子图层
-    func removeLayerView() {
+    func removeSublayers() {
         _ = self.sectionLayer.sublayers?.map { $0.removeFromSuperlayer() }
         self.sectionLayer.sublayers?.removeAll()
         
@@ -61,7 +60,7 @@ extension CHSection {
         self.titleLayer.sublayers?.removeAll()
     }
     
-    /// 建立 Y 轴左边对象
+    /// 建立Y轴左边对象
     func buildYAxisPerModel(_ model: CHChartModel, startIndex: Int, endIndex: Int) {
         let datas = model.datas
         if datas.count == 0 {
@@ -115,7 +114,7 @@ extension CHSection {
     
     /// 绘制 header 上的标题信息
     ///
-    /// - Parameter title: 标题内容
+    /// - Parameter title: 标题富文本
     func drawTitleForHeader(title: NSAttributedString) {
         guard self.showTitle else {
             return
@@ -160,10 +159,10 @@ extension CHSection {
     }
 }
 
-// MARK: - 公开方法
+// MARK: - Public Methods
 extension CHSection {
     
-    /// 建立 Y 轴的数值范围
+    /// 建立Y轴的数值范围
     ///
     /// - Parameters:
     ///   - startIndex: 计算范围的开始数据点
@@ -217,7 +216,7 @@ extension CHSection {
             }
         }
         
-        // 如果使用水平对称显示 Y 轴, 则基于基值计算上下的边界值
+        // 如果使用水平对称显示Y轴, 则基于基值计算上下的边界值
         if symmetrical {
             if self.yAxis.baseValue > self.yAxis.max {
                 self.yAxis.max = self.yAxis.baseValue + (self.yAxis.baseValue - self.yAxis.min)
@@ -233,34 +232,33 @@ extension CHSection {
         }
     }
     
-    /// 获取标签值对应在坐标系中的 Y 值
+    /// 获取标签值对应在坐标系中的Y值
     ///
     /// - Parameter val: 标签值
-    /// - Returns: 坐标系中实际的 Y 值
+    /// - Returns: 坐标系中实际的Y值
     public func getLocalY(_ val: CGFloat) -> CGFloat {
         let max = self.yAxis.max
         let min = self.yAxis.min
         if max == min {
             return 0
         }
-        
-        /*
-         计算公式：
-         y轴有值的区间高度 = 整个分区高度-（paddingTop+paddingBottom）
-         当前y值所在位置的比例 =（当前值 - y最小值）/（y最大值 - y最小值）
-         当前y值的实际的相对y轴有值的区间的高度 = 当前y值所在位置的比例 * y轴有值的区间高度
-         当前y值的实际坐标 = 分区高度 + 分区y坐标 - paddingBottom - 当前y值的实际的相对y轴有值的区间的高度
+        /**
+         计算公式:
+         Y轴有值的区间高度 = 整个分区高度 -（paddingTop + paddingBottom）
+         当前Y值所在位置的比例 =（当前值 - Y最小值）/（Y最大值 - Y最小值）
+         当前Y值实际的相对Y轴有值的区间的高度 = 当前Y值所在位置的比例 * Y轴有值的区间高度
+         当前Y值的实际坐标 = 分区高度 + 分区Y坐标 - paddingBottom - 当前Y值实际的相对Y轴有值的区间的高度
          */
         let baseY = self.frame.size.height + self.frame.origin.y - self.padding.bottom - (self.frame.size.height - self.padding.top - self.padding.bottom) * (val - min) / (max - min)
         return baseY
     }
     
-    /// 获取坐标系中 Y 值 对应的标签值
+    /// 获取坐标系中Y值对应的标签值
     public func getRawValue(_ y: CGFloat) -> CGFloat {
         let max = self.yAxis.max
         let min = self.yAxis.min
-        let ymax = self.getLocalY(self.yAxis.min) // y最大值对应y轴上的最高点, 则最小值
-        let ymin = self.getLocalY(self.yAxis.max) // y最小值对应y轴上的最低点, 则最大值
+        let ymax = self.getLocalY(self.yAxis.min) // 最大值对应Y轴最高点
+        let ymin = self.getLocalY(self.yAxis.max) // 最小值对应Y轴最低点
         if max == min {
             return 0
         }
@@ -295,7 +293,7 @@ extension CHSection {
     /// 添加用户自定义的视图到主视图
     ///
     /// - Parameters:
-    ///   - view: 自定义视图
+    ///   - view: 自定义标题视图
     ///   - mainView: 主视图
     public func addCustomView(_ view: UIView, inView mainView: UIView) {
         if self.titleView !== view {

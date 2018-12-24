@@ -2,7 +2,7 @@
 import UIKit
 
 public protocol CHChartAlgorithmProtocol {
-    /// 通过传入一个基本的K线数据模型集合给委托者, 完成指标算法计算.
+    /// 通过传入 K 线数据模型集合给委托者, 完成指标算法计算.
     ///
     /// - Parameter datas: K 线数据模型集合
     /// - Returns: 返回处理后的集合, 算法的结果记录到 CHChartItem 的 extVal 字典中

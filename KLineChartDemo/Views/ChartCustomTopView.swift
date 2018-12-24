@@ -115,7 +115,6 @@ class ChartCustomTopView: UIView {
         self.addSubview(self.stackRight)
         
         self.stackLeft.addArrangedSubview(self.labelPrice)
-        
         let leftStatck1 = UIStackView()
         leftStatck1.axis = .horizontal
         leftStatck1.distribution = .fillEqually
@@ -174,7 +173,7 @@ class ChartCustomTopView: UIView {
         self.labelHigh.text = "最高" + " " + "\(data.highPrice.toString(maxF: 4))"
         self.labelLow.text = "最低" + " " + "\(data.lowPrice.toString(maxF: 4))"
         self.labelClose.text = "收盘" + " " + "\(data.closePrice.toString(maxF: 4))"
-        self.labelVol.text = "交易量" + " " + "\(data.vol.toString(maxF: 2))"
-        self.labelTurnover.text = "交易额" + " " + "\((data.vol * data.closePrice).toString(maxF: 2))"
+        self.labelVol.text = "总量" + " " + "\(data.vol.toString(maxF: 2))"
+        self.labelTurnover.text = "总额" + " " + "\((data.vol * data.closePrice).toString(maxF: 2))"
     }
 }

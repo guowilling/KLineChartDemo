@@ -11,13 +11,13 @@ class ChartCustomViewController: UIViewController {
     let times: [String] = ["5min", "15min", "1hour", "6hour", "1day"]
 
     /// 主图线段
-    let masterLine: [String] = [CHSeriesKey.candle, CHSeriesKey.timeline]
+    let masterLines: [String] = [CHSeriesKey.candle, CHSeriesKey.timeline]
     
     /// 主图指标
-    let masterIndex: [String] = [CHSeriesKey.ma, CHSeriesKey.ema, CHSeriesKey.sar, CHSeriesKey.boll, CHSeriesKey.sam, Hide]
+    let masterIndexes: [String] = [CHSeriesKey.ma, CHSeriesKey.ema, CHSeriesKey.sar, CHSeriesKey.boll, CHSeriesKey.sam, Hide]
     
     /// 副图指标
-    let assistIndex: [String] = [CHSeriesKey.volume, CHSeriesKey.sam, CHSeriesKey.kdj, CHSeriesKey.macd, CHSeriesKey.rsi, Hide]
+    let assistIndexes: [String] = [CHSeriesKey.volume, CHSeriesKey.sam, CHSeriesKey.kdj, CHSeriesKey.macd, CHSeriesKey.rsi, Hide]
     
     /// 选择交易对
     let exPairs: [String] = ["BTC-USD", "ETH-USD", "LTC-USD", "LTC-BTC", "ETH-BTC", "BCH-BTC"]
@@ -192,27 +192,23 @@ class ChartCustomViewController: UIViewController {
         self.bottomBar.addSubview(self.buttonIndexParams)
         self.bottomBar.addSubview(self.buttonStyle)
         
-        self.indicatorView.snp.makeConstraints { (make) in
-            make.center.equalTo(self.chartView)
-        }
-        
         self.topView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(5)
-            make.bottom.equalTo(self.chartView.snp.top).offset(-5)
+            make.top.equalTo(self.view.snp.top).offset(5)
             make.left.right.equalToSuperview().inset(10)
             make.height.equalTo(75)
         }
         
         self.chartView.snp.makeConstraints { (make) in
-            //make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+            make.top.equalTo(self.topView.snp.bottom).offset(5)
             make.left.right.equalToSuperview()
+            make.height.equalTo(450)
         }
         
         self.bottomBar.snp.makeConstraints { (make) in
-            make.top.equalTo(self.chartView.snp.bottom)
+            make.top.equalTo(self.chartView.snp.bottom).offset(5)
             make.left.right.equalToSuperview()
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
             make.height.equalTo(44)
+//            make.bottom.equalTo(self.view.snp.bottom)
         }
         
         self.buttonTime.snp.makeConstraints { (make) in
@@ -236,6 +232,14 @@ class ChartCustomViewController: UIViewController {
             make.width.equalTo(self.buttonTime)
             make.height.equalToSuperview()
         }
+        
+        self.indicatorView.snp.makeConstraints { (make) in
+            make.center.equalTo(self.chartView)
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
     }
     
     func fetchKLineChartData() {
@@ -254,10 +258,10 @@ class ChartCustomViewController: UIViewController {
     }
     
     func handleChartIndexChanged() {
-        let lineKey = self.masterLine[self.selectedMasterLine]
-        let masterKey = self.masterIndex[self.selectedMasterIndex]
-        let assist1Key = self.assistIndex[self.selectedAssistIndex1]
-        let assist2Key = self.assistIndex[self.selectedAssistIndex2]
+        let lineKey = self.masterLines[self.selectedMasterLine]
+        let masterKey = self.masterIndexes[self.selectedMasterIndex]
+        let assist1Key = self.assistIndexes[self.selectedAssistIndex1]
+        let assist2Key = self.assistIndexes[self.selectedAssistIndex2]
         
         self.chartView.setSection(hidden: assist1Key == ChartCustomViewController.Hide, byIndex: 1)
         self.chartView.setSection(hidden: assist2Key == ChartCustomViewController.Hide, byIndex: 2)
@@ -296,10 +300,10 @@ extension ChartCustomViewController {
     @objc func buttonIndexAction() {
         let view = self.selectionPopVCForIndex
         view.clear()
-        view.addItems(section: "Chart Line", items: self.masterLine, selectedIndex: self.selectedMasterLine)
-        view.addItems(section: "Master Index", items: self.masterIndex, selectedIndex: self.selectedMasterIndex)
-        view.addItems(section: "Assist Index 1", items: self.assistIndex, selectedIndex: self.selectedAssistIndex1)
-        view.addItems(section: "Assist Index 2", items: self.assistIndex, selectedIndex: self.selectedAssistIndex2)
+        view.addItems(section: "Chart Line", items: self.masterLines, selectedIndex: self.selectedMasterLine)
+        view.addItems(section: "Master Index", items: self.masterIndexes, selectedIndex: self.selectedMasterIndex)
+        view.addItems(section: "Assist Index 1", items: self.assistIndexes, selectedIndex: self.selectedAssistIndex1)
+        view.addItems(section: "Assist Index 2", items: self.assistIndexes, selectedIndex: self.selectedAssistIndex2)
         view.show(from: self)
     }
     
@@ -335,31 +339,31 @@ extension ChartCustomViewController: CHKLineChartDelegate {
     }
     
     func kLineChart(chart: CHKLineChartView, labelOnYAxisForValue value: CGFloat, atIndex index: Int, section: CHSection) -> String {
-        var strValue = ""
+        var lable = ""
         if section.key == "volume" {
             if value / 1000 > 1 {
-                strValue = (value / 1000).ch_toString(maxF: section.decimal) + "K"
+                lable = (value / 1000).ch_toString(maxF: section.decimal) + "K"
             } else {
-                strValue = value.ch_toString(maxF: section.decimal)
+                lable = value.ch_toString(maxF: section.decimal)
             }
         } else {
-            strValue = value.ch_toString(maxF: section.decimal)
+            lable = value.ch_toString(maxF: section.decimal)
         }
-        return strValue
+        return lable
     }
     
     func kLineChart(chart: CHKLineChartView, labelOnXAxisForIndex index: Int) -> String {
         let timestamp = self.chartPoints[index].time
         let dayText = Date.ch_getTimeByStamp(timestamp, format: "MM-dd")
         let timeText = Date.ch_getTimeByStamp(timestamp, format: "HH:mm")
-        var text = ""
+        var lable = ""
         if dayText != self.chartXAxisPrevDay && index > 0 {
-            text = dayText
+            lable = dayText
         } else {
-            text = timeText
+            lable = timeText
         }
         self.chartXAxisPrevDay = dayText
-        return text
+        return lable
     }
     
     func kLineChart(chart: CHKLineChartView, decimalAt section: Int) -> Int {
@@ -379,7 +383,7 @@ extension ChartCustomViewController: CHKLineChartDelegate {
         var key = ""
         switch section.index {
         case 0:
-            key = self.masterIndex[self.selectedMasterIndex]
+            key = self.masterIndexes[self.selectedMasterIndex]
         default:
             key = section.series[section.selectedIndex].key
         }
@@ -401,13 +405,13 @@ extension ChartCustomViewController: CHKLineChartDelegate {
         let data = self.chartPoints[index]
         self.topView.update(data: data)
     }
-
+    
     func kLineChart(chart: CHKLineChartView, didFlipPageSeries section: CHSection, series: CHSeries, seriesIndex: Int) {
         switch section.index {
         case 1:
-            self.selectedAssistIndex1 = self.assistIndex.index(of: series.key) ?? self.selectedAssistIndex1
+            self.selectedAssistIndex1 = self.assistIndexes.index(of: series.key) ?? self.selectedAssistIndex1
         case 2:
-            self.selectedAssistIndex2 = self.assistIndex.index(of: series.key) ?? self.selectedAssistIndex2
+            self.selectedAssistIndex2 = self.assistIndexes.index(of: series.key) ?? self.selectedAssistIndex2
         default:
             break
         }
@@ -520,7 +524,7 @@ extension ChartCustomViewController {
             style.sections.append(assistSection2)
         }
         
-        /***** 设置图表外的背景 *****/
+        // 设置图表外的背景色
         self.view.backgroundColor = UIColor(hex: styleParam.backgroundColor)
         self.topView.backgroundColor = UIColor(hex: styleParam.backgroundColor)
         self.bottomBar.backgroundColor = UIColor(hex: styleParam.backgroundColor)

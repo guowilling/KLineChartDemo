@@ -37,7 +37,7 @@ open class CHSeries: NSObject {
     
     var seriesLayer: CHShapeLayer = CHShapeLayer()   // 点线模型的绘图层
     
-    func removeSeriesLayerSublayers() {
+    func removeSublayers() {
         _ = self.seriesLayer.sublayers?.map { $0.removeFromSuperlayer() }
         self.seriesLayer.sublayers?.removeAll()
     }

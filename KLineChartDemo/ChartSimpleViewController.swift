@@ -66,7 +66,7 @@ extension ChartSimpleViewController: CHKLineChartDelegate {
     }
     
     func widthForYAxisLabelInKLineChart(in chart: CHKLineChartView) -> CGFloat {
-        return chart.kYAxisLabelWidth
+        return chart.DefaultYAxisLabelWidth
     }
     
     func heightForXAxisInKLineChart(in chart: CHKLineChartView) -> CGFloat {
