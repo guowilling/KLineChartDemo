@@ -24,7 +24,7 @@
 		6E9068DB21CE776100C12760 /* CHChartAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B621CE776100C12760 /* CHChartAlgorithm.swift */; };
 		6E9068DC21CE776100C12760 /* SeriesSettingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B721CE776100C12760 /* SeriesSettingDetailViewController.swift */; };
 		6E9068DD21CE776100C12760 /* DemoSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B821CE776100C12760 /* DemoSelectViewController.swift */; };
-		6E9068DE21CE776100C12760 /* ChartDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BA21CE776100C12760 /* ChartDataFetcher.swift */; };
+		6E9068DE21CE776100C12760 /* KLineChartDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BA21CE776100C12760 /* KLineChartDataFetcher.swift */; };
 		6E9068DF21CE776100C12760 /* KLineChartPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BB21CE776100C12760 /* KLineChartPoint.swift */; };
 		6E9068E021CE776100C12760 /* SeriesParam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BC21CE776100C12760 /* SeriesParam.swift */; };
 		6E9068E121CE776100C12760 /* Double+exension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BE21CE776100C12760 /* Double+exension.swift */; };
@@ -32,7 +32,7 @@
 		6E9068E321CE776100C12760 /* Int+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C021CE776100C12760 /* Int+extension.swift */; };
 		6E9068E421CE776100C12760 /* String+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C121CE776100C12760 /* String+extension.swift */; };
 		6E9068E521CE776100C12760 /* NSDate+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C221CE776100C12760 /* NSDate+extension.swift */; };
-		6E9068E621CE776100C12760 /* ChartStyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C421CE776100C12760 /* ChartStyleManager.swift */; };
+		6E9068E621CE776100C12760 /* KLineChartStyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C421CE776100C12760 /* KLineChartStyleManager.swift */; };
 		6E9068E721CE776100C12760 /* ChartTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C621CE776100C12760 /* ChartTableViewCell.swift */; };
 		6E9068E821CE776100C12760 /* SeriesSettingListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C721CE776100C12760 /* SeriesSettingListCell.swift */; };
 		6E9068E921CE776100C12760 /* ChartCustomTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068C821CE776100C12760 /* ChartCustomTopView.swift */; };
@@ -68,7 +68,7 @@
 		6E9068B621CE776100C12760 /* CHChartAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHChartAlgorithm.swift; sourceTree = "<group>"; };
 		6E9068B721CE776100C12760 /* SeriesSettingDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesSettingDetailViewController.swift; sourceTree = "<group>"; };
 		6E9068B821CE776100C12760 /* DemoSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoSelectViewController.swift; sourceTree = "<group>"; };
-		6E9068BA21CE776100C12760 /* ChartDataFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartDataFetcher.swift; sourceTree = "<group>"; };
+		6E9068BA21CE776100C12760 /* KLineChartDataFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KLineChartDataFetcher.swift; sourceTree = "<group>"; };
 		6E9068BB21CE776100C12760 /* KLineChartPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KLineChartPoint.swift; sourceTree = "<group>"; };
 		6E9068BC21CE776100C12760 /* SeriesParam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesParam.swift; sourceTree = "<group>"; };
 		6E9068BE21CE776100C12760 /* Double+exension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Double+exension.swift"; sourceTree = "<group>"; };
@@ -76,7 +76,7 @@
 		6E9068C021CE776100C12760 /* Int+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int+extension.swift"; sourceTree = "<group>"; };
 		6E9068C121CE776100C12760 /* String+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+extension.swift"; sourceTree = "<group>"; };
 		6E9068C221CE776100C12760 /* NSDate+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+extension.swift"; sourceTree = "<group>"; };
-		6E9068C421CE776100C12760 /* ChartStyleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartStyleManager.swift; sourceTree = "<group>"; };
+		6E9068C421CE776100C12760 /* KLineChartStyleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KLineChartStyleManager.swift; sourceTree = "<group>"; };
 		6E9068C621CE776100C12760 /* ChartTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartTableViewCell.swift; sourceTree = "<group>"; };
 		6E9068C721CE776100C12760 /* SeriesSettingListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesSettingListCell.swift; sourceTree = "<group>"; };
 		6E9068C821CE776100C12760 /* ChartCustomTopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartCustomTopView.swift; sourceTree = "<group>"; };
@@ -133,8 +133,8 @@
 		6E90689821CE76F700C12760 /* KLineChartDemo */ = {
 			isa = PBXGroup;
 			children = (
-				6E9068B821CE776100C12760 /* DemoSelectViewController.swift */,
 				6E9068AB21CE776100C12760 /* CHKLineChart */,
+				6E9068B821CE776100C12760 /* DemoSelectViewController.swift */,
 				6E9068CC21CE776100C12760 /* ChartCustomViewController.swift */,
 				6E9068CF21CE776100C12760 /* ChartImageViewController.swift */,
 				6E9068CA21CE776100C12760 /* ChartSimpleViewController.swift */,
@@ -176,10 +176,10 @@
 		6E9068B921CE776100C12760 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				6E9068BA21CE776100C12760 /* ChartDataFetcher.swift */,
+				6E9068BA21CE776100C12760 /* KLineChartDataFetcher.swift */,
 				6E9068BB21CE776100C12760 /* KLineChartPoint.swift */,
+				6E9068C421CE776100C12760 /* KLineChartStyleManager.swift */,
 				6E9068BC21CE776100C12760 /* SeriesParam.swift */,
-				6E9068C421CE776100C12760 /* ChartStyleManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -362,11 +362,11 @@
 				6E9068E021CE776100C12760 /* SeriesParam.swift in Sources */,
 				6E9068E421CE776100C12760 /* String+extension.swift in Sources */,
 				6E9068E821CE776100C12760 /* SeriesSettingListCell.swift in Sources */,
-				6E9068E621CE776100C12760 /* ChartStyleManager.swift in Sources */,
+				6E9068E621CE776100C12760 /* KLineChartStyleManager.swift in Sources */,
 				6E9068D321CE776100C12760 /* CHSeries.swift in Sources */,
 				6E9068D921CE776100C12760 /* CHShapeLayer.swift in Sources */,
 				6E90689A21CE76F700C12760 /* AppDelegate.swift in Sources */,
-				6E9068DE21CE776100C12760 /* ChartDataFetcher.swift in Sources */,
+				6E9068DE21CE776100C12760 /* KLineChartDataFetcher.swift in Sources */,
 				6E9068D821CE776100C12760 /* CHChartImageGenerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

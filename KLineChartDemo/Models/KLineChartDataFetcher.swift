@@ -2,13 +2,13 @@
 import UIKit
 import SwiftyJSON
 
-class ChartDataFetcher: NSObject {
+class KLineChartDataFetcher: NSObject {
     
     /// gdax
     let apiURL = "https://api.gdax.com/products/"
     
-    static let shared: ChartDataFetcher = {
-        let instance = ChartDataFetcher()
+    static let shared: KLineChartDataFetcher = {
+        let instance = KLineChartDataFetcher()
         return instance
     }()
     

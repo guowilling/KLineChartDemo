@@ -36,10 +36,10 @@ open class CHKLineChartStyle {
     /// 字体大小
     open var labelFont: UIFont!
     
-    /// 线条颜色
+    /// 边框线条颜色
     open var lineColor: UIColor = UIColor.clear
     
-    /// 文字颜色
+    /// XY 轴上 Label 颜色
     open var textColor: UIColor = UIColor.clear
     
     /// 是否显示选中的内容
@@ -48,7 +48,7 @@ open class CHKLineChartStyle {
     /// 选中点显示的背景颜色
     open var selectedBGColor: UIColor = UIColor.clear
     
-    /// 选中点显示的文字颜色
+    /// 选中点时显示的 XY 轴上 Label 颜色
     open var selectedTextColor: UIColor = UIColor.clear
     
     /// Y 轴的位置, 默认右边

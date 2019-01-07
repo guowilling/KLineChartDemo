@@ -23,13 +23,13 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fEc-AO-iYx" customClass="CHKLineChartView" customModule="KLineChartDemo">
                                 <rect key="frame" x="0.0" y="20" width="375" height="160"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="160" id="xMB-6y-VM6"/>
                                 </constraints>
                             </view>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="cvQ-Ba-Qzt">
-                                <rect key="frame" x="169" y="81.5" width="37" height="37"/>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="cvQ-Ba-Qzt">
+                                <rect key="frame" x="177.5" y="90" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -175,8 +175,8 @@
                                                         <constraint firstAttribute="height" constant="150" id="N8Q-ks-kKg"/>
                                                     </constraints>
                                                 </view>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="yhJ-Jw-knx">
-                                                    <rect key="frame" x="169" y="138.5" width="37" height="37"/>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="yhJ-Jw-knx">
+                                                    <rect key="frame" x="177.5" y="147" width="20" height="20"/>
                                                     <color key="color" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                 </activityIndicatorView>
                                             </subviews>

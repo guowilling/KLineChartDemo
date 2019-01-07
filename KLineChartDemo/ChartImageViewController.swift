@@ -11,15 +11,15 @@ class ChartImageViewController: UIViewController {
     let imageSize: CGSize = CGSize(width: 80, height: 40)
     
     let dataSize = 40
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.fetchChartDatas(symbol: "BTC-USD", type: "15min")
     }
-
+    
     func fetchChartDatas(symbol: String, type: String) {
-        ChartDataFetcher.shared.getKLineChartData(exPair: symbol, timeType: type) { [weak self] (success, chartPoints) in
+        KLineChartDataFetcher.shared.getKLineChartData(exPair: symbol, timeType: type) { [weak self] (success, chartPoints) in
             if success && chartPoints.count > 0 {
                 self?.kLineChartDatas = chartPoints.map { ($0.time, $0.closePrice) }
                 self?.tableView.reloadData()

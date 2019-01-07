@@ -2,7 +2,7 @@
 import UIKit
 //import CHKLineChartKit
 
-class ChartStyleManager: NSObject, Codable {
+class KLineChartStyleManager: NSObject, Codable {
     
     /// 主题风格名称: Dark/Light
     var theme: String = ""
@@ -27,13 +27,13 @@ class ChartStyleManager: NSObject, Codable {
     
     var isInnerYAxis: Bool = false
     
-    static var shared: ChartStyleManager = {
-        let instance = ChartStyleManager.loadUserData()
+    static var shared: KLineChartStyleManager = {
+        let instance = KLineChartStyleManager.loadUserData()
         return instance
     }()
     
-    static var defaultStyle: ChartStyleManager {
-        let style = ChartStyleManager()
+    static var defaultStyle: KLineChartStyleManager {
+        let style = KLineChartStyleManager()
         style.theme = "Dark"
         style.candleColors = "Green/Red"
         style.showYAxisLabel = "right"
@@ -45,23 +45,23 @@ class ChartStyleManager: NSObject, Codable {
         style.upColor = 0x00bd9a
         style.downColor = 0xff6960
         style.lineColors = [0xDDDDDD, 0xF9EE30, 0xF600FF]
-        style.isInnerYAxis = false
+        style.isInnerYAxis = false        
         return style
     }
     
-    static func loadUserData() -> ChartStyleManager {
-        guard let json = UserDefaults.standard.value(forKey: "CustomChartStyle") as? String else {
-            return ChartStyleManager.defaultStyle
+    static func loadUserData() -> KLineChartStyleManager {
+        guard let json = UserDefaults.standard.value(forKey: "CustomKLineChartStyle") as? String else {
+            return KLineChartStyleManager.defaultStyle
         }
         guard let jsonData = json.data(using: String.Encoding.utf8) else {
-            return ChartStyleManager.defaultStyle
+            return KLineChartStyleManager.defaultStyle
         }
         let jsonDecoder = JSONDecoder()
         do {
-            let csm = try jsonDecoder.decode(ChartStyleManager.self, from: jsonData)
+            let csm = try jsonDecoder.decode(KLineChartStyleManager.self, from: jsonData)
             return csm
         } catch _ {
-            return ChartStyleManager.defaultStyle
+            return KLineChartStyleManager.defaultStyle
         }
     }
     
@@ -70,17 +70,17 @@ class ChartStyleManager: NSObject, Codable {
         do {
             let jsonData = try jsonEncoder.encode(self)
             let jsonString = String(data: jsonData, encoding: .utf8)
-            UserDefaults.standard.set(jsonString, forKey: "CustomChartStyle")
+            UserDefaults.standard.set(jsonString, forKey: "CustomKLineChartStyle")
             UserDefaults.standard.synchronize()
             return true
         } catch _ {
             return false
         }
     }
-
+    
     static func resetDefault() {
-        ChartStyleManager.shared = ChartStyleManager.defaultStyle
-        _ = ChartStyleManager.shared.saveUserData()
+        KLineChartStyleManager.shared = KLineChartStyleManager.defaultStyle
+        _ = KLineChartStyleManager.shared.saveUserData()
     }
 }
 

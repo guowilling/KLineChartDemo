@@ -9,7 +9,7 @@ class ChartCustomViewController: UIViewController {
     
     /// 时间周期
     let times: [String] = ["5min", "15min", "1hour", "6hour", "1day"]
-
+    
     /// 主图线段
     let masterLines: [String] = [CHSeriesKey.candle, CHSeriesKey.timeline]
     
@@ -61,10 +61,10 @@ class ChartCustomViewController: UIViewController {
     var chartXAxisPrevDay: String = ""
     
     lazy var chartView: CHKLineChartView = {
-        let chartView = CHKLineChartView(frame: CGRect.zero)
-        chartView.style = self.loadUserStyle()
-        chartView.delegate = self
-        return chartView
+        let view = CHKLineChartView(frame: CGRect.zero)
+        view.style = self.loadUserStyle()
+        view.delegate = self
+        return view
     }()
     
     lazy var topView: ChartCustomTopView = {
@@ -118,15 +118,15 @@ class ChartCustomViewController: UIViewController {
     }()
     
     lazy var selectionPopVCForTimes: SelectionPopViewController = {
-        let view = SelectionPopViewController() { (vc, indexPath) in
+        let vc = SelectionPopViewController() { (vc, indexPath) in
             self.selectedTime = indexPath.row
             self.fetchKLineChartData()
         }
-        return view
+        return vc
     }()
     
     lazy var selectionPopVCForIndex: SelectionPopViewController = {
-        let view = SelectionPopViewController() { (vc, indexPath) in
+        let vc = SelectionPopViewController() { (vc, indexPath) in
             switch indexPath.section {
             case 0:
                 self.selectedMasterLine = indexPath.row
@@ -141,22 +141,22 @@ class ChartCustomViewController: UIViewController {
             }
             self.handleChartIndexChanged()
         }
-        return view
+        return vc
     }()
     
     lazy var selectionPopVCForExPairs: SelectionPopViewController = {
-        let view = SelectionPopViewController() { (vc, indexPath) in
+        let vc = SelectionPopViewController() { (vc, indexPath) in
             let symbol = self.exPairs[indexPath.row]
             self.selectedExPair = indexPath.row
             self.buttonExPairs.setTitle(symbol, for: .normal)
             self.fetchKLineChartData()
         }
-        return view
+        return vc
     }()
     
     lazy var indicatorView: UIActivityIndicatorView = {
-        let v = UIActivityIndicatorView(activityIndicatorStyle: .white)
-        return v
+        let view = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        return view
     }()
     
     override func viewDidLoad() {
@@ -246,7 +246,7 @@ class ChartCustomViewController: UIViewController {
         self.indicatorView.startAnimating()
         self.indicatorView.isHidden = false
         let symbol = self.exPairs[self.selectedExPair]
-        ChartDataFetcher.shared.getKLineChartData(exPair: symbol, timeType: self.times[self.selectedTime]) { [weak self] (success, chartPoints) in
+        KLineChartDataFetcher.shared.getKLineChartData(exPair: symbol, timeType: self.times[self.selectedTime]) { [weak self] (success, chartPoints) in
             self?.indicatorView.stopAnimating()
             self?.indicatorView.isHidden = true
             if success && chartPoints.count > 0 {
@@ -272,10 +272,12 @@ class ChartCustomViewController: UIViewController {
         self.chartView.setSerie(hidden: true, inSection: 2)
         
         // 再显示选中的线段
-        self.chartView.setSerie(hidden: false, by: masterKey, inSection: 0)
+        self.chartView.setSerie(hidden: false, by: lineKey, inSection: 0)
+        if masterKey != ChartCustomViewController.Hide {
+            self.chartView.setSerie(hidden: false, by: masterKey, inSection: 0)
+        }
         self.chartView.setSerie(hidden: false, by: assist1Key, inSection: 1)
         self.chartView.setSerie(hidden: false, by: assist2Key, inSection: 2)
-        self.chartView.setSerie(hidden: false, by: lineKey, inSection: 0)
         
         self.chartView.reloadData(resetData: false)
     }
@@ -284,27 +286,27 @@ class ChartCustomViewController: UIViewController {
 extension ChartCustomViewController {
     
     @IBAction func buttonExPairsAction(_ sender: UIButton) {
-        let view = self.selectionPopVCForExPairs
-        view.clear()
-        view.addItems(section: "ExPairs", items: self.exPairs, selectedIndex: self.selectedExPair)
-        view.show(from: self)
+        let vc = self.selectionPopVCForExPairs
+        vc.clear()
+        vc.addItems(section: "ExPairs", items: self.exPairs, selectedIndex: self.selectedExPair)
+        vc.show(from: self)
     }
     
     @objc func buttonTimeAction() {
-        let view = self.selectionPopVCForTimes
-        view.clear()
-        view.addItems(section: "Time", items: self.times, selectedIndex: self.selectedTime)
-        view.show(from: self)
+        let vc = self.selectionPopVCForTimes
+        vc.clear()
+        vc.addItems(section: "Time", items: self.times, selectedIndex: self.selectedTime)
+        vc.show(from: self)
     }
     
     @objc func buttonIndexAction() {
-        let view = self.selectionPopVCForIndex
-        view.clear()
-        view.addItems(section: "Chart Line", items: self.masterLines, selectedIndex: self.selectedMasterLine)
-        view.addItems(section: "Master Index", items: self.masterIndexes, selectedIndex: self.selectedMasterIndex)
-        view.addItems(section: "Assist Index 1", items: self.assistIndexes, selectedIndex: self.selectedAssistIndex1)
-        view.addItems(section: "Assist Index 2", items: self.assistIndexes, selectedIndex: self.selectedAssistIndex2)
-        view.show(from: self)
+        let vc = self.selectionPopVCForIndex
+        vc.clear()
+        vc.addItems(section: "Chart Line", items: self.masterLines, selectedIndex: self.selectedMasterLine)
+        vc.addItems(section: "Master Index", items: self.masterIndexes, selectedIndex: self.selectedMasterIndex)
+        vc.addItems(section: "Assist Index 1", items: self.assistIndexes, selectedIndex: self.selectedAssistIndex1)
+        vc.addItems(section: "Assist Index 2", items: self.assistIndexes, selectedIndex: self.selectedAssistIndex2)
+        vc.show(from: self)
     }
     
     @objc func buttonIndexParamsAction() {
@@ -423,18 +425,18 @@ extension ChartCustomViewController {
     ///
     /// - Returns: CHKLineChartStyle
     func loadUserStyle() -> CHKLineChartStyle {
-        let styleParam = ChartStyleManager.shared
+        let styleManager = KLineChartStyleManager.shared
         
         let style = CHKLineChartStyle()
         style.labelFont = UIFont.systemFont(ofSize: 10)
-        style.lineColor = UIColor(hex: styleParam.lineColor)
-        style.textColor = UIColor(hex: styleParam.textColor)
+        style.lineColor = UIColor(hex: styleManager.lineColor)
+        style.textColor = UIColor(hex: styleManager.textColor)
         style.selectedBGColor = UIColor(white: 0.4, alpha: 1)
-        style.selectedTextColor = UIColor(hex: styleParam.selectedTextColor)
-        style.backgroundColor = UIColor(hex: styleParam.backgroundColor)
-        style.isInnerYAxis = styleParam.isInnerYAxis
+        style.selectedTextColor = UIColor(hex: styleManager.selectedTextColor)
+        style.backgroundColor = UIColor(hex: styleManager.backgroundColor)
+        style.isInnerYAxis = styleManager.isInnerYAxis
         
-        if styleParam.showYAxisLabel == "Left" {
+        if styleManager.showYAxisLabel == "Left" {
             style.yAxisShowPosition = .left
             style.padding = UIEdgeInsets(top: 16, left: 0, bottom: 4, right: 8)
         } else {
@@ -447,8 +449,8 @@ extension ChartCustomViewController {
         /***** 配置分区样式 *****/
         
         /// 主图
-        let upcolor = (UIColor.ch_hex(styleParam.upColor), true)
-        let downcolor = (UIColor.ch_hex(styleParam.downColor), true)
+        let upcolor = (UIColor.ch_hex(styleManager.upColor), true)
+        let downcolor = (UIColor.ch_hex(styleManager.downColor), true)
         
         let priceSection = CHSection()
         priceSection.backgroundColor = style.backgroundColor
@@ -484,20 +486,22 @@ extension ChartCustomViewController {
         /***** 添加主图固定线段 *****/
         
         /// 时分线
-        let timelineSeries = CHSeries.getTimelinePrice(color: UIColor.ch_hex(0xAE475C),
-                                                       section: priceSection,
-                                                       showGuide: true,
-                                                       ultimateValueStyle: .circle(UIColor.ch_hex(0xAE475C), true),
-                                                       lineWidth: 2)
+        let timelineSeries = CHSeries.getTimelinePrice(
+            color: UIColor.ch_hex(0xAE475C),
+            section: priceSection,
+            showGuide: true,
+            ultimateValueStyle: .circle(UIColor.ch_hex(0xAE475C), true),
+            lineWidth: 2)
         timelineSeries.hidden = true
         
         /// 蜡烛线
-        let priceSeries = CHSeries.getCandlePrice(upStyle: upcolor,
-                                                  downStyle: downcolor,
-                                                  titleColor: UIColor(white: 0.8, alpha: 1),
-                                                  section: priceSection,
-                                                  showGuide: true,
-                                                  ultimateValueStyle: .arrow(UIColor(white: 0.8, alpha: 1)))
+        let priceSeries = CHSeries.getCandlePrice(
+            upStyle: upcolor,
+            downStyle: downcolor,
+            titleColor: UIColor(white: 0.8, alpha: 1),
+            section: priceSection,
+            showGuide: true,
+            ultimateValueStyle: .arrow(UIColor(white: 0.8, alpha: 1)))
         priceSeries.showTitle = true
         priceSeries.chartModels.first?.ultimateValueStyle = .arrow(UIColor(white: 0.8, alpha: 1))
         priceSection.series.append(timelineSeries)
@@ -525,9 +529,9 @@ extension ChartCustomViewController {
         }
         
         // 设置图表外的背景色
-        self.view.backgroundColor = UIColor(hex: styleParam.backgroundColor)
-        self.topView.backgroundColor = UIColor(hex: styleParam.backgroundColor)
-        self.bottomBar.backgroundColor = UIColor(hex: styleParam.backgroundColor)
+        self.view.backgroundColor = UIColor(hex: styleManager.backgroundColor)
+        self.topView.backgroundColor = UIColor(hex: styleManager.backgroundColor)
+        self.bottomBar.backgroundColor = UIColor(hex: styleManager.backgroundColor)
         
         return style
     }
@@ -541,7 +545,7 @@ extension ChartCustomViewController: SeriesSettingListViewControllerDelegate {
 }
 
 extension ChartCustomViewController: ChartStyleSettingViewControllerDelegate {
-    func updateChartStyle(styleParam: ChartStyleManager) {
+    func updateChartStyle(styleParam: KLineChartStyleManager) {
         self.chartView.resetStyle(style: self.loadUserStyle())
         self.handleChartIndexChanged()
     }

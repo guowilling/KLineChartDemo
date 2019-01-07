@@ -87,7 +87,7 @@ class SeriesParam: NSObject, Codable {
     }
     
     func appendIn(masterSection: CHSection, assistSections: CHSection...) {
-        let styleParam = ChartStyleManager.shared
+        let styleParam = KLineChartStyleManager.shared
         
         let upcolor = (UIColor(hex: styleParam.upColor), true)
         let downcolor = (UIColor(hex: styleParam.downColor), true)

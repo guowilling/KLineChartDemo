@@ -2,7 +2,7 @@
 import UIKit
 
 @objc protocol ChartStyleSettingViewControllerDelegate {
-    @objc optional func updateChartStyle(styleParam: ChartStyleManager)
+    @objc optional func updateChartStyle(styleParam: KLineChartStyleManager)
 }
 
 class ChartStyleSettingViewController: UIViewController {
@@ -99,7 +99,7 @@ class ChartStyleSettingViewController: UIViewController {
     
     var delegate: ChartStyleSettingViewControllerDelegate?
 
-    var styleParam = ChartStyleManager.shared
+    var styleParam = KLineChartStyleManager.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -196,9 +196,11 @@ extension ChartStyleSettingViewController {
             self.styleParam.lineColor = 0x333333
             upcolor = 0x00bd9a
             downcolor = 0xff6960
-            lineColors = [0xDDDDDD,
-                          0xF9EE30,
-                          0xF600FF]
+            lineColors = [
+                0xDDDDDD,
+                0xF9EE30,
+                0xF600FF
+            ]
         } else {
             self.styleParam.backgroundColor = 0xffffff
             self.styleParam.textColor = 0x808080
@@ -206,9 +208,11 @@ extension ChartStyleSettingViewController {
             self.styleParam.lineColor = 0xcccccc
             upcolor = 0x1E932B
             downcolor = 0xF80D1F
-            lineColors = [0x4E9CC1,
-                          0xF7A23B,
-                          0xF600FF]
+            lineColors = [
+                0x4E9CC1,
+                0xF7A23B,
+                0xF600FF
+            ]
         }
         
         if self.segmentCandleColor.selectedSegmentIndex == 0 {

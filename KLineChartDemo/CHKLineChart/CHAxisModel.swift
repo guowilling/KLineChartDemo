@@ -32,7 +32,8 @@ public struct CHYAxis {
     public var pos: Int = 0
     public var decimal: Int = 2       // 几位小数
     public var isUsed = false
-    public var referenceStyle: CHAxisReferenceStyle = .dash(color: UIColor(white: 0.2, alpha: 1), pattern: [5])
+    public var referenceStyle: CHAxisReferenceStyle = .dash(color: UIColor(white: 0.3, alpha: 1), pattern: [4])
+//    public var referenceStyle: CHAxisReferenceStyle = .solid(color: UIColor(white: 0.3, alpha: 1))
 }
 
 /// X 轴数据

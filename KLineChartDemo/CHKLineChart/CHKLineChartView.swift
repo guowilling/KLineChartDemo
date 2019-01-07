@@ -777,11 +777,11 @@ extension CHKLineChartView {
     fileprivate func drawYAxis(_ section: CHSection) -> [(CGRect, String)] {
         var yAxisToDraw = [(CGRect, String)]()
         var valueToDraw = Set<CGFloat>()
- 
+        
         var startX: CGFloat = 0, startY: CGFloat = 0, extrude: CGFloat = 0
         var showYAxisLabel: Bool = true
         var showYAxisReference: Bool = true
-
+        
         switch self.yAxisShowPosition {
         case .left:
             startX = section.frame.origin.x - 3 * (self.isInnerYAxis ? -1 : 1)
@@ -826,15 +826,21 @@ extension CHKLineChartView {
             let referencePath = UIBezierPath()
             let referenceLayer = CHShapeLayer()
             referenceLayer.lineWidth = self.lineWidth
-            switch section.yAxis.referenceStyle {
-            case let .dash(color: dashColor, pattern: pattern):
-                referenceLayer.strokeColor = dashColor.cgColor
-                referenceLayer.lineDashPattern = pattern
-                showYAxisReference = true
-            case let .solid(color: solidColor):
-                referenceLayer.strokeColor = solidColor.cgColor
-                showYAxisReference = true
-            default:
+            
+            if section.valueType == .master {
+                switch section.yAxis.referenceStyle {
+                case let .dash(color: dashColor, pattern: pattern):
+                    referenceLayer.strokeColor = dashColor.cgColor
+                    referenceLayer.lineDashPattern = pattern
+                    showYAxisReference = true
+                case let .solid(color: solidColor):
+                    referenceLayer.strokeColor = solidColor.cgColor
+                    showYAxisReference = true
+                default:
+                    showYAxisReference = false
+                    startY = iy - 7
+                }
+            } else {
                 showYAxisReference = false
                 startY = iy - 7
             }

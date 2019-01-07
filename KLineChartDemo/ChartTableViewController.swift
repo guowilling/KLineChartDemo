@@ -23,7 +23,7 @@ class ChartTableViewController: UIViewController {
     }
 
     func fetchChartDatas(symbol: String, type: String) {
-        ChartDataFetcher.shared.getKLineChartData(exPair: symbol, timeType: type) { [weak self] (success, chartPoints) in
+        KLineChartDataFetcher.shared.getKLineChartData(exPair: symbol, timeType: type) { [weak self] (success, chartPoints) in
             if success && chartPoints.count > 0 {
                 self?.kLineDatas[symbol] = chartPoints
                 let row = self?.exPairs.index(of: symbol)

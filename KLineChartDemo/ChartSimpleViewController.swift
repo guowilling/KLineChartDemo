@@ -22,7 +22,7 @@ class ChartSimpleViewController: UIViewController {
     func fetchChartDatas(symbol: String, type: String) {
         self.indicatorView.startAnimating()
         self.indicatorView.isHidden = false
-        ChartDataFetcher.shared.getKLineChartData(exPair: symbol, timeType: type) { [weak self] (success, chartPoints) in
+        KLineChartDataFetcher.shared.getKLineChartData(exPair: symbol, timeType: type) { [weak self] (success, chartPoints) in
             if success && chartPoints.count > 0 {
                 self?.chartPoints = chartPoints
                 self?.kLineChartView.reloadData(toPosition: .end)

@@ -6,10 +6,12 @@ class DemoSelectViewController: UIViewController {
     
     @IBOutlet var tableView: UITableView!
 
-    let demo: [Int: (String, String, Bool)] = [0: ("K线最佳例子", "ChartCustomViewController", false),
-                                               1: ("K线简单例子", "ChartFullViewController", true),
-                                               2: ("K线图片例子", "ChartImageViewController", true),
-                                               3: ("K线列表例子", "ChartInTableViewController", true)]
+    let demo: [Int: (String, String, Bool)] = [
+        0: ("K线最佳例子", "ChartCustomViewController", false),
+        1: ("K线简单例子", "ChartFullViewController", true),
+        2: ("K线图片例子", "ChartImageViewController", true),
+        3: ("K线列表例子", "ChartInTableViewController", true),
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
