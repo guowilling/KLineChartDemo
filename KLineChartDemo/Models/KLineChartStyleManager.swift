@@ -152,7 +152,7 @@ public extension CHKLineChartStyle {
         /// MA
         let priceMASeries = CHSeries.getPriceMA(isEMA: false,
                                                 num: [5,10,30],
-                                                colors:maColor,
+                                                colors: maColor,
                                                 section: priceSection)
         priceMASeries.hidden = false
         

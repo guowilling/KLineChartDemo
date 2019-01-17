@@ -78,7 +78,7 @@ open class CHKLineChartStyle {
 
 public extension CHKLineChartStyle {
     
-    /// 最基本的图表样式
+    /// 基本图表样式
     public static var base: CHKLineChartStyle {
         let style = CHKLineChartStyle()
         style.labelFont = UIFont.systemFont(ofSize: 10)

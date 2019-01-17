@@ -425,6 +425,9 @@ extension ChartCustomViewController {
     ///
     /// - Returns: CHKLineChartStyle
     func loadUserStyle() -> CHKLineChartStyle {
+//        return CHKLineChartStyle.customDark
+//        return CHKLineChartStyle.customLight  
+        
         let styleManager = KLineChartStyleManager.shared
         
         let style = CHKLineChartStyle()

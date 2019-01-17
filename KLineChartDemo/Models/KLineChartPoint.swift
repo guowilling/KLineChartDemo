@@ -34,4 +34,3 @@ class KLineChartPoint: NSObject, Codable {
         }
     }
 }
-
