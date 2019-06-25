@@ -147,6 +147,7 @@ extension CHChartAlgorithm {
 
 // MARK: - MA
 extension CHChartAlgorithm {
+    
     fileprivate func handleMA(_ num: Int, datas: [CHChartItem]) -> [CHChartItem] {
         for (index, data) in datas.enumerated() {
             let value = self.getMAValue(num, index: index, datas: datas)

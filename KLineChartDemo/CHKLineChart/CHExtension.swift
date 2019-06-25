@@ -7,7 +7,7 @@ public extension String {
     func ch_sizeWithConstrained(_ font: UIFont, constraintRect: CGSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)) -> CGSize {
         let boundingRect = self.boundingRect(with: constraintRect,
                                              options: NSStringDrawingOptions.usesLineFragmentOrigin,
-                                             attributes: [NSAttributedStringKey.font: font],
+                                             attributes: [NSAttributedString.Key.font: font],
                                              context: nil)
         return boundingRect.size
     }
@@ -62,7 +62,7 @@ public extension Array where Element: Equatable {
     }
     
     mutating func ch_removeObject(_ object: Element) {
-        if let index = self.index(of: object) {
+        if let index = self.firstIndex(of: object) {
             self.remove(at: index)
         }
     }

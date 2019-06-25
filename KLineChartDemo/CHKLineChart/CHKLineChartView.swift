@@ -96,7 +96,6 @@ open class CHKLineChartView: UIView {
     open var selectedIndex: Int = -1
     
     var selectedPoint: CGPoint = CGPoint.zero
-    
     open var enablePinch: Bool = true
     open var enablePan: Bool = true
     open var enableTap: Bool = true {
@@ -104,6 +103,7 @@ open class CHKLineChartView: UIView {
             self.showSelection = self.enableTap
         }
     }
+    open var panShouldMoveChart: Bool = false
     
     open var showSelection: Bool = true {
         didSet {
@@ -410,11 +410,11 @@ open class CHKLineChartView: UIView {
                 
                 self.showSelection = true
                 
-                self.bringSubview(toFront: self.verticalLineView!)
-                self.bringSubview(toFront: self.horizontalLineView!)
-                self.bringSubview(toFront: self.selectedXAxisLabel!)
-                self.bringSubview(toFront: self.selectedYAxisLabel!)
-                self.bringSubview(toFront: self.sightView!)
+                self.bringSubviewToFront(self.verticalLineView!)
+                self.bringSubviewToFront(self.horizontalLineView!)
+                self.bringSubviewToFront(self.selectedXAxisLabel!)
+                self.bringSubviewToFront(self.selectedYAxisLabel!)
+                self.bringSubviewToFront(self.sightView!)
                 
                 self.setSelectedIndexByIndex(i)
                 
@@ -715,7 +715,7 @@ extension CHKLineChartView {
             let xLabelText = CHTextLayer()
             xLabelText.frame = barLabelRect
             xLabelText.string = xLabel
-            xLabelText.alignmentMode = kCAAlignmentCenter
+            xLabelText.alignmentMode = CATextLayerAlignmentMode.center
             xLabelText.fontSize = self.labelFont.pointSize
             xLabelText.foregroundColor =  self.textColor.cgColor
             xLabelText.backgroundColor = UIColor.clear.cgColor
@@ -869,14 +869,14 @@ extension CHKLineChartView {
     
     /// 绘制Y轴坐标上的标签
     fileprivate func drawYAxisLabel(_ yAxisToDraw: [(CGRect, String)]) {
-        var alignmentMode = kCAAlignmentLeft
+        var alignmentMode = CATextLayerAlignmentMode.left
         switch self.yAxisShowPosition {
         case .left:
-            alignmentMode = self.isInnerYAxis ? kCAAlignmentLeft : kCAAlignmentRight
+            alignmentMode = self.isInnerYAxis ? CATextLayerAlignmentMode.left : CATextLayerAlignmentMode.right
         case .right:
-            alignmentMode = self.isInnerYAxis ? kCAAlignmentRight : kCAAlignmentLeft
+            alignmentMode = self.isInnerYAxis ? CATextLayerAlignmentMode.right : CATextLayerAlignmentMode.left
         case .none:
-            alignmentMode = kCAAlignmentLeft
+            alignmentMode = CATextLayerAlignmentMode.left
         }
         for (yLabelRect, strValue) in yAxisToDraw {
             let yAxisLabel = CHTextLayer()
@@ -1054,12 +1054,10 @@ extension CHKLineChartView {
                 if self.plotCount > (self.rangeTo-self.rangeFrom) {
                     if self.rangeFrom - interval >= 0 {
                         self.rangeFrom -= interval
-                        self.rangeTo   -= interval
-                        
+                        self.rangeTo -= interval
                     } else {
                         self.rangeFrom = 0
                         self.rangeTo -= self.rangeFrom
-                        
                     }
                     self.drawLayerView()
                 }
@@ -1068,12 +1066,9 @@ extension CHKLineChartView {
                     if self.rangeTo + interval <= self.plotCount {
                         self.rangeFrom += interval
                         self.rangeTo += interval
-                        
                     } else {
                         self.rangeFrom += self.plotCount - self.rangeTo
                         self.rangeTo  = self.plotCount
-                        
-                        
                     }
                     self.drawLayerView()
                 }
@@ -1146,9 +1141,29 @@ extension CHKLineChartView: UIGestureRecognizerDelegate {
         }
     }
    
+//    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//        if otherGestureRecognizer.view is UITableView {
+//            return true
+//        }
+//        return false
+//        return true
+//    }
+    
+    
+    
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if otherGestureRecognizer.view is UITableView {
-            return true
+        if gestureRecognizer is UIPanGestureRecognizer {
+            let pan = gestureRecognizer as! UIPanGestureRecognizer
+            let translation = pan.translation(in: self)
+            if abs(translation.y) > abs(translation.x * 5) {
+                // 垂直滑动, 传递手势, 禁止 K 线图滑动
+                self.panShouldMoveChart = false
+                return true
+            } else {
+                // 水平滑动, 不传递手势, 允许 K 线图滑动
+                self.panShouldMoveChart = true
+                return false
+            }
         }
         return false
     }
@@ -1174,6 +1189,9 @@ extension CHKLineChartView: UIGestureRecognizerDelegate {
         guard self.enablePan else {
             return
         }
+        guard self.panShouldMoveChart else {
+            return
+        }
         
         self.showSelection = false
         
@@ -1182,6 +1200,7 @@ extension CHKLineChartView: UIGestureRecognizerDelegate {
             return
         }
         
+        let location = sender.location(in: self)
         let translation = sender.translation(in: self)
         let velocity = sender.velocity(in: self)
         let plotWidth = (section.frame.size.width - section.padding.left - section.padding.right) / CGFloat(self.rangeTo - self.rangeFrom)
@@ -1190,10 +1209,10 @@ extension CHKLineChartView: UIGestureRecognizerDelegate {
         case .began:
             self.dynamicAnimator.removeAllBehaviors()
         case .changed:
-            let distance = fabs(translation.x)
+            let distance = abs(translation.x)
             if distance > plotWidth {
                 let isRight = translation.x > 0 ? true : false
-                let interval = lroundf(fabs(Float(distance / plotWidth)))
+                let interval = lroundf(abs(Float(distance / plotWidth)))
                 self.moveChart(by: interval, direction: isRight)
                 sender.setTranslation(CGPoint(x: 0, y: 0), in: self)
             }
@@ -1204,15 +1223,15 @@ extension CHKLineChartView: UIGestureRecognizerDelegate {
             decelerationBehavior.addLinearVelocity(velocity, for: self.dynamicItem)
             decelerationBehavior.resistance = 2.0
             decelerationBehavior.action = { [weak self]() -> Void in
-                if self?.rangeFrom == 0 || self?.rangeTo == self?.plotCount{
+                if self?.rangeFrom == 0 || self?.rangeTo == self?.plotCount {
                     return
                 }
                 let itemX = self?.dynamicItem.center.x ?? 0
                 let startX = self?.decelerationStartX ?? 0
-                let distance = fabs(itemX - startX)
+                let distance = abs(itemX - startX)
                 if distance > plotWidth {
                     let isRight = itemX > 0 ? true : false
-                    let interval = lroundf(fabs(Float(distance / plotWidth)))
+                    let interval = lroundf(abs(Float(distance / plotWidth)))
                     self?.moveChart(by: interval, direction: isRight)
                     self?.decelerationStartX = itemX
                 }
@@ -1237,15 +1256,10 @@ extension CHKLineChartView: UIGestureRecognizerDelegate {
         }
         
         let plotWidth = (section.frame.size.width - section.padding.left - section.padding.right) / CGFloat(self.rangeTo - self.rangeFrom)
-        
         let scale = sender.scale
-        
         let newPlotWidth = plotWidth * scale
-        
         let newRangeTemp = (section.frame.size.width - section.padding.left - section.padding.right) / newPlotWidth
-        
         let newRange = scale > 1 ? Int(newRangeTemp + 1) : Int(newRangeTemp)
-        
         let distance = abs(self.range - newRange)
         if distance % 2 == 0 && distance > 0 {
             let enlarge = scale > 1 ? true : false

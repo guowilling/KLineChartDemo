@@ -104,21 +104,16 @@ class ChartCustomTopView: UIView {
         super.init(coder: aDecoder)
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        self.setupUI()
-    }
-    
     func setupUI() {
         self.addSubview(self.stackLeft)
         self.addSubview(self.stackRight)
         
         self.stackLeft.addArrangedSubview(self.labelPrice)
+        
         let leftStatck1 = UIStackView()
         leftStatck1.axis = .horizontal
         leftStatck1.distribution = .fillEqually
-        leftStatck1.spacing = 8
+        leftStatck1.spacing = 5
         leftStatck1.alignment = .fill
         leftStatck1.addArrangedSubview(self.labelMargin)
         leftStatck1.addArrangedSubview(self.labelRise)
@@ -127,7 +122,7 @@ class ChartCustomTopView: UIView {
         let rightStack1 = UIStackView()
         rightStack1.axis = .horizontal
         rightStack1.distribution = .fillEqually
-        rightStack1.spacing = 8
+        rightStack1.spacing = 5
         rightStack1.alignment = .fill
         rightStack1.addArrangedSubview(self.labelHigh)
         rightStack1.addArrangedSubview(self.labelOpen)
@@ -136,7 +131,7 @@ class ChartCustomTopView: UIView {
         let rightStack2 = UIStackView()
         rightStack2.axis = .horizontal
         rightStack2.distribution = .fillEqually
-        rightStack2.spacing = 8
+        rightStack2.spacing = 5
         rightStack2.alignment = .fill
         rightStack2.addArrangedSubview(self.labelLow)
         rightStack2.addArrangedSubview(self.labelClose)
@@ -145,7 +140,7 @@ class ChartCustomTopView: UIView {
         let rightStack3 = UIStackView()
         rightStack3.axis = .horizontal
         rightStack3.distribution = .fillEqually
-        rightStack3.spacing = 8
+        rightStack3.spacing = 5
         rightStack3.alignment = .fill
         rightStack3.addArrangedSubview(self.labelVol)
         rightStack3.addArrangedSubview(self.labelTurnover)
@@ -166,9 +161,8 @@ class ChartCustomTopView: UIView {
     
     func update(data: KLineChartPoint) {
         self.labelPrice.text = "\(data.closePrice)"
-        self.labelRise.text = "\(data.amplitudeRatio.toString(maxF: 2))%"
         self.labelMargin.text = "\(data.amplitude.toString(maxF: 4))"
-        
+        self.labelRise.text = "\(data.amplitudeRatio.toString(maxF: 2))%"
         self.labelOpen.text = "开盘" + " " + "\(data.openPrice.toString(maxF: 4))"
         self.labelHigh.text = "最高" + " " + "\(data.highPrice.toString(maxF: 4))"
         self.labelLow.text = "最低" + " " + "\(data.lowPrice.toString(maxF: 4))"

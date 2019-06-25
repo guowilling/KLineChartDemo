@@ -79,7 +79,7 @@ open class CHKLineChartStyle {
 public extension CHKLineChartStyle {
     
     /// 基本图表样式
-    public static var base: CHKLineChartStyle {
+    static var base: CHKLineChartStyle {
         let style = CHKLineChartStyle()
         style.labelFont = UIFont.systemFont(ofSize: 10)
         style.lineColor = UIColor(white: 0.2, alpha: 1)

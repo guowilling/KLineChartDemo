@@ -200,7 +200,7 @@ class SeriesParam: NSObject, Codable {
     }
 }
 
-class SeriesParamList: NSObject, Codable{
+class SeriesParamList: NSObject, Codable {
     
     var results: [SeriesParam] = [SeriesParam]()
     

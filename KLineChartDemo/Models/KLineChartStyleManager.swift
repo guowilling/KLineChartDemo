@@ -88,7 +88,7 @@ class KLineChartStyleManager: NSObject, Codable {
 public extension CHKLineChartStyle {
     
     /// 自定义的明亮风格样式
-    public static var customLight: CHKLineChartStyle {
+    static var customLight: CHKLineChartStyle {
         let style = CHKLineChartStyle()
         style.labelFont = UIFont.systemFont(ofSize: 10)
         style.lineColor = UIColor.clear
@@ -220,7 +220,7 @@ public extension CHKLineChartStyle {
     }
     
     /// 自定义暗黑风格的样式
-    public static var customDark: CHKLineChartStyle {
+    static var customDark: CHKLineChartStyle {
         let style = CHKLineChartStyle()
         style.labelFont = UIFont.systemFont(ofSize: 10)
         style.lineColor = UIColor.clear
@@ -357,7 +357,7 @@ public extension CHKLineChartStyle {
     }
     
     /// 暗黑风格的点线简单样式
-    public static var simpleLineDark: CHKLineChartStyle {
+    static var simpleLineDark: CHKLineChartStyle {
         let style = CHKLineChartStyle()
         style.labelFont = UIFont.systemFont(ofSize: 10)
         style.lineColor = UIColor.clear

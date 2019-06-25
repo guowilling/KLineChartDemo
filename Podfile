@@ -6,8 +6,7 @@ target 'KLineChartDemo' do
   use_frameworks!
 
   # Pods for KLineChartDemo
-    pod "SnapKit", "~> 4.0.0"
-    pod "MZFormSheetPresentationController"
+    pod "SnapKit"
     pod "SwiftyJSON"
     
 end
