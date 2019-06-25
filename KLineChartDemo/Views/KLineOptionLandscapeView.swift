@@ -101,7 +101,7 @@ class KLineOptionLandscapeView: UIView {
         }
     }
     
-    func setThemeColor(withHex hex: UInt) {
+    func setThemeColor(hex: UInt) {
         indexMenuButton.backgroundColor = UIColor(hex: hex)
         menuIndexView.backgroundColor = UIColor(hex: hex)
         

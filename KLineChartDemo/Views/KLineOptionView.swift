@@ -128,7 +128,7 @@ public class KLineOptionView: UIView {
         }
     }
     
-    func setThemeColor(withHex hex: UInt) {
+    func setThemeColor(hex: UInt) {
         moreMenuButton.backgroundColor = UIColor(hex: hex)
         menuMoreView.backgroundColor = UIColor(hex: hex)
         

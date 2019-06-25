@@ -159,7 +159,6 @@ class ChartCustomViewController: UIViewController {
         self.navigationItem.titleView = self.buttonExPairs
         
         let scrollView = UIScrollView(frame: view.bounds)
-        scrollView.backgroundColor = UIColor(hex: 0x232732)
         scrollView.bounces = true
         scrollView.alwaysBounceVertical = true
         self.view.addSubview(scrollView)
@@ -508,7 +507,15 @@ extension ChartCustomViewController {
         // 设置图表外的背景色
         self.view.backgroundColor = UIColor(hex: styleManager.backgroundColor)
         self.topView.backgroundColor = UIColor(hex: styleManager.backgroundColor)
+        self.optionView.backgroundColor = UIColor(hex: styleManager.backgroundColor)
+        self.optionView.setThemeColor(hex: styleManager.backgroundColor)
         self.bottomBar.backgroundColor = UIColor(hex: styleManager.backgroundColor)
+        
+        if styleManager.backgroundColor == 0xffffff {
+            self.indicatorView.style = .gray
+        } else {
+            self.indicatorView.style = .white
+        }
         
         return style
     }

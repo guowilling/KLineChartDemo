@@ -10,10 +10,10 @@ class ViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
 
     let demos: [Int: (String, String, Bool)] = [
-        0: ("K线最佳例子", "ChartCustomViewController", false),
-        1: ("K线简单例子", "ChartFullViewController", true),
-        2: ("K线图片例子", "ChartImageViewController", true),
-        3: ("K线列表例子", "ChartInTableViewController", true),
+        0: ("最佳例子", "ChartCustomViewController", false),
+        1: ("简单例子", "ChartFullViewController", true),
+        2: ("图片例子", "ChartImageViewController", true),
+        3: ("列表例子", "ChartInTableViewController", true),
     ]
     
     override func viewDidLoad() {
