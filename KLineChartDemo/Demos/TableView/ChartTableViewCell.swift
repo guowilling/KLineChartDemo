@@ -11,7 +11,7 @@ class ChartTableViewCell: UITableViewCell {
     
     static let identifier = "ChartTableViewCellID"
     
-    var datas = [KLineChartPoint]()
+    var datas = [ChartPoint]()
     
     var time: String = "15min"
     
@@ -36,7 +36,7 @@ class ChartTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func reloadData(datas: [KLineChartPoint]) {
+    func reloadData(datas: [ChartPoint]) {
         self.datas = datas
         self.chartView.reloadData()
     }

@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class KLineOptionMenuBaseView: UIView {
+class OptionMenuBaseView: UIView {
     convenience init() {
         self.init(frame: .zero)
         
@@ -18,12 +18,12 @@ class KLineOptionMenuBaseView: UIView {
     }
 }
 
-class KLineOptionMenuMoreView: KLineOptionMenuBaseView {
+class OptionMenuMoreView: OptionMenuBaseView {
     
-    weak var optionMenuButton: KLineOptionMenuButton!
+    weak var optionMenuButton: OptionMenuButton!
     
     let buttonsTitle = ["1分钟", "5分钟", "6小时", "12小时", "周线", "月线"]
-    var buttons: [KLineOptionMenuMoreButton] = []
+    var buttons: [OptionMenuMoreButton] = []
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,10 +36,10 @@ class KLineOptionMenuMoreView: KLineOptionMenuBaseView {
     }
     
     func createButtons() {
-        var lastBtn: KLineOptionMenuMoreButton?
+        var lastBtn: OptionMenuMoreButton?
         let btnWidth = UIScreen.main.bounds.width / CGFloat(buttonsTitle.count)
         for i in 0..<buttonsTitle.count {
-            let button = KLineOptionMenuMoreButton()
+            let button = OptionMenuMoreButton()
             let titleString = buttonsTitle[i]
             button.titleString = titleString
             button.addTarget(self, action: #selector(buttonAction(sender:)), for: .touchUpInside)
@@ -58,26 +58,26 @@ class KLineOptionMenuMoreView: KLineOptionMenuBaseView {
         }
     }
     
-    @objc func buttonAction(sender: KLineOptionMenuMoreButton) {
+    @objc func buttonAction(sender: OptionMenuMoreButton) {
         optionMenuButton.titleString = sender.titleString
         optionMenuButton.setTitleColor(sender.titleColor(for: .selected), for: .normal)
         
-        let optionView: KLineOptionView = superview as! KLineOptionView
+        let optionView: ChartCustomOptionView = superview as! ChartCustomOptionView
         optionView.buttonAction(button: optionMenuButton)
     }
 }
 
-class KLineOptionMenuIndexView: KLineOptionMenuBaseView {
+class OptionMenuIndexView: OptionMenuBaseView {
     
-    weak var optionMenuButton: KLineOptionMenuButton!
+    weak var optionMenuButton: OptionMenuButton!
     
-    let subMasterView = KLineOptionMenuIndexSubView()
-    let subAssistView = KLineOptionMenuIndexSubView()
+    let subMasterView = OptionMenuIndexSubView()
+    let subAssistView = OptionMenuIndexSubView()
     
-    var masterIndexChangedClosure: KLineButtonActionClosure? {
+    var masterIndexChangedClosure: optionButtonActionClosure? {
         didSet { subMasterView.buttonActionClosure = masterIndexChangedClosure }
     }
-    var assistIndexChangedClosure: KLineButtonActionClosure? {
+    var assistIndexChangedClosure: optionButtonActionClosure? {
         didSet { subAssistView.buttonActionClosure = assistIndexChangedClosure }
     }
     
@@ -106,23 +106,23 @@ class KLineOptionMenuIndexView: KLineOptionMenuBaseView {
     }
 }
 
-enum KLineOptionMenuIndexSubType: Int {
+enum OptionMenuIndexSubType: Int {
     case master
     case assist
 }
 
-class KLineOptionMenuIndexSubView: UIView {
+class OptionMenuIndexSubView: UIView {
     
     let verticalLine = UIView()
     
     var titleArray: [String] = []
     
-    var selectedMasterButton: KLineOptionMenuIndexButton?
-    var selectedAssistButton: KLineOptionMenuIndexButton?
+    var selectedMasterButton: OptionMenuIndexButton?
+    var selectedAssistButton: OptionMenuIndexButton?
     
-    var buttonActionClosure: KLineButtonActionClosure?
+    var buttonActionClosure: optionButtonActionClosure?
     
-    var type: KLineOptionMenuIndexSubType! {
+    var type: OptionMenuIndexSubType! {
         didSet {
             if type == .master {
                 titleArray = ["MA", "BOLL", "SAR"]
@@ -134,9 +134,9 @@ class KLineOptionMenuIndexSubView: UIView {
         }
     }
     
-    var buttons: [KLineOptionMenuIndexButton] = []
+    var buttons: [OptionMenuIndexButton] = []
     
-    convenience init(type: KLineOptionMenuIndexSubType) {
+    convenience init(type: OptionMenuIndexSubType) {
         self.init(frame: .zero)
         
         self.type = type
@@ -178,9 +178,9 @@ class KLineOptionMenuIndexSubView: UIView {
     }
     
     func createButtons() {
-        var lastBtn: KLineOptionMenuIndexButton!
+        var lastBtn: OptionMenuIndexButton!
         for i in 0..<titleArray.count {
-            let button = KLineOptionMenuIndexButton()
+            let button = OptionMenuIndexButton()
             let titleString = titleArray[i]
             button.titleString = titleString
             button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
@@ -200,7 +200,7 @@ class KLineOptionMenuIndexSubView: UIView {
             buttons.append(button)
         }
         
-        let hideButton = KLineOptionMenuIndexButton()
+        let hideButton = OptionMenuIndexButton()
         hideButton.setTitle("隐藏", for: .normal)
         hideButton.setTitle("隐藏", for: .selected)
         if type == .master {
@@ -217,9 +217,9 @@ class KLineOptionMenuIndexSubView: UIView {
         }
     }
     
-    @objc func buttonAction(_ button: KLineOptionMenuIndexButton) {
-        let optionView: KLineOptionView? = superview?.superview as? KLineOptionView
-        let menuView: KLineOptionMenuIndexView? = superview as? KLineOptionMenuIndexView
+    @objc func buttonAction(_ button: OptionMenuIndexButton) {
+        let optionView: ChartCustomOptionView? = superview?.superview as? ChartCustomOptionView
+        let menuView: OptionMenuIndexView? = superview as? OptionMenuIndexView
         optionView?.buttonAction(button: (menuView?.optionMenuButton)!)
         menuView?.optionMenuButton.isSelected = true
         

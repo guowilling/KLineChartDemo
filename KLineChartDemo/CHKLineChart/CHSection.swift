@@ -13,9 +13,9 @@ public enum CHSectionValueType {
 /// 分区
 open class CHSection: NSObject {
     
-    open var upColor: UIColor = UIColor.green
-    open var downColor: UIColor = UIColor.red
-    open var titleColor: UIColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
+    open var upColor = UIColor.green
+    open var downColor = UIColor.red
+    open var titleColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
     open var labelFont = UIFont.systemFont(ofSize: 10)
     open var valueType: CHSectionValueType = CHSectionValueType.master
     open var key = ""
@@ -40,6 +40,8 @@ open class CHSection: NSObject {
     var titleLayer: CHShapeLayer = CHShapeLayer()   // 标题的绘图层
     var sectionLayer: CHShapeLayer = CHShapeLayer() // 分区的绘图层
     var titleView: UIView?                          // 用户自定义视图
+    
+    var maskLayer: CAShapeLayer?
     
     convenience init(valueType: CHSectionValueType, key: String = "") {
         self.init()

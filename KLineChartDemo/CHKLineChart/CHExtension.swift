@@ -13,16 +13,19 @@ public extension String {
     }
     
     var ch_length: Int {
-        return self.count;
+        return self.count
     }
 }
 
 public extension UIColor {
+    
     class func ch_hex(_ hex: UInt, alpha: Float = 1.0) -> UIColor {
-        return UIColor(red: CGFloat((hex & 0xFF0000) >> 16) / 255.0,
-                       green: CGFloat((hex & 0x00FF00) >> 8) / 255.0,
-                       blue: CGFloat(hex & 0x0000FF) / 255.0,
-                       alpha: CGFloat(alpha))
+        return UIColor(
+            red: CGFloat((hex & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((hex & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(hex & 0x0000FF) / 255.0,
+            alpha: CGFloat(alpha)
+        )
     }
 }
 

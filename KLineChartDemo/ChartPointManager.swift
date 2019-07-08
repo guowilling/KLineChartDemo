@@ -2,8 +2,7 @@
 import UIKit
 import SwiftyJSON
 
-
-enum KLineTimeType: String {
+enum ChartPointDurationType: String {
     case min5 = "5分钟"
     case min15 = "15分钟"
     case min30 = "30分钟"
@@ -17,13 +16,13 @@ enum KLineTimeType: String {
     case month = "月线"
 }
 
-class KLineChartDataFetcher: NSObject {
+class ChartPointManager: NSObject {
     
     /// gdax
     let apiURL = "https://api.gdax.com/products/"
     
-    static let shared: KLineChartDataFetcher = {
-        let instance = KLineChartDataFetcher()
+    static let shared: ChartPointManager = {
+        let instance = ChartPointManager()
         return instance
     }()
     
@@ -33,7 +32,7 @@ class KLineChartDataFetcher: NSObject {
     ///   - exPair: 交易对(BTC/USDT)
     ///   - timeType: 时间周期
     ///   - completion: 完成回调
-    func getKLineChartData(exPair: String, timeType: KLineTimeType, completion: @escaping (Bool, [KLineChartPoint]) -> Void) {
+    func getKLineChartData(exPair: String, timeType: ChartPointDurationType, completion: @escaping (Bool, [ChartPoint]) -> Void) {
         // The granularity field must be one of the following values: {60, 300, 900, 3600, 21600, 86400}. Otherwise, your request will be rejected. These values correspond to timeslices representing one minute, five minutes, fifteen minutes, one hour, six hours, and one day, respectively.
         var granularity = 300
         switch timeType {
@@ -69,12 +68,12 @@ class KLineChartDataFetcher: NSObject {
                     completion(false, [])
                     return
                 }
-                var chartPoints = [KLineChartPoint]()
+                var chartPoints = [ChartPoint]()
                 do {
                     let json = try JSON(data: data)
                     let pointDatas = json.arrayValue
                     for pointData in pointDatas {
-                        let chartPoint = KLineChartPoint(json: pointData.arrayValue)
+                        let chartPoint = ChartPoint(json: pointData.arrayValue)
                         chartPoints.append(chartPoint)
                     }
                     chartPoints.reverse()

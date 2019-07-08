@@ -21,7 +21,7 @@ class SeriesParamControl: NSObject, Codable {
     }
 }
 
-/// 指标线参数
+/// 指标参数模型
 class SeriesParam: NSObject, Codable {
     
     var seriesKey: String = ""
@@ -70,9 +70,6 @@ class SeriesParam: NSObject, Codable {
             algorithms.append(a)
         case CHSeriesKey.sar:
             let a = CHChartAlgorithm.sar(Int(self.params[0].value), CGFloat(self.params[1].value), CGFloat(self.params[2].value))
-            algorithms.append(a)
-        case CHSeriesKey.sam:
-            let a = CHChartAlgorithm.sam(Int(self.params[0].value))
             algorithms.append(a)
         case CHSeriesKey.rsi:
             for p in self.params {
@@ -164,23 +161,6 @@ class SeriesParam: NSObject, Codable {
                                                  section: masterSection)
             priceSARSeries.hidden = true
             masterSection.series.append(priceSARSeries)
-            
-        case CHSeriesKey.sam:
-            let priceSAMSeries = CHSeries.getPriceSAM(num: Int(self.params[0].value),
-                                                      barStyle: (UIColor.yellow, false),
-                                                      lineColor: UIColor(white: 0.4, alpha: 1),
-                                                      section: masterSection)
-            priceSAMSeries.hidden = true
-            masterSection.series.append(priceSAMSeries)
-            for assistSection in assistSections {
-                let volWithSAMSeries = CHSeries.getVolumeWithSAM(upStyle: upcolor,
-                                                                 downStyle: downcolor,
-                                                                 num: Int(self.params[0].value),
-                                                                 barStyle: (UIColor.yellow, false),
-                                                                 lineColor: UIColor(white: 0.4, alpha: 1),
-                                                                 section: assistSection)
-                assistSection.series.append(volWithSAMSeries)
-            }
             
         case CHSeriesKey.rsi:
             var maColor = [UIColor]()
@@ -290,12 +270,6 @@ extension SeriesParamList {
                               order: 3,
                               hidden: false)
         
-        let sam = SeriesParam(seriesKey: CHSeriesKey.sam,
-                              name: CHSeriesKey.sam,
-                              params: [SeriesParamControl(value: 60, note: "统计周期", min: 10, max: 120, step: 1)],
-                              order: 4,
-                              hidden: false)
-        
         let kdj = SeriesParam(seriesKey: CHSeriesKey.kdj,
                               name: CHSeriesKey.kdj,
                               params: [SeriesParamControl(value: 9, note: "周期", min: 2, max: 90, step: 1),
@@ -320,7 +294,6 @@ extension SeriesParamList {
                               order: 7,
                               hidden: false)
         
-        return [ma, ema, boll, sar, sam, kdj, macd, rsi]
+        return [ma, ema, boll, sar, kdj, macd, rsi]
     }
 }
-

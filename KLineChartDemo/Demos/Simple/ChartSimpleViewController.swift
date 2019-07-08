@@ -8,7 +8,7 @@ class ChartSimpleViewController: UIViewController {
     
     @IBOutlet weak var kLineChartView: CHKLineChartView!
     
-    var chartPoints = [KLineChartPoint]()
+    var chartPoints = [ChartPoint]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,13 +19,13 @@ class ChartSimpleViewController: UIViewController {
         self.fetchChartDatas(symbol: "BTC-USD", type: .min15)
     }
     
-    func fetchChartDatas(symbol: String, type: KLineTimeType) {
+    func fetchChartDatas(symbol: String, type: ChartPointDurationType) {
         self.indicatorView.startAnimating()
         self.indicatorView.isHidden = false
-        KLineChartDataFetcher.shared.getKLineChartData(exPair: symbol, timeType: type) { [weak self] (success, chartPoints) in
+        ChartPointManager.shared.getKLineChartData(exPair: symbol, timeType: type) { [weak self] (success, chartPoints) in
             if success && chartPoints.count > 0 {
                 self?.chartPoints = chartPoints
-                self?.kLineChartView.reloadData(toPosition: .end)
+                self?.kLineChartView.reloadData(toPosition: .tail)
             }
             self?.indicatorView.stopAnimating()
             self?.indicatorView.isHidden = true

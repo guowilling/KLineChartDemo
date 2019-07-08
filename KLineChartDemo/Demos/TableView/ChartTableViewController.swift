@@ -6,13 +6,13 @@ class ChartTableViewController: UIViewController {
     
     @IBOutlet var tableView: UITableView!
     
-    let times: [KLineTimeType] = [.min5, .min15, .hour1, .day]
+    let times: [ChartPointDurationType] = [.min5, .min15, .hour1, .day]
     
     var selectedTimeIndex: [Int] = [0, 0, 0, 0, 0, 0]
     
     let exPairs: [String] = ["BTC-USD", "ETH-USD", "LTC-USD", "LTC-BTC", "ETH-BTC", "BCH-BTC"]
     
-    var kLineDatas = [String: [KLineChartPoint]]()
+    var kLineDatas = [String: [ChartPoint]]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,8 +22,8 @@ class ChartTableViewController: UIViewController {
         }
     }
     
-    func fetchChartDatas(symbol: String, type: KLineTimeType) {
-        KLineChartDataFetcher.shared.getKLineChartData(exPair: symbol, timeType: type) { [weak self] (success, chartPoints) in
+    func fetchChartDatas(symbol: String, type: ChartPointDurationType) {
+        ChartPointManager.shared.getKLineChartData(exPair: symbol, timeType: type) { [weak self] (success, chartPoints) in
             if success && chartPoints.count > 0 {
                 self?.kLineDatas[symbol] = chartPoints
                 let row = self?.exPairs.firstIndex(of: symbol)

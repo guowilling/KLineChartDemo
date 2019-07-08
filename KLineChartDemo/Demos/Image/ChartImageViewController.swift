@@ -18,8 +18,8 @@ class ChartImageViewController: UIViewController {
         self.fetchChartDatas(symbol: "BTC-USD", type: .min15)
     }
     
-    func fetchChartDatas(symbol: String, type: KLineTimeType) {
-        KLineChartDataFetcher.shared.getKLineChartData(exPair: symbol, timeType: type) { [weak self] (success, chartPoints) in
+    func fetchChartDatas(symbol: String, type: ChartPointDurationType) {
+        ChartPointManager.shared.getKLineChartData(exPair: symbol, timeType: type) { [weak self] (success, chartPoints) in
             if success && chartPoints.count > 0 {
                 self?.kLineChartDatas = chartPoints.map { ($0.time, $0.closePrice) }
                 self?.tableView.reloadData()

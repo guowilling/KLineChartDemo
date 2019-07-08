@@ -73,14 +73,14 @@ open class CHChartModel {
         self.plotPaddingExt = plotPaddingExt
     }
     
-    open func drawSerie(_ startIndex: Int, endIndex: Int) -> CAShapeLayer {
+    open func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer {
         return CAShapeLayer()
     }
 }
 
 /// 点线样式模型
 open class CHLineModel: CHChartModel {
-    open override func drawSerie(_ startIndex: Int, endIndex: Int) -> CAShapeLayer {
+    open override func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer {
         let serieLayer = CAShapeLayer()
         
         let modelLayer = CAShapeLayer()
@@ -93,13 +93,16 @@ open class CHLineModel: CHChartModel {
         // 每个点的间隔宽度
         let plotWidth = (self.section.frame.size.width - self.section.padding.left - self.section.padding.right) / CGFloat(endIndex - startIndex)
         
-        var isStartPoint = false
-        
-        let linePath = UIBezierPath()
         var maxValue: CGFloat = 0                               // 最大值的项
         var maxPoint: CGPoint?                                  // 最大值所在坐标
         var minValue: CGFloat = CGFloat.greatestFiniteMagnitude // 最小值的项
         var minPoint: CGPoint?                                  // 最小值所在坐标
+        
+        var startPoint: CGPoint = CGPoint.zero
+        var endPoint: CGPoint = CGPoint.zero
+        
+        let linePath = UIBezierPath()
+        var isStartPoint = false
         
         // 循环起始到终结
         for i in stride(from: startIndex, to: endIndex, by: 1) {
@@ -113,8 +116,12 @@ open class CHLineModel: CHChartModel {
             if !isStartPoint {
                 isStartPoint = true
                 linePath.move(to: point)
+                startPoint = point
             } else {
                 linePath.addLine(to: point)
+                if i == endIndex - 1 {
+                    endPoint = point
+                }
             }
             
             // 记录最大值信息
@@ -145,6 +152,24 @@ open class CHLineModel: CHChartModel {
             serieLayer.addSublayer(minLayer)
         }
         
+        if seriesKey == CHSeriesKey.timeline {
+            let path = UIBezierPath()
+            let pathHeight = section.frame.size.height + section.frame.origin.y - section.padding.bottom
+            path.move(to: CGPoint(x: startPoint.x, y: pathHeight))
+            path.addLine(to: startPoint)
+            path.append(linePath)
+            path.addLine(to: CGPoint(x: endPoint.x, y: pathHeight))
+            path.addLine(to: CGPoint(x: startPoint.x, y: pathHeight))
+            
+            let maskLayer = CAShapeLayer()
+            maskLayer.path = path.cgPath
+            maskLayer.fillColor = UIColor.white.cgColor
+            maskLayer.strokeColor = UIColor.clear.cgColor
+            maskLayer.lineWidth = 0.0
+            
+            section.maskLayer = maskLayer
+        }
+        
         return serieLayer
     }
 }
@@ -154,7 +179,7 @@ open class CHCandleModel: CHChartModel {
     
     var drawShadow = true
     
-    open override func drawSerie(_ startIndex: Int, endIndex: Int) -> CAShapeLayer {
+    open override func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer {
         let serieLayer = CAShapeLayer()
         
         let modelLayer = CAShapeLayer()
@@ -284,7 +309,7 @@ open class CHCandleModel: CHChartModel {
 /// 交易量样式模型
 open class CHColumnModel: CHChartModel {
     
-    open override func drawSerie(_ startIndex: Int, endIndex: Int) -> CAShapeLayer {
+    open override func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer {
         let serieLayer = CAShapeLayer()
         let modelLayer = CAShapeLayer()
         
@@ -341,7 +366,7 @@ open class CHColumnModel: CHChartModel {
 //// 柱状样式模型
 open class CHBarModel: CHChartModel {
     
-    open override func drawSerie(_ startIndex: Int, endIndex: Int) -> CAShapeLayer{
+    open override func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer{
         let serieLayer = CAShapeLayer()
         let modelLayer = CAShapeLayer()
         
@@ -400,7 +425,7 @@ open class CHBarModel: CHChartModel {
 /// 圆点样式模型
 open class CHRoundModel: CHChartModel {
     
-    open override func drawSerie(_ startIndex: Int, endIndex: Int) -> CAShapeLayer {
+    open override func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer {
         let serieLayer = CAShapeLayer()
         
         let modelLayer = CAShapeLayer()

@@ -1,37 +1,49 @@
 //
-//  KLineOptionLandscapeView.swift
-//  MatrixExchange
+//  KLineOptionView.swift
+//  SRTempDemo
 //
-//  Created by 郭伟林 on 2019/6/4.
-//  Copyright © 2019 Matrix. All rights reserved.
+//  Created by 郭伟林 on 2019/1/15.
+//  Copyright © 2019年 BITMAIN. All rights reserved.
 //
 
 import UIKit
+import SnapKit
 
-class KLineOptionLandscapeView: UIView {
+public typealias optionButtonActionClosure = ((String) -> Void)
 
-    var buttonsTitleArray = ["分时", "1分钟", "5分钟", "15分钟", "1小时", "4小时", "6小时", "12小时", "日线", "周线", "月线", "指标"]
+public class ChartCustomOptionView: UIView {
     
-    let menuIndexView = KLineOptionMenuIndexView()
+    var buttonsTitleArray = ["分时", "15分钟", "1小时", "4小时", "日线", "更多", "指标"]
     
-    weak var indexMenuButton: KLineOptionMenuButton!
+    let menuMoreView = OptionMenuMoreView()
+    let menuIndexView = OptionMenuIndexView()
     
-    var selectedTimeButton: KLineOptionBaseButton?
-    var selectedMenuButton: KLineOptionMenuButton?
+    weak var moreMenuButton: OptionMenuButton!
+    weak var indexMenuButton: OptionMenuButton!
+   
+    var selectedTimeButton: OptionBaseButton?
+    var selectedMenuButton: OptionMenuButton?
     
-    var timeChangedClosure: KLineButtonActionClosure?
+    var timeChangedClosure: optionButtonActionClosure?
     
-    var masterIndexChangedClosure: KLineButtonActionClosure? {
+    var masterIndexChangedClosure: optionButtonActionClosure? {
         didSet { menuIndexView.masterIndexChangedClosure = masterIndexChangedClosure }
     }
-    var assistIndexChangedClosure: KLineButtonActionClosure? {
+    var assistIndexChangedClosure: optionButtonActionClosure? {
         didSet { menuIndexView.assistIndexChangedClosure = assistIndexChangedClosure }
     }
     
-    var buttons: [KLineOptionBaseButton] = []
+    var buttons: [OptionBaseButton] = []
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        addSubview(menuMoreView)
+        menuMoreView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.top.equalTo(self.snp.bottom)
+            make.height.equalTo(44)
+        }
         
         addSubview(menuIndexView)
         menuIndexView.snp.makeConstraints { make in
@@ -43,21 +55,27 @@ class KLineOptionLandscapeView: UIView {
         createButtons()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     func createButtons() {
-        var lastBtn: KLineOptionBaseButton?
+        var lastBtn: OptionBaseButton?
         for i in 0..<buttonsTitleArray.count {
-            var button: KLineOptionBaseButton
-            if i == buttonsTitleArray.count - 1 {
-                button = KLineOptionMenuButton()
-                indexMenuButton = button as? KLineOptionMenuButton
-                indexMenuButton.menuView = menuIndexView
-                menuIndexView.optionMenuButton = indexMenuButton
+            var button: OptionBaseButton
+            if i < buttonsTitleArray.count - 2 {
+                button = OptionTimeButton()
             } else {
-                button = KLineOptionTimeButton()
+                button = OptionMenuButton()
+                if i == buttonsTitleArray.count - 1 {
+                    indexMenuButton = button as? OptionMenuButton
+                    indexMenuButton.menuView = menuIndexView
+                    menuIndexView.optionMenuButton = indexMenuButton
+                } else {
+                    moreMenuButton = button as? OptionMenuButton
+                    moreMenuButton.menuView = menuMoreView
+                    menuMoreView.optionMenuButton = moreMenuButton
+                }
             }
             button.titleString = buttonsTitleArray[i]
             if button.titleString == "1小时" {
@@ -81,17 +99,26 @@ class KLineOptionLandscapeView: UIView {
         }
     }
     
-    @objc func buttonAction(button: KLineOptionBaseButton) {
-        if button.isKind(of: KLineOptionMenuButton.self) {
+    @objc func buttonAction(button: OptionBaseButton) {
+        if button.isKind(of: OptionMenuButton.self) {
             if button == selectedMenuButton {
                 selectedMenuButton!.isSelected = !selectedMenuButton!.isSelected
             } else {
                 selectedMenuButton?.isSelected = false
                 button.isSelected = true
-                selectedMenuButton = button as? KLineOptionMenuButton
+                selectedMenuButton = button as? OptionMenuButton
+            }
+            if button == moreMenuButton {
+                if button.titleString != "更多" && !selectedMenuButton!.isSelected {
+                    selectedTimeButton?.isSelected = false
+                    timeChangedClosure?(button.titleString!)
+                }
             }
         } else {
             selectedMenuButton?.isSelected = false
+            
+            moreMenuButton.titleString = "更多"
+            moreMenuButton.setTitleColor(UIColor.init(hex: 0x44617D), for: .normal)
             
             selectedTimeButton?.isSelected = false
             button.isSelected = true
@@ -102,18 +129,24 @@ class KLineOptionLandscapeView: UIView {
     }
     
     func setThemeColor(hex: UInt) {
+        moreMenuButton.backgroundColor = UIColor(hex: hex)
+        menuMoreView.backgroundColor = UIColor(hex: hex)
+        
         indexMenuButton.backgroundColor = UIColor(hex: hex)
         menuIndexView.backgroundColor = UIColor(hex: hex)
         
         if hex == 0xffffff {
             for btn in buttons {
                 btn.setTitleColor(UIColor.init(hex: 0x000000), for: .selected)
-                if let btn = btn as? KLineOptionTimeButton {
+                if let btn = btn as? OptionTimeButton {
                     btn.underLine.backgroundColor = UIColor.init(hex: 0x000000)
                 }
-                if let btn = btn as? KLineOptionMenuButton {
+                if let btn = btn as? OptionMenuButton {
                     btn.selectedColor = UIColor.init(hex: 0x000000)
                 }
+            }
+            for btn in menuMoreView.buttons {
+                btn.setTitleColor(UIColor.init(hex: 0x000000), for: .selected)
             }
             for btn in menuIndexView.subMasterView.buttons {
                 btn.setTitleColor(UIColor.init(hex: 0x000000), for: .selected)
@@ -124,12 +157,15 @@ class KLineOptionLandscapeView: UIView {
         } else {
             for btn in buttons {
                 btn.setTitleColor(UIColor.init(hex: 0xffffff), for: .selected)
-                if let btn = btn as? KLineOptionTimeButton {
+                if let btn = btn as? OptionTimeButton {
                     btn.underLine.backgroundColor = UIColor.init(hex: 0xffffff)
                 }
-                if let btn = btn as? KLineOptionMenuButton {
+                if let btn = btn as? OptionMenuButton {
                     btn.selectedColor = UIColor.init(hex: 0xffffff)
                 }
+            }
+            for btn in menuMoreView.buttons {
+                btn.setTitleColor(UIColor.init(hex: 0xffffff), for: .selected)
             }
             for btn in menuIndexView.subMasterView.buttons {
                 btn.setTitleColor(UIColor.init(hex: 0xffffff), for: .selected)
@@ -141,7 +177,7 @@ class KLineOptionLandscapeView: UIView {
     }
 }
 
-extension KLineOptionLandscapeView {
+extension ChartCustomOptionView {
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let view = super.hitTest(point, with: event)
         if view != nil {

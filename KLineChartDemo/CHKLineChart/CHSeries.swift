@@ -7,11 +7,10 @@ public struct CHSeriesKey {
     public static let volume = "Volume"
     public static let ma = "MA"
     public static let ema = "EMA"
-    public static let kdj = "KDJ"
-    public static let macd = "MACD"
     public static let boll = "BOLL"
+    public static let macd = "MACD"
+    public static let kdj = "KDJ"
     public static let sar = "SAR"
-    public static let sam = "SAM"
     public static let rsi = "RSI"
 }
 
@@ -27,7 +26,7 @@ open class CHSeries: NSObject {
     
     open var key = ""
     open var title: String = ""
-    open var chartModels = [CHChartModel]() // 每个系列包含多个点线模型
+    open var chartModels = [CHChartModel]()          // 每个系列可能包含多个点线模型
     open var hidden: Bool = false
     open var showTitle: Bool = true                  // 是否显示标题文本
     open var baseValueSticky = false                 // 是否以固定基值显示最小或最大值, 若超过范围
@@ -109,12 +108,14 @@ extension CHSeries {
     }
     
     /// 返回一个交易量和 MA 组合的系列样式
-    public class func getVolumeWithMA(upStyle: (color: UIColor, isSolid: Bool),
-                                       downStyle: (color: UIColor, isSolid: Bool),
-                                       isEMA: Bool = false,
-                                       num: [Int],
-                                       colors: [UIColor],
-                                       section: CHSection) -> CHSeries {
+    public class func getVolumeWithMA(
+        upStyle: (color: UIColor, isSolid: Bool),
+        downStyle: (color: UIColor, isSolid: Bool),
+        isEMA: Bool = false,
+        num: [Int],
+        colors: [UIColor],
+        section: CHSection) -> CHSeries
+    {
         let series = CHSeries()
         series.key = CHSeriesKey.volume
         let volumeSeries = CHSeries.getDefaultVolume(upStyle: upStyle, downStyle: downStyle, section: section)
@@ -125,22 +126,6 @@ extension CHSeries {
             section: section)
         series.chartModels.append(contentsOf: volumeSeries.chartModels)
         series.chartModels.append(contentsOf: volumeMASeries.chartModels)
-        return series
-    }
-    
-    /// 返回一个交易量和 SAM 组合系列样式
-    public class func getVolumeWithSAM(upStyle: (color: UIColor, isSolid: Bool),
-                                      downStyle: (color: UIColor, isSolid: Bool),
-                                      num: Int,
-                                      barStyle: (color: UIColor, isSolid: Bool),
-                                      lineColor: UIColor,
-                                      section: CHSection) -> CHSeries {
-        let series = CHSeries()
-        series.key = CHSeriesKey.sam
-        let volumeSeries = CHSeries.getDefaultVolume(upStyle: upStyle, downStyle: downStyle, section: section)
-        let volumeSAMSeries = CHSeries.getVolumeSAM(num: num, barStyle: barStyle, lineColor: lineColor, section: section)
-        series.chartModels.append(contentsOf: volumeSeries.chartModels)
-        series.chartModels.append(contentsOf: volumeSAMSeries.chartModels)
         return series
     }
     
@@ -243,46 +228,4 @@ extension CHSeries {
         return series
     }
     
-    /// 返回一个交易量的 SAM 系列样式
-    public class func getVolumeSAM(num: Int,
-                                   barStyle: (color: UIColor, isSolid: Bool),
-                                   lineColor: UIColor,
-                                   section: CHSection) -> CHSeries {
-        let valueKey = CHSeriesKey.volume
-        
-        let series = CHSeries()
-        series.key = CHSeriesKey.sam
-        
-        let sam = CHChartModel.getLine(lineColor, title: "\(CHSeriesKey.sam)\(num)", key: "\(CHSeriesKey.sam)_\(num)_\(valueKey)")
-        sam.section = section
-        sam.useTitleColor = true
-        
-        let vol = CHChartModel.getVolume(upStyle: barStyle, downStyle: barStyle, key: "\(CHSeriesKey.sam)_\(num)_\(valueKey)_BAR")
-        vol.section = section
-        
-        series.chartModels = [sam, vol]
-        return series
-    }
-    
-    /// 返回一个主图价格的 SAM 系列样式
-    public class func getPriceSAM(num: Int,
-                                  barStyle: (color: UIColor, isSolid: Bool),
-                                  lineColor: UIColor,
-                                  section: CHSection) -> CHSeries {
-        let valueKey = CHSeriesKey.timeline
-        
-        let series = CHSeries()
-        series.key = CHSeriesKey.sam
-        
-        let sam = CHChartModel.getLine(lineColor, title: "\(CHSeriesKey.sam)\(num)", key: "\(CHSeriesKey.sam)_\(num)_\(valueKey)")
-        sam.section = section
-        sam.useTitleColor = true
-        
-        let candle = CHChartModel.getCandle(upStyle: barStyle, downStyle: barStyle, titleColor: barStyle.color, key: "\(CHSeriesKey.sam)_\(num)_\(valueKey)_BAR")
-        candle.drawShadow = false
-        candle.section = section
-        
-        series.chartModels = [sam, candle]
-        return series
-    }
 }

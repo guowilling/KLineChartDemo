@@ -7,15 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		19279F7822C1CB3200442739 /* KLineTopLandscapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19279F7422C1CB3200442739 /* KLineTopLandscapeView.swift */; };
-		19279F7922C1CB3200442739 /* KLineTopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19279F7522C1CB3200442739 /* KLineTopView.xib */; };
-		19279F7A22C1CB3200442739 /* KLineTopLandscapeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19279F7622C1CB3200442739 /* KLineTopLandscapeView.xib */; };
-		19279F7B22C1CB3200442739 /* KLineTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19279F7722C1CB3200442739 /* KLineTopView.swift */; };
-		1965DDEC22C1EC5900108066 /* KLineOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1965DDE822C1EC5900108066 /* KLineOptionView.swift */; };
-		1965DDED22C1EC5900108066 /* KLineOptionMenus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1965DDE922C1EC5900108066 /* KLineOptionMenus.swift */; };
-		1965DDEE22C1EC5900108066 /* KLineOptionLandscapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1965DDEA22C1EC5900108066 /* KLineOptionLandscapeView.swift */; };
-		1965DDEF22C1EC5900108066 /* KLineOptionButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1965DDEB22C1EC5900108066 /* KLineOptionButtons.swift */; };
+		1965DDED22C1EC5900108066 /* ChartCustomOptionMenus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1965DDE922C1EC5900108066 /* ChartCustomOptionMenus.swift */; };
+		1965DDEF22C1EC5900108066 /* ChartCustomOptionButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1965DDEB22C1EC5900108066 /* ChartCustomOptionButtons.swift */; };
 		1965DDF122C219F400108066 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1965DDF022C219F400108066 /* LaunchScreen.storyboard */; };
+		199FF72A22CF017D00246FD0 /* ChartCustomTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199FF72922CF017D00246FD0 /* ChartCustomTopView.swift */; };
+		199FF72C22CF3A6D00246FD0 /* ChartCustomOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199FF72B22CF3A6D00246FD0 /* ChartCustomOptionView.swift */; };
 		6E90689A21CE76F700C12760 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E90689921CE76F700C12760 /* AppDelegate.swift */; };
 		6E90689F21CE76F700C12760 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E90689D21CE76F700C12760 /* Main.storyboard */; };
 		6E9068A121CE76F900C12760 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E9068A021CE76F900C12760 /* Assets.xcassets */; };
@@ -32,8 +28,8 @@
 		6E9068DB21CE776100C12760 /* CHChartAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B621CE776100C12760 /* CHChartAlgorithm.swift */; };
 		6E9068DC21CE776100C12760 /* SeriesSettingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B721CE776100C12760 /* SeriesSettingDetailViewController.swift */; };
 		6E9068DD21CE776100C12760 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068B821CE776100C12760 /* ViewController.swift */; };
-		6E9068DE21CE776100C12760 /* KLineChartDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BA21CE776100C12760 /* KLineChartDataFetcher.swift */; };
-		6E9068DF21CE776100C12760 /* KLineChartPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BB21CE776100C12760 /* KLineChartPoint.swift */; };
+		6E9068DE21CE776100C12760 /* ChartPointManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BA21CE776100C12760 /* ChartPointManager.swift */; };
+		6E9068DF21CE776100C12760 /* ChartPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BB21CE776100C12760 /* ChartPoint.swift */; };
 		6E9068E021CE776100C12760 /* SeriesParam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BC21CE776100C12760 /* SeriesParam.swift */; };
 		6E9068E121CE776100C12760 /* Double+Exension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BE21CE776100C12760 /* Double+Exension.swift */; };
 		6E9068E221CE776100C12760 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068BF21CE776100C12760 /* UIColor+Extension.swift */; };
@@ -54,15 +50,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		19279F7422C1CB3200442739 /* KLineTopLandscapeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KLineTopLandscapeView.swift; sourceTree = "<group>"; };
-		19279F7522C1CB3200442739 /* KLineTopView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KLineTopView.xib; sourceTree = "<group>"; };
-		19279F7622C1CB3200442739 /* KLineTopLandscapeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KLineTopLandscapeView.xib; sourceTree = "<group>"; };
-		19279F7722C1CB3200442739 /* KLineTopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KLineTopView.swift; sourceTree = "<group>"; };
-		1965DDE822C1EC5900108066 /* KLineOptionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KLineOptionView.swift; sourceTree = "<group>"; };
-		1965DDE922C1EC5900108066 /* KLineOptionMenus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KLineOptionMenus.swift; sourceTree = "<group>"; };
-		1965DDEA22C1EC5900108066 /* KLineOptionLandscapeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KLineOptionLandscapeView.swift; sourceTree = "<group>"; };
-		1965DDEB22C1EC5900108066 /* KLineOptionButtons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KLineOptionButtons.swift; sourceTree = "<group>"; };
+		1965DDE922C1EC5900108066 /* ChartCustomOptionMenus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartCustomOptionMenus.swift; sourceTree = "<group>"; };
+		1965DDEB22C1EC5900108066 /* ChartCustomOptionButtons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartCustomOptionButtons.swift; sourceTree = "<group>"; };
 		1965DDF022C219F400108066 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		199FF72922CF017D00246FD0 /* ChartCustomTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartCustomTopView.swift; sourceTree = "<group>"; };
+		199FF72B22CF3A6D00246FD0 /* ChartCustomOptionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartCustomOptionView.swift; sourceTree = "<group>"; };
 		28BBDDB6E8E257F55798BE15 /* Pods-KLineChartDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KLineChartDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-KLineChartDemo/Pods-KLineChartDemo.release.xcconfig"; sourceTree = "<group>"; };
 		6E90689621CE76F700C12760 /* KLineChartDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KLineChartDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E90689921CE76F700C12760 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -82,8 +74,8 @@
 		6E9068B621CE776100C12760 /* CHChartAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHChartAlgorithm.swift; sourceTree = "<group>"; };
 		6E9068B721CE776100C12760 /* SeriesSettingDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesSettingDetailViewController.swift; sourceTree = "<group>"; };
 		6E9068B821CE776100C12760 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		6E9068BA21CE776100C12760 /* KLineChartDataFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KLineChartDataFetcher.swift; sourceTree = "<group>"; };
-		6E9068BB21CE776100C12760 /* KLineChartPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KLineChartPoint.swift; sourceTree = "<group>"; };
+		6E9068BA21CE776100C12760 /* ChartPointManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartPointManager.swift; sourceTree = "<group>"; };
+		6E9068BB21CE776100C12760 /* ChartPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartPoint.swift; sourceTree = "<group>"; };
 		6E9068BC21CE776100C12760 /* SeriesParam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesParam.swift; sourceTree = "<group>"; };
 		6E9068BE21CE776100C12760 /* Double+Exension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Double+Exension.swift"; sourceTree = "<group>"; };
 		6E9068BF21CE776100C12760 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
@@ -124,19 +116,75 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		19279F7322C1C63600442739 /* ViewControllers */ = {
+		199FF72D22CF3E2900246FD0 /* Custom */ = {
 			isa = PBXGroup;
 			children = (
-				6E9068B821CE776100C12760 /* ViewController.swift */,
 				6E9068CC21CE776100C12760 /* ChartCustomViewController.swift */,
+				199FF72922CF017D00246FD0 /* ChartCustomTopView.swift */,
+				199FF72B22CF3A6D00246FD0 /* ChartCustomOptionView.swift */,
+				1965DDEB22C1EC5900108066 /* ChartCustomOptionButtons.swift */,
+				1965DDE922C1EC5900108066 /* ChartCustomOptionMenus.swift */,
+				199FF73122CF3F0200246FD0 /* StyleSetting */,
+				199FF73022CF3E7500246FD0 /* SeriesSetting */,
+			);
+			path = Custom;
+			sourceTree = "<group>";
+		};
+		199FF72E22CF3E4200246FD0 /* Simple */ = {
+			isa = PBXGroup;
+			children = (
 				6E9068CA21CE776100C12760 /* ChartSimpleViewController.swift */,
-				6E9068CF21CE776100C12760 /* ChartImageViewController.swift */,
+			);
+			path = Simple;
+			sourceTree = "<group>";
+		};
+		199FF72F22CF3E4F00246FD0 /* TableView */ = {
+			isa = PBXGroup;
+			children = (
 				6E9068CD21CE776100C12760 /* ChartTableViewController.swift */,
+				6E9068C621CE776100C12760 /* ChartTableViewCell.swift */,
+			);
+			path = TableView;
+			sourceTree = "<group>";
+		};
+		199FF73022CF3E7500246FD0 /* SeriesSetting */ = {
+			isa = PBXGroup;
+			children = (
 				6E9068CB21CE776100C12760 /* SeriesSettingListViewController.swift */,
 				6E9068B721CE776100C12760 /* SeriesSettingDetailViewController.swift */,
-				6E9068CE21CE776100C12760 /* StyleSettingViewController.swift */,
+				6E9068C721CE776100C12760 /* SeriesSettingListCell.swift */,
+				6E9068C921CE776100C12760 /* SeriesSettingDetailCell.swift */,
 			);
-			path = ViewControllers;
+			path = SeriesSetting;
+			sourceTree = "<group>";
+		};
+		199FF73122CF3F0200246FD0 /* StyleSetting */ = {
+			isa = PBXGroup;
+			children = (
+				6E9068CE21CE776100C12760 /* StyleSettingViewController.swift */,
+				6E9068C421CE776100C12760 /* KLineChartStyleManager.swift */,
+				6E9068BC21CE776100C12760 /* SeriesParam.swift */,
+			);
+			path = StyleSetting;
+			sourceTree = "<group>";
+		};
+		199FF73522CF417200246FD0 /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				6E9068CF21CE776100C12760 /* ChartImageViewController.swift */,
+			);
+			path = Image;
+			sourceTree = "<group>";
+		};
+		199FF73622CF41C400246FD0 /* Demos */ = {
+			isa = PBXGroup;
+			children = (
+				199FF72D22CF3E2900246FD0 /* Custom */,
+				199FF72E22CF3E4200246FD0 /* Simple */,
+				199FF72F22CF3E4F00246FD0 /* TableView */,
+				199FF73522CF417200246FD0 /* Image */,
+			);
+			path = Demos;
 			sourceTree = "<group>";
 		};
 		6E90688D21CE76F700C12760 = {
@@ -161,9 +209,10 @@
 			isa = PBXGroup;
 			children = (
 				6E9068AB21CE776100C12760 /* CHKLineChart */,
-				19279F7322C1C63600442739 /* ViewControllers */,
-				6E9068B921CE776100C12760 /* Models */,
-				6E9068C521CE776100C12760 /* Views */,
+				6E9068B821CE776100C12760 /* ViewController.swift */,
+				6E9068BA21CE776100C12760 /* ChartPointManager.swift */,
+				6E9068BB21CE776100C12760 /* ChartPoint.swift */,
+				199FF73622CF41C400246FD0 /* Demos */,
 				6E9068BD21CE776100C12760 /* Extensions */,
 				6E90689921CE76F700C12760 /* AppDelegate.swift */,
 				6E90689D21CE76F700C12760 /* Main.storyboard */,
@@ -178,9 +227,9 @@
 			isa = PBXGroup;
 			children = (
 				6E9068AF21CE776100C12760 /* CHSection.swift */,
-				6E9068B021CE776100C12760 /* CHChartModel.swift */,
 				6E9068AE21CE776100C12760 /* CHSeries.swift */,
 				6E9068AD21CE776100C12760 /* CHAxisModel.swift */,
+				6E9068B021CE776100C12760 /* CHChartModel.swift */,
 				6E9068B221CE776100C12760 /* CHKLineChartView.swift */,
 				6E9068B121CE776100C12760 /* CHKLineChartStyle.swift */,
 				6E9068B621CE776100C12760 /* CHChartAlgorithm.swift */,
@@ -190,17 +239,6 @@
 				6E9068AC21CE776100C12760 /* CHExtension.swift */,
 			);
 			path = CHKLineChart;
-			sourceTree = "<group>";
-		};
-		6E9068B921CE776100C12760 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				6E9068BA21CE776100C12760 /* KLineChartDataFetcher.swift */,
-				6E9068BB21CE776100C12760 /* KLineChartPoint.swift */,
-				6E9068C421CE776100C12760 /* KLineChartStyleManager.swift */,
-				6E9068BC21CE776100C12760 /* SeriesParam.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		6E9068BD21CE776100C12760 /* Extensions */ = {
@@ -213,24 +251,6 @@
 				6E9068C221CE776100C12760 /* NSDate+Extension.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		6E9068C521CE776100C12760 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				19279F7722C1CB3200442739 /* KLineTopView.swift */,
-				19279F7522C1CB3200442739 /* KLineTopView.xib */,
-				19279F7422C1CB3200442739 /* KLineTopLandscapeView.swift */,
-				19279F7622C1CB3200442739 /* KLineTopLandscapeView.xib */,
-				1965DDE822C1EC5900108066 /* KLineOptionView.swift */,
-				1965DDEA22C1EC5900108066 /* KLineOptionLandscapeView.swift */,
-				1965DDEB22C1EC5900108066 /* KLineOptionButtons.swift */,
-				1965DDE922C1EC5900108066 /* KLineOptionMenus.swift */,
-				6E9068C621CE776100C12760 /* ChartTableViewCell.swift */,
-				6E9068C721CE776100C12760 /* SeriesSettingListCell.swift */,
-				6E9068C921CE776100C12760 /* SeriesSettingDetailCell.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		ABAC7C0076BB0215DC414924 /* Pods */ = {
@@ -253,7 +273,7 @@
 				6E90689221CE76F700C12760 /* Sources */,
 				6E90689321CE76F700C12760 /* Frameworks */,
 				6E90689421CE76F700C12760 /* Resources */,
-				F294043912B409319A23CAD7 /* [CP] Embed Pods Frameworks */,
+				8A823A1404684F1415947829 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -303,8 +323,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E9068A121CE76F900C12760 /* Assets.xcassets in Resources */,
-				19279F7A22C1CB3200442739 /* KLineTopLandscapeView.xib in Resources */,
-				19279F7922C1CB3200442739 /* KLineTopView.xib in Resources */,
 				1965DDF122C219F400108066 /* LaunchScreen.storyboard in Resources */,
 				6E90689F21CE76F700C12760 /* Main.storyboard in Resources */,
 			);
@@ -313,7 +331,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		F294043912B409319A23CAD7 /* [CP] Embed Pods Frameworks */ = {
+		8A823A1404684F1415947829 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -364,19 +382,19 @@
 				6E9068D221CE776100C12760 /* CHAxisModel.swift in Sources */,
 				6E9068DB21CE776100C12760 /* CHChartAlgorithm.swift in Sources */,
 				6E9068E321CE776100C12760 /* Int+Etension.swift in Sources */,
-				6E9068DF21CE776100C12760 /* KLineChartPoint.swift in Sources */,
+				6E9068DF21CE776100C12760 /* ChartPoint.swift in Sources */,
 				6E9068D621CE776100C12760 /* CHKLineChartStyle.swift in Sources */,
 				6E9068E221CE776100C12760 /* UIColor+Extension.swift in Sources */,
 				6E9068D121CE776100C12760 /* CHExtension.swift in Sources */,
-				1965DDEC22C1EC5900108066 /* KLineOptionView.swift in Sources */,
 				6E9068E721CE776100C12760 /* ChartTableViewCell.swift in Sources */,
+				199FF72C22CF3A6D00246FD0 /* ChartCustomOptionView.swift in Sources */,
 				6E9068DA21CE776100C12760 /* CHDynamicItem.swift in Sources */,
 				6E9068DC21CE776100C12760 /* SeriesSettingDetailViewController.swift in Sources */,
 				6E9068D721CE776100C12760 /* CHKLineChartView.swift in Sources */,
 				6E9068EE21CE776100C12760 /* ChartTableViewController.swift in Sources */,
 				6E9068D521CE776100C12760 /* CHChartModel.swift in Sources */,
-				1965DDEF22C1EC5900108066 /* KLineOptionButtons.swift in Sources */,
-				1965DDEE22C1EC5900108066 /* KLineOptionLandscapeView.swift in Sources */,
+				199FF72A22CF017D00246FD0 /* ChartCustomTopView.swift in Sources */,
+				1965DDEF22C1EC5900108066 /* ChartCustomOptionButtons.swift in Sources */,
 				6E9068ED21CE776100C12760 /* ChartCustomViewController.swift in Sources */,
 				6E9068E121CE776100C12760 /* Double+Exension.swift in Sources */,
 				6E9068F021CE776100C12760 /* ChartImageViewController.swift in Sources */,
@@ -384,15 +402,13 @@
 				6E9068E021CE776100C12760 /* SeriesParam.swift in Sources */,
 				6E9068E421CE776100C12760 /* String+Extension.swift in Sources */,
 				6E9068E821CE776100C12760 /* SeriesSettingListCell.swift in Sources */,
-				1965DDED22C1EC5900108066 /* KLineOptionMenus.swift in Sources */,
+				1965DDED22C1EC5900108066 /* ChartCustomOptionMenus.swift in Sources */,
 				6E9068E621CE776100C12760 /* KLineChartStyleManager.swift in Sources */,
 				6E9068D321CE776100C12760 /* CHSeries.swift in Sources */,
-				19279F7B22C1CB3200442739 /* KLineTopView.swift in Sources */,
 				6E9068D921CE776100C12760 /* CHShapeLayer.swift in Sources */,
 				6E90689A21CE76F700C12760 /* AppDelegate.swift in Sources */,
-				6E9068DE21CE776100C12760 /* KLineChartDataFetcher.swift in Sources */,
+				6E9068DE21CE776100C12760 /* ChartPointManager.swift in Sources */,
 				6E9068D821CE776100C12760 /* CHChartImageGenerator.swift in Sources */,
-				19279F7822C1CB3200442739 /* KLineTopLandscapeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

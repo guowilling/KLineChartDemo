@@ -2,7 +2,7 @@
 import UIKit
 import SwiftyJSON
 
-class KLineChartPoint: NSObject, Codable {
+class ChartPoint: NSObject, Codable {
     
     var time: Int = 0
     var lowPrice: Double = 0

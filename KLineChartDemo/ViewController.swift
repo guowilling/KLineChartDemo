@@ -8,7 +8,7 @@ public let BM_SCREEN_H: CGFloat = UIScreen.main.bounds.size.height
 class ViewController: UIViewController {
     
     @IBOutlet var tableView: UITableView!
-
+    
     let demos: [Int: (String, String, Bool)] = [
         0: ("最佳例子", "ChartCustomViewController", false),
         1: ("简单例子", "ChartFullViewController", true),

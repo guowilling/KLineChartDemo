@@ -3,11 +3,11 @@ import UIKit
 
 /// 图表刷新后滚动到开始显示的位置
 ///
-/// - top: 头部
-/// - end: 尾部
+/// - head: 头部
+/// - tail: 尾部
 /// - none: 不处理
 public enum CHChartViewScrollPosition {
-    case top, end, none
+    case head, tail, none
 }
 
 /// 图表选中时十字 Y 轴显示位置
@@ -163,7 +163,9 @@ open class CHKLineChartView: UIView {
     
     open var style: CHKLineChartStyle! {
         didSet {
+            // SRTEST
             self.backgroundColor = self.style.backgroundColor
+//            self.backgroundColor = UIColor.random
             self.sections = self.style.sections
             self.padding = self.style.padding
             self.algorithms = self.style.algorithms
@@ -279,7 +281,7 @@ open class CHKLineChartView: UIView {
                 self.datas.append(item!)
             }
             for algorithm in self.algorithms {
-                self.datas = algorithm.handleAlgorithm(self.datas)
+                self.datas = algorithm.calculateIndex(self.datas)
             }
         }
     }
@@ -388,7 +390,7 @@ open class CHKLineChartView: UIView {
                 }
                 self.selectedYAxisLabel?.text = String(format: format, yVal)
                 self.selectedYAxisLabel?.frame = CGRect(x: yAxisStartX, y: vY - self.labelSize.height / 2, width: self.yAxisLabelWidth, height: self.labelSize.height)
-               
+                
                 let time = Date.ch_getTimeByStamp(item.time, format: "yyyy-MM-dd HH:mm")
                 let size = time.ch_sizeWithConstrained(self.labelFont)
                 self.selectedXAxisLabel?.text = time
@@ -532,11 +534,11 @@ extension CHKLineChartView {
             
             if self.scrollToPosition == .none {
                 if self.rangeTo == 0 || self.plotCount < self.rangeTo {
-                    self.scrollToPosition = .end
+                    self.scrollToPosition = .tail
                 }
             }
             
-            if self.scrollToPosition == .top {
+            if self.scrollToPosition == .head {
                 self.rangeFrom = 0
                 if self.rangeFrom + self.range < self.plotCount {
                     self.rangeTo = self.rangeFrom + self.range
@@ -544,7 +546,7 @@ extension CHKLineChartView {
                     self.rangeTo = self.plotCount
                 }
                 self.selectedIndex = -1
-            } else if self.scrollToPosition == .end {
+            } else if self.scrollToPosition == .tail {
                 self.rangeTo = self.plotCount
                 if self.rangeTo - self.range > 0 {
                     self.rangeFrom = self.rangeTo - range
@@ -562,7 +564,7 @@ extension CHKLineChartView {
         }
         
         let backgroundLayer = CHShapeLayer()
-        let backgroundPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: self.bounds.size.width,height: self.bounds.size.height), cornerRadius: 0)
+        let backgroundPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height), cornerRadius: 0)
         backgroundLayer.path = backgroundPath.cgPath
         backgroundLayer.fillColor = self.backgroundColor?.cgColor
         self.drawLayer.addSublayer(backgroundLayer)
@@ -901,6 +903,14 @@ extension CHKLineChartView {
             for serie in section.series {
                 let seriesLayer = self.drawSerie(serie)
                 section.sectionLayer.addSublayer(seriesLayer)
+                if !serie.hidden && serie.key == CHSeriesKey.timeline {
+                    let gradientLayer = CAGradientLayer()
+                    gradientLayer.frame = CGRect(x: 0, y: 0, width: section.frame.size.width, height: section.frame.size.height)
+//                    gradientLayer.frame = section.frame // 会产生偏移
+                    gradientLayer.colors = [UIColor.yellow.cgColor, UIColor.clear.cgColor]
+                    gradientLayer.mask = section.maskLayer
+                    serie.seriesLayer.addSublayer(gradientLayer)
+                }
             }
         }
         self.drawLayer.addSublayer(section.sectionLayer)
@@ -910,9 +920,8 @@ extension CHKLineChartView {
     func drawSerie(_ serie: CHSeries) -> CHShapeLayer {
         if !serie.hidden {
             for model in serie.chartModels {
-                let serieLayer = model.drawSerie(self.rangeFrom, endIndex: self.rangeTo)
+                let serieLayer = model.drawSerie(seriesKey: serie.key, self.rangeFrom, endIndex: self.rangeTo)
                 serie.seriesLayer.addSublayer(serieLayer)
-                
             }
         }
         return serie.seriesLayer
@@ -1141,16 +1150,6 @@ extension CHKLineChartView: UIGestureRecognizerDelegate {
         }
     }
    
-//    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        if otherGestureRecognizer.view is UITableView {
-//            return true
-//        }
-//        return false
-//        return true
-//    }
-    
-    
-    
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer is UIPanGestureRecognizer {
             let pan = gestureRecognizer as! UIPanGestureRecognizer

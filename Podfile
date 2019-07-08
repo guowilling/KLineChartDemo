@@ -6,7 +6,7 @@ target 'KLineChartDemo' do
   use_frameworks!
 
   # Pods for KLineChartDemo
-    pod "SnapKit"
-    pod "SwiftyJSON"
+  pod "SnapKit"
+  pod "SwiftyJSON"
     
 end

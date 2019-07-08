@@ -5,19 +5,19 @@ import UIKit
 class ChartCustomViewController: UIViewController {
     
     /// 不显示
-    static let Hide: String = ""
+    static let Hide: String = "隐藏"
     
     /// 时间周期
-    let times: [KLineTimeType] = [.min5, .min15, .hour1, .hour6, .day]
+    let times: [ChartPointDurationType] = [.min5, .min15, .hour1, .hour6, .day]
     
     /// 主图线段
     let masterLines: [String] = [CHSeriesKey.candle, CHSeriesKey.timeline]
     
     /// 主图指标
-    let masterIndexes: [String] = [CHSeriesKey.ma, CHSeriesKey.ema, CHSeriesKey.sar, CHSeriesKey.boll, CHSeriesKey.sam, Hide]
+    let masterIndexes: [String] = [CHSeriesKey.ma, CHSeriesKey.ema, CHSeriesKey.boll, CHSeriesKey.sar, Hide]
     
     /// 副图指标
-    let assistIndexes: [String] = [CHSeriesKey.volume, CHSeriesKey.sam, CHSeriesKey.kdj, CHSeriesKey.macd, CHSeriesKey.rsi, Hide]
+    let assistIndexes: [String] = [CHSeriesKey.volume, CHSeriesKey.macd, CHSeriesKey.kdj, CHSeriesKey.rsi, Hide]
     
     /// 选择交易对
     let exPairs: [String] = ["BTC-USD", "ETH-USD", "LTC-USD", "LTC-BTC", "ETH-BTC"]
@@ -41,7 +41,7 @@ class ChartCustomViewController: UIViewController {
     var selectedAssistIndex2: Int = 0
     
     /// 数据源
-    var chartPoints = [KLineChartPoint]()
+    var chartPoints = [ChartPoint]()
     
     /// X 轴的前一天, 用于对比是否夸日
     var chartXAxisPrevDay: String = ""
@@ -53,21 +53,22 @@ class ChartCustomViewController: UIViewController {
         return view
     }()
     
-    lazy var topView: KLineTopView = {
-        let view = KLineTopView.loadFromNib()
+    lazy var topView: ChartCustomTopView = {
+//        let view = KLineTopView.loadFromNib()
+        let view = ChartCustomTopView()
         return view
     }()
     
-    lazy var optionView: KLineOptionView = {
-        let view = KLineOptionView(frame: .zero)
+    lazy var optionView: ChartCustomOptionView = {
+        let view = ChartCustomOptionView(frame: .zero)
         
         view.timeChangedClosure = { [weak self] str in
             guard let self = self else { return }
-            if let timeType = KLineTimeType.init(rawValue: str), let index = self.times.firstIndex(of: timeType) {
-                // 分时线
+            if let timeType = ChartPointDurationType.init(rawValue: str), let index = self.times.firstIndex(of: timeType) {
                 self.selectedMasterLine = 0
                 self.selectedTime = index
             } else {
+                // 分时线
                 self.selectedMasterLine = 1
                 self.selectedTime = 1
             }
@@ -146,7 +147,7 @@ class ChartCustomViewController: UIViewController {
         self.selectedMasterLine = 0
         self.selectedMasterIndex = 0
         self.selectedAssistIndex1 = 0
-        self.selectedAssistIndex2 = 2
+        self.selectedAssistIndex2 = 1
         
         self.handleChartIndexChanged()
         
@@ -201,7 +202,7 @@ class ChartCustomViewController: UIViewController {
         self.indicatorView.startAnimating()
         self.indicatorView.isHidden = false
         let symbol = self.exPairs[self.selectedExPair]
-        KLineChartDataFetcher.shared.getKLineChartData(exPair: symbol, timeType: self.times[self.selectedTime]) { [weak self] (success, chartPoints) in
+        ChartPointManager.shared.getKLineChartData(exPair: symbol, timeType: self.times[self.selectedTime]) { [weak self] (success, chartPoints) in
             self?.indicatorView.stopAnimating()
             self?.indicatorView.isHidden = true
             if success && chartPoints.count > 0 {
@@ -233,8 +234,6 @@ class ChartCustomViewController: UIViewController {
         }
         self.chartView.setSerie(hidden: false, by: assist1Key, inSection: 1)
         self.chartView.setSerie(hidden: false, by: assist2Key, inSection: 2)
-        
-        self.chartView.reloadData(resetData: false)
     }
 }
 
@@ -377,8 +376,8 @@ extension ChartCustomViewController: CHKLineChartDelegate {
     }
     
     func kLineChart(chart: CHKLineChartView, didSelectAt index: Int, item: CHChartItem) {
-        let data = self.chartPoints[index]
-        self.topView.update(point: data)
+//        let point = self.chartPoints[index]
+//        self.topView.update(point: point)
     }
     
     func kLineChart(chart: CHKLineChartView, didFlipPageSeries section: CHSection, series: CHSeries, seriesIndex: Int) {
@@ -444,7 +443,7 @@ extension ChartCustomViewController {
         assistSection1.key = "assist1"
         assistSection1.hidden = false
         assistSection1.ratios = 1
-        assistSection1.paging = true
+        assistSection1.paging = false
         assistSection1.yAxis.tickInterval = 4
         assistSection1.padding = UIEdgeInsets(top: 16, left: 0, bottom: 8, right: 0)
         
@@ -455,7 +454,7 @@ extension ChartCustomViewController {
         assistSection2.key = "assist2"
         assistSection2.hidden = false
         assistSection2.ratios = 1
-        assistSection2.paging = true
+        assistSection2.paging = false
         assistSection2.yAxis.tickInterval = 4
         assistSection2.padding = UIEdgeInsets(top: 16, left: 0, bottom: 8, right: 0)
         

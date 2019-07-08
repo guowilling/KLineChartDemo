@@ -90,20 +90,22 @@ public extension CHKLineChartStyle {
         style.backgroundColor = UIColor.ch_hex(0x1D1C1C)
         style.yAxisShowPosition = .right
         
-        style.algorithms = [CHChartAlgorithm.timeline,
-                            CHChartAlgorithm.sar(4, 0.02, 0.2), // 默认周期4, 最小加速0.02, 最大加速0.2
-                            CHChartAlgorithm.ma(5),
-                            CHChartAlgorithm.ma(10),
-                            CHChartAlgorithm.ma(20),            // 计算 BOLL, 必须先计算同周期的 MA
-                            CHChartAlgorithm.ma(30),
-                            CHChartAlgorithm.ema(5),
-                            CHChartAlgorithm.ema(10),
-                            CHChartAlgorithm.ema(12),           // 计算 MACD, 必须先计算同周期的 EMA
-                            CHChartAlgorithm.ema(26),           // 计算 MACD, 必须先计算同周期的 EMA
-                            CHChartAlgorithm.ema(30),
-                            CHChartAlgorithm.boll(20, 2),
-                            CHChartAlgorithm.macd(12, 26, 9),
-                            CHChartAlgorithm.kdj(9, 3, 3)]
+        style.algorithms = [
+            CHChartAlgorithm.timeline,
+            CHChartAlgorithm.sar(4, 0.02, 0.2), // 默认周期4, 最小加速0.02, 最大加速0.2
+            CHChartAlgorithm.ma(5),
+            CHChartAlgorithm.ma(10),
+            CHChartAlgorithm.ma(20),            // 计算 BOLL, 必须先计算同周期的 MA
+            CHChartAlgorithm.ma(30),
+            CHChartAlgorithm.ema(5),
+            CHChartAlgorithm.ema(10),
+            CHChartAlgorithm.ema(12),           // 计算 MACD, 必须先计算同周期的 EMA
+            CHChartAlgorithm.ema(26),           // 计算 MACD, 必须先计算同周期的 EMA
+            CHChartAlgorithm.ema(30),
+            CHChartAlgorithm.boll(20, 2),
+            CHChartAlgorithm.macd(12, 26, 9),
+            CHChartAlgorithm.kdj(9, 3, 3),
+        ]
         
         let upcolor = (UIColor.ch_hex(0xF80D1F), true)
         let downcolor = (UIColor.ch_hex(0x1E932B), true)

@@ -12,7 +12,7 @@ import SnapKit
 
 // MARK: - Option UIButton
 
-class KLineOptionBaseButton: UIButton {
+class OptionBaseButton: UIButton {
     
     var titleString: String? {
         didSet {
@@ -30,7 +30,7 @@ class KLineOptionBaseButton: UIButton {
     }
 }
 
-class KLineOptionTimeButton: KLineOptionBaseButton {
+class KLineOptionTimeButton: OptionBaseButton {
     
     let underLine = UILabel()
     
@@ -59,7 +59,7 @@ class KLineOptionTimeButton: KLineOptionBaseButton {
     }
 }
 
-class KLineOptionMenuButton: KLineOptionBaseButton {
+class KLineOptionMenuButton: OptionBaseButton {
     
     var triangleColor: UIColor!
     
