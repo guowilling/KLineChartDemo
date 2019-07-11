@@ -3,11 +3,12 @@ import UIKit
 
 public class CHChartImageGenerator: NSObject {
 
-    public var values: [(Int, Double)] = [(Int, Double)]()
+    /// (时间戳, 收盘价格)
+    public var values: [(Int, Double)] = []
     
     public var chartView: CHKLineChartView!
     
-    public var style: CHKLineChartStyle = CHKLineChartStyle.lineIMG
+    public var style: CHKLineChartStyle = CHKLineChartStyle.timelineImgStyle
     
     public static let share: CHChartImageGenerator = {
         let generator = CHChartImageGenerator()
@@ -18,29 +19,36 @@ public class CHChartImageGenerator: NSObject {
         super.init()
         
         self.chartView = CHKLineChartView(frame: CGRect.zero)
-        self.chartView.style = CHKLineChartStyle.lineIMG
+        self.chartView.style = CHKLineChartStyle.timelineImgStyle
         self.chartView.delegate = self
     }
     
-    public func kLineImage(by values: [(Int, Double)],
-                           lineWidth: CGFloat = 1,
-                           backgroundColor: UIColor = UIColor.white,
-                           lineColor: UIColor = UIColor.lightGray,
-                           size: CGSize) -> UIImage {
+    public func kLineImage(
+        by values: [(Int, Double)],
+        lineWidth: CGFloat = 1,
+        backgroundColor: UIColor = UIColor.white,
+        lineColor: UIColor = UIColor.lightGray,
+        size: CGSize) -> UIImage
+    {
         self.values = values
+        
         self.style.backgroundColor = backgroundColor
+        
         let section = self.style.sections[0]
         section.backgroundColor = backgroundColor
+        
         let model = section.series[0].chartModels[0]
         model.upStyle = (lineColor, true)
         model.downStyle = (lineColor, true)
         model.lineWidth = lineWidth
+        
         var frame = self.chartView.frame
         frame.size.width = size.width
         frame.size.height = size.height
         self.chartView.frame = frame
         self.chartView.style = self.style
         self.chartView.reloadData()
+        
         return self.chartView.image
     }
 }
@@ -77,7 +85,7 @@ extension CHChartImageGenerator: CHKLineChartDelegate {
 }
 
 extension CHKLineChartStyle {
-    public static var lineIMG: CHKLineChartStyle {
+    public static var timelineImgStyle: CHKLineChartStyle {
         let style = CHKLineChartStyle()
         style.labelFont = UIFont.systemFont(ofSize: 10)
         style.lineColor = UIColor.clear
@@ -104,14 +112,15 @@ extension CHKLineChartStyle {
         priceSection.ratios = 1
         priceSection.yAxis.referenceStyle = .none
         priceSection.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        let timelineSeries = CHSeries.getTimelinePrice(color: UIColor.ch_hex(0xA4AAB3),
-                                                       section: priceSection,
-                                                       showGuide: true,
-                                                       ultimateValueStyle: .none,
-                                                       lineWidth: 1)
+        let timelineSeries = CHSeries.getTimelinePrice(
+            color: UIColor.ch_hex(0xA4AAB3),
+            section: priceSection,
+            showGuide: true,
+            ultimateValueStyle: .none,
+            lineWidth: 1
+        )
         priceSection.series = [timelineSeries]
         style.sections = [priceSection]
         return style
     }
 }
-

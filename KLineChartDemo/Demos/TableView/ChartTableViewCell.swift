@@ -162,4 +162,3 @@ extension ChartTableViewCell: CHKLineChartDelegate {
         return 16
     }
 }
-

@@ -43,9 +43,9 @@ extension ChartImageViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "DemoCell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ImageDemoCell")
         cell?.selectionStyle = .none
-    
+        
         let start = indexPath.row * self.dataSize
         var end = start + self.dataSize - 1
         if end >= self.kLineChartDatas.count {
@@ -54,13 +54,15 @@ extension ChartImageViewController: UITableViewDelegate, UITableViewDataSource {
         let durationDatas = self.kLineChartDatas[start...end]
         let duration = Date.ch_getTimeByStamp(durationDatas[start].0, format: "HH:mm") + "~" + Date.ch_getTimeByStamp(durationDatas[end].0, format: "HH:mm")
         cell?.textLabel?.text = duration
-    
+        
         let imageView = cell?.contentView.viewWithTag(100) as? UIImageView
-        imageView?.image = CHChartImageGenerator.share.kLineImage(by: Array(durationDatas),
-                                                                  lineWidth: 1,
-                                                                  backgroundColor: UIColor.white,
-                                                                  lineColor: UIColor.ch_hex(0xA4AAB3),
-                                                                  size: imageSize)
+        imageView?.image = CHChartImageGenerator.share.kLineImage(
+            by: Array(durationDatas),
+            lineWidth: 1,
+            backgroundColor: UIColor.white,
+            lineColor: UIColor.ch_hex(0xA4AAB3),
+            size: imageSize
+        )
         return cell!
     }
     
