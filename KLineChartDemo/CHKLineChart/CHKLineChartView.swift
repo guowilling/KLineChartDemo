@@ -93,7 +93,7 @@ open class CHKLineChartView: UIView {
     
     open var sections = [CHSection]()
     
-    open var selectedIndex: Int = -1
+    open var selectedPointIndex: Int = -1
     
     var selectedPoint: CGPoint = CGPoint.zero
     open var enablePinch: Bool = true
@@ -135,7 +135,7 @@ open class CHKLineChartView: UIView {
     
     open var labelSize = CGSize(width: 30, height: 15)
     
-    var datas: [CHChartItem] = [CHChartItem]()
+    var datas: [CHChartItem] = []
     
     open var selectedBGColor: UIColor = UIColor(white: 0.4, alpha: 1)    
     open var selectedTextColor: UIColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
@@ -298,7 +298,7 @@ open class CHKLineChartView: UIView {
     
     /// 显示X轴坐标的分区
     func getSecionWhichShowXAxis() -> CHSection? {
-        let visiableSection = self.sections.filter { !$0.hidden }
+        let visiableSection = self.sections.filter { !$0.isHidden }
         var showSection: CHSection?
         for (i, section) in visiableSection.enumerated() {
             if section.index == self.showXAxisOnSection {
@@ -322,7 +322,7 @@ open class CHKLineChartView: UIView {
         if section == nil {
             return
         }
-        let visiableSections = self.sections.filter { !$0.hidden }
+        let visiableSections = self.sections.filter { !$0.isHidden }
         guard let lastSection = visiableSections.last else {
             return
         }
@@ -352,7 +352,7 @@ open class CHKLineChartView: UIView {
             let ixs = plotWidth * CGFloat(i - self.rangeFrom) + section!.padding.left + self.padding.left
             let ixe = plotWidth * CGFloat(i - self.rangeFrom + 1) + section!.padding.left + self.padding.left
             if ixs <= point.x && point.x < ixe {
-                self.selectedIndex = i
+                self.selectedPointIndex = i
                 let item = self.datas[i]
                 var hX = section!.frame.origin.x + section!.padding.left
                 hX = hX + plotWidth * CGFloat(i - self.rangeFrom) + plotWidth / 2
@@ -365,7 +365,7 @@ open class CHKLineChartView: UIView {
                 switch self.selectedPosition {
                 case .free:
                     vY = point.y
-                    yVal = section!.getRawValue(point.y)
+                    yVal = section!.getValue(with: point.y)
                 case .onClosePrice:
                     if let series = section?.getSeries(key: CHSeriesKey.candle), !series.hidden {
                         yVal = item.closePrice
@@ -374,7 +374,7 @@ open class CHKLineChartView: UIView {
                     } else if let series = section?.getSeries(key: CHSeriesKey.volume), !series.hidden {
                         yVal = item.vol
                     }
-                    vY = section!.getLocalY(yVal)
+                    vY = section!.getY(with: yVal)
                 }
                 let hWidth = section!.frame.size.width - section!.padding.left - section!.padding.right
                 self.verticalLineView?.frame = CGRect(x: vX, y: vY - self.lineWidth / 2, width: hWidth, height: self.lineWidth)
@@ -418,21 +418,21 @@ open class CHKLineChartView: UIView {
                 self.bringSubviewToFront(self.selectedYAxisLabel!)
                 self.bringSubviewToFront(self.sightView!)
                 
-                self.setSelectedIndexByIndex(i)
+                self.setSelectedPointIndex(i)
                 
                 break
             }
         }
     }
     
-    func setSelectedIndexByIndex(_ index: Int) {
+    func setSelectedPointIndex(_ index: Int) {
         guard index >= self.rangeFrom && index < self.rangeTo else {
             return
         }
-        self.selectedIndex = index
+        self.selectedPointIndex = index
         let item = self.datas[index]
         for (_, section) in self.sections.enumerated() {
-            if section.hidden {
+            if section.isHidden {
                 continue
             }
             if let titleString = self.delegate?.kLineChart?(chart: self, titleForHeaderInSection: section, index: index, item: self.datas[index]) {
@@ -451,7 +451,7 @@ extension CHKLineChartView {
     func removeSublayers() {
         for section in self.sections {
             section.removeSublayers()
-            for series in section.series {
+            for series in section.seriesArray {
                 series.removeSublayers()
             }
         }
@@ -499,13 +499,13 @@ extension CHKLineChartView {
             
             // 用户是否自定义标题视图
             if let titleView = self.delegate?.kLineChart?(chart: self, viewForHeaderInSection: index) {
-                section.showTitle = false
-                section.addCustomView(titleView, inView: self)
+                section.isShowTitle = false
+                section.drawCustomTitleForHeader(titleView, inView: self)
             } else {
-                if let titleString = self.delegate?.kLineChart?(chart: self, titleForHeaderInSection: section, index: self.selectedIndex, item: self.datas[self.selectedIndex]) {
+                if let titleString = self.delegate?.kLineChart?(chart: self, titleForHeaderInSection: section, index: self.selectedPointIndex, item: self.datas[self.selectedPointIndex]) {
                     section.drawTitleForHeader(title: titleString)
                 } else {
-                    section.drawTitle(self.selectedIndex) // 显示范围最后一个点的数据
+                    section.drawTitle(self.selectedPointIndex) // 显示范围最后一个点的数据
                 }
             }
         }
@@ -545,7 +545,7 @@ extension CHKLineChartView {
                 } else {
                     self.rangeTo = self.plotCount
                 }
-                self.selectedIndex = -1
+                self.selectedPointIndex = -1
             } else if self.scrollToPosition == .tail {
                 self.rangeTo = self.plotCount
                 if self.rangeTo - self.range > 0 {
@@ -553,14 +553,14 @@ extension CHKLineChartView {
                 } else {
                     self.rangeFrom = 0
                 }
-                self.selectedIndex = -1
+                self.selectedPointIndex = -1
             }
         }
         
         self.scrollToPosition = .none // 刷新图表, 默认不处理滚动
         
-        if self.selectedIndex < 0 || self.selectedIndex >= self.rangeTo {
-            self.selectedIndex = self.rangeTo - 1
+        if self.selectedPointIndex < 0 || self.selectedPointIndex >= self.rangeTo {
+            self.selectedPointIndex = self.rangeTo - 1
         }
         
         let backgroundLayer = CHShapeLayer()
@@ -585,7 +585,7 @@ extension CHKLineChartView {
         var total = 0
         for (index, section) in self.sections.enumerated() {
             section.index = index
-            if !section.hidden {
+            if !section.isHidden {
                 if section.ratios > 0 {
                     total = total + section.ratios
                 }
@@ -596,7 +596,7 @@ extension CHKLineChartView {
         for (index, section) in self.sections.enumerated() { // 计算每个区域的高度，并绘制
             var heightOfSection: CGFloat = 0
             let widthOfSection = width
-            if section.hidden {
+            if section.isHidden {
                 continue
             }
             if section.fixHeight > 0 {
@@ -770,7 +770,7 @@ extension CHKLineChartView {
     
     /// 初始化分区上各个线的Y轴
     fileprivate func initYAxis(_ section: CHSection) {
-        if section.series.count > 0 {
+        if section.seriesArray.count > 0 {
             section.buildYAxis(startIndex: self.rangeFrom, endIndex: self.rangeTo, datas: self.datas)
         }
     }
@@ -817,7 +817,7 @@ extension CHKLineChartView {
         }
         
         for (i, yVal) in valueToDraw.enumerated() { // 绘制虚线和Y标签值
-            let iy = section.getLocalY(yVal)
+            let iy = section.getY(with: yVal)
             
             if self.isInnerYAxis { // 为了不挡住辅助线, 向上移动Y轴的数值位置
                 startY = iy - 14
@@ -829,7 +829,7 @@ extension CHKLineChartView {
             let referenceLayer = CHShapeLayer()
             referenceLayer.lineWidth = self.lineWidth
             
-            if section.valueType == .master {
+            if section.type == .master {
                 switch section.yAxis.referenceStyle {
                 case let .dash(color: dashColor, pattern: pattern):
                     referenceLayer.strokeColor = dashColor.cgColor
@@ -895,19 +895,19 @@ extension CHKLineChartView {
     
     /// 绘制分区的点线
     func drawChart(_ section: CHSection) {
-        if section.paging { // 如果分区以分页显示, 绘制当前系列
-            let serie = section.series[section.selectedIndex]
+        if section.isPageable { // 如果分区以分页显示, 绘制当前系列
+            let serie = section.seriesArray[section.selectedIndex]
             let seriesLayer = self.drawSerie(serie)
             section.sectionLayer.addSublayer(seriesLayer)
         } else { // 不分页显示, 绘制全部系列
-            for serie in section.series {
+            for serie in section.seriesArray {
                 let seriesLayer = self.drawSerie(serie)
                 section.sectionLayer.addSublayer(seriesLayer)
                 if !serie.hidden && serie.key == CHSeriesKey.timeline {
                     let gradientLayer = CAGradientLayer()
                     gradientLayer.frame = CGRect(x: 0, y: 0, width: section.frame.size.width, height: section.frame.size.height)
 //                    gradientLayer.frame = section.frame // 会产生偏移
-                    gradientLayer.colors = [UIColor.yellow.cgColor, UIColor.clear.cgColor]
+                    gradientLayer.colors = [UIColor.ch_hex(0x9D48FE, alpha: 0.3).cgColor, UIColor.clear.cgColor]
                     gradientLayer.mask = section.maskLayer
                     serie.seriesLayer.addSublayer(gradientLayer)
                 }
@@ -963,15 +963,15 @@ extension CHKLineChartView {
             hideSections.append(self.sections[inSection])
         }
         for section in hideSections {
-            for (index, serie) in section.series.enumerated() {
+            for (index, serie) in section.seriesArray.enumerated() {
                 if key == "" {
-                    if section.paging {
+                    if section.isPageable {
                         section.selectedIndex = 0
                     } else {
                         serie.hidden = hidden
                     }
                 } else if serie.key == key {
-                    if section.paging {
+                    if section.isPageable {
                         if hidden == false {
                             section.selectedIndex = index
                         }
@@ -987,8 +987,8 @@ extension CHKLineChartView {
     /// 通过主键隐藏或显示分区
     public func setSection(hidden: Bool, byKey key: String) {
         for section in self.sections {
-            if section.key == key && section.valueType == .assistant { // 副图才能隐藏
-                section.hidden = hidden
+            if section.key == key && section.type == .assistant { // 副图才能隐藏
+                section.isHidden = hidden
                 break
             }
         }
@@ -996,10 +996,10 @@ extension CHKLineChartView {
     
     /// 通过索引隐藏或显示分区
     public func setSection(hidden: Bool, byIndex index: Int) {
-        guard let section = self.sections[safe: index], section.valueType == .assistant else { // 副图才能隐藏
+        guard let section = self.sections[safe: index], section.type == .assistant else { // 副图才能隐藏
             return
         }
-        section.hidden = hidden
+        section.isHidden = hidden
     }
     
     /// 缩放图表
@@ -1100,11 +1100,11 @@ extension CHKLineChartView {
     /// - Parameters:
     ///   - titles: 元组(文本, 颜色)
     ///   - section: 分区位置
-    open func setHeader(titles: [(title: String, color: UIColor)], inSection section: Int)  {
+    open func setHeader(titlesAndAttrs: [(title: String, color: UIColor)], inSection section: Int)  {
         guard let section = self.sections[safe: section] else {
             return
         }
-        section.setHeader(titles: titles)
+        section.prepareDrawTitle(titlesAndAttributes: titlesAndAttrs)
     }
     
     /// 添加新线系列到分区
@@ -1116,7 +1116,7 @@ extension CHKLineChartView {
         guard let section = self.sections[safe: section] else {
             return
         }
-        section.series.append(series)
+        section.seriesArray.append(series)
         self.drawLayerView()
     }
     
@@ -1173,11 +1173,16 @@ extension CHKLineChartView: UIGestureRecognizerDelegate {
         }
         let point = sender.location(in: self)
         let (_, section) = self.getSectionByTouchPoint(point)
-        if section != nil {
-            if section!.paging {
-                section!.nextPage()
+        if let section = section {
+            if section.isPageable {
+                section.nextPageSeries()
                 self.drawLayerView()
-                self.delegate?.kLineChart?(chart: self, didFlipPageSeries: section!, series: section!.series[section!.selectedIndex], seriesIndex: section!.selectedIndex)
+                self.delegate?.kLineChart?(
+                    chart: self,
+                    didFlipPageSeries: section,
+                    series: section.seriesArray[section.selectedIndex],
+                    seriesIndex: section.selectedIndex
+                )
             } else {
                 self.setSelectedIndexByPoint(point)
             }
@@ -1194,7 +1199,7 @@ extension CHKLineChartView: UIGestureRecognizerDelegate {
         
         self.showSelection = false
         
-        let visiableSection = self.sections.filter { !$0.hidden }
+        let visiableSection = self.sections.filter { !$0.isHidden }
         guard let section = visiableSection.first else {
             return
         }
@@ -1249,7 +1254,7 @@ extension CHKLineChartView: UIGestureRecognizerDelegate {
         
         self.showSelection = false
         
-        let visiableSection = self.sections.filter { !$0.hidden }
+        let visiableSection = self.sections.filter { !$0.isHidden }
         guard let section = visiableSection.first else {
             return
         }

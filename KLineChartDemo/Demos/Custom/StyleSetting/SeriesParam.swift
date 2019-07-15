@@ -102,7 +102,7 @@ class SeriesParam: NSObject, Codable {
                                              num: self.params.map {Int($0.value)},
                                              colors: maColor,
                                              section: masterSection)
-            masterSection.series.append(series)
+            masterSection.seriesArray.append(series)
             for assistSection in assistSections {
                 let volWithMASeries = CHSeries.getVolumeWithMA(upStyle: upcolor,
                                                                downStyle: downcolor,
@@ -110,7 +110,7 @@ class SeriesParam: NSObject, Codable {
                                                                num: self.params.map { Int($0.value) },
                                                                colors: maColor,
                                                                section: assistSection)
-                assistSection.series.append(volWithMASeries)
+                assistSection.seriesArray.append(volWithMASeries)
             }
             
         case CHSeriesKey.ema:
@@ -122,7 +122,7 @@ class SeriesParam: NSObject, Codable {
                                              num: self.params.map { Int($0.value) },
                                              colors: emaColor,
                                              section: masterSection)
-            masterSection.series.append(series)
+            masterSection.seriesArray.append(series)
             
         case CHSeriesKey.kdj:
             for assistSection in assistSections {
@@ -131,7 +131,7 @@ class SeriesParam: NSObject, Codable {
                                                 jc: lineColors[2],
                                                 section: assistSection)
                 kdjSeries.title = "KDJ(\(self.params[0].value.toString()), \(self.params[1].value.toString()), \(self.params[2].value.toString()))"
-                assistSection.series.append(kdjSeries)
+                assistSection.seriesArray.append(kdjSeries)
             }
             
         case CHSeriesKey.macd:
@@ -143,7 +143,7 @@ class SeriesParam: NSObject, Codable {
                                                   section: assistSection)
                 macdSeries.title = "MACD(\(self.params[0].value.toString()), \(self.params[1].value.toString()), \(self.params[2].value.toString()))"
                 macdSeries.symmetrical = true
-                assistSection.series.append(macdSeries)
+                assistSection.seriesArray.append(macdSeries)
             }
             
         case CHSeriesKey.boll:
@@ -152,7 +152,7 @@ class SeriesParam: NSObject, Codable {
                                                    lbc: lineColors[2],
                                                    section: masterSection)
             priceBOLLSeries.hidden = true
-            masterSection.series.append(priceBOLLSeries)
+            masterSection.seriesArray.append(priceBOLLSeries)
             
         case CHSeriesKey.sar:
             let priceSARSeries = CHSeries.getSAR(upStyle: upcolor,
@@ -160,7 +160,7 @@ class SeriesParam: NSObject, Codable {
                                                  titleColor: lineColors[0],
                                                  section: masterSection)
             priceSARSeries.hidden = true
-            masterSection.series.append(priceSARSeries)
+            masterSection.seriesArray.append(priceSARSeries)
             
         case CHSeriesKey.rsi:
             var maColor = [UIColor]()
@@ -171,7 +171,7 @@ class SeriesParam: NSObject, Codable {
                 let series = CHSeries.getRSI(num: self.params.map {Int($0.value)},
                                              colors: maColor,
                                              section: assistSection)
-                    assistSection.series.append(series)
+                    assistSection.seriesArray.append(series)
             }
             
         default:

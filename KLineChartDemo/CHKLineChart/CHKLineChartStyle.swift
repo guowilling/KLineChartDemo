@@ -111,10 +111,10 @@ public extension CHKLineChartStyle {
         let downcolor = (UIColor.ch_hex(0x1E932B), true)
         let priceSection = CHSection()
         priceSection.backgroundColor = style.backgroundColor
-        priceSection.titleShowOutSide = true
-        priceSection.valueType = .master
+        priceSection.isShowTitleOutside = true
+        priceSection.type = .master
         priceSection.key = "master"
-        priceSection.hidden = false
+        priceSection.isHidden = false
         priceSection.ratios = 3
         priceSection.padding = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
         
@@ -122,9 +122,10 @@ public extension CHKLineChartStyle {
         let timelineSeries = CHSeries.getTimelinePrice(
             color: UIColor.ch_hex(0xAE475C),
             section: priceSection,
-            showGuide: true,
+            showUltimateValue: true,
             ultimateValueStyle: .circle(UIColor.ch_hex(0xAE475C), true),
-            lineWidth: 2)
+            lineWidth: 2
+        )
         timelineSeries.hidden = true
         
         /// 蜡烛线
@@ -133,55 +134,66 @@ public extension CHKLineChartStyle {
             downStyle: downcolor,
             titleColor: UIColor(white: 0.8, alpha: 1),
             section: priceSection,
-            showGuide: true,
-            ultimateValueStyle: .arrow(UIColor(white: 0.8, alpha: 1)))
+            showUltimateValue: true,
+            ultimateValueStyle: .arrow(UIColor(white: 0.8, alpha: 1))
+        )
         priceSeries.showTitle = true
         priceSeries.chartModels.first?.ultimateValueStyle = .arrow(UIColor(white: 0.8, alpha: 1))
         
         let priceMASeries = CHSeries.getPriceMA(
             isEMA: false,
             num: [5,10,30],
-            colors: [UIColor.ch_hex(0xDDDDDD),
-                     UIColor.ch_hex(0xF9EE30),
-                     UIColor.ch_hex(0xF600FF)],
-            section: priceSection)
+            colors: [
+                UIColor.ch_hex(0xDDDDDD),
+                UIColor.ch_hex(0xF9EE30),
+                UIColor.ch_hex(0xF600FF),
+            ],
+            section: priceSection
+        )
         priceMASeries.hidden = false
         
         let priceEMASeries = CHSeries.getPriceMA(
             isEMA: true,
             num: [5,10,30],
-            colors: [UIColor.ch_hex(0xDDDDDD),
-                     UIColor.ch_hex(0xF9EE30),
-                     UIColor.ch_hex(0xF600FF)],
-            section: priceSection)
+            colors: [
+                UIColor.ch_hex(0xDDDDDD),
+                UIColor.ch_hex(0xF9EE30),
+                UIColor.ch_hex(0xF600FF),
+            ],
+            section: priceSection
+        )
         priceEMASeries.hidden = true
         
         let priceBOLLSeries = CHSeries.getBOLL(
             UIColor.ch_hex(0xDDDDDD),
             ubc: UIColor.ch_hex(0xF9EE30),
             lbc: UIColor.ch_hex(0xF600FF),
-            section: priceSection)
+            section: priceSection
+        )
         priceBOLLSeries.hidden = true
         
         let priceSARSeries = CHSeries.getSAR(
             upStyle: upcolor,
             downStyle: downcolor,
             titleColor: UIColor.ch_hex(0xDDDDDD),
-            section: priceSection)
+            section: priceSection
+        )
         priceSARSeries.hidden = true
         
-        priceSection.series = [timelineSeries,
-                               priceSeries,
-                               priceMASeries,
-                               priceEMASeries,
-                               priceBOLLSeries,
-                               priceSARSeries]
+        priceSection.seriesArray = [
+            timelineSeries,
+            priceSeries,
+            priceMASeries,
+            priceEMASeries,
+            priceBOLLSeries,
+            priceSARSeries,
+        ]
         
         let volumeSection = CHSection()
         volumeSection.backgroundColor = style.backgroundColor
-        volumeSection.valueType = .assistant
+        volumeSection.type = .assistant
         volumeSection.key = "volume"
-        volumeSection.hidden = false
+        volumeSection.isHidden = false
         volumeSection.ratios = 1
         volumeSection.yAxis.tickInterval = 4
         volumeSection.padding = UIEdgeInsets(top: 16, left: 0, bottom: 8, right: 0)
@@ -190,48 +202,56 @@ public extension CHKLineChartStyle {
         let volumeMASeries = CHSeries.getVolumeMA(
             isEMA: false,
             num: [5,10,30],
-            colors: [UIColor.ch_hex(0xDDDDDD),
-                     UIColor.ch_hex(0xF9EE30),
-                     UIColor.ch_hex(0xF600FF)],
-            section: volumeSection)
+            colors: [
+                UIColor.ch_hex(0xDDDDDD),
+                UIColor.ch_hex(0xF9EE30),
+                UIColor.ch_hex(0xF600FF),
+            ],
+            section: volumeSection
+        )
         
         let volumeEMASeries = CHSeries.getVolumeMA(
             isEMA: true,
             num: [5,10,30],
-            colors: [UIColor.ch_hex(0xDDDDDD),
-                     UIColor.ch_hex(0xF9EE30),
-                     UIColor.ch_hex(0xF600FF)],
+            colors: [
+                UIColor.ch_hex(0xDDDDDD),
+                UIColor.ch_hex(0xF9EE30),
+                UIColor.ch_hex(0xF600FF),
+            ],
             section: volumeSection)
         volumeEMASeries.hidden = true
         
-        volumeSection.series = [volumeSeries, volumeMASeries, volumeEMASeries]
+        volumeSection.seriesArray = [volumeSeries, volumeMASeries, volumeEMASeries]
         
         let trendSection = CHSection()
         trendSection.backgroundColor = style.backgroundColor
-        trendSection.valueType = .assistant
+        trendSection.type = .assistant
         trendSection.key = "analysis"
-        trendSection.hidden = false
+        trendSection.isHidden = false
         trendSection.ratios = 1
-        trendSection.paging = true
+        trendSection.isPageable = true
         trendSection.yAxis.tickInterval = 4
         trendSection.padding = UIEdgeInsets(top: 16, left: 0, bottom: 8, right: 0)
         let kdjSeries = CHSeries.getKDJ(
             UIColor.ch_hex(0xDDDDDD),
             dc: UIColor.ch_hex(0xF9EE30),
             jc: UIColor.ch_hex(0xF600FF),
-            section: trendSection)
+            section: trendSection
+        )
         kdjSeries.title = "KDJ(9,3,3)"
         
         let macdSeries = CHSeries.getMACD(
             UIColor.ch_hex(0xDDDDDD),
             deac: UIColor.ch_hex(0xF9EE30),
             barc: UIColor.ch_hex(0xF600FF),
-            upStyle: upcolor, downStyle: downcolor,
-            section: trendSection)
+            upStyle: upcolor,
+            downStyle: downcolor,
+            section: trendSection
+        )
         macdSeries.title = "MACD(12,26,9)"
         macdSeries.symmetrical = true
         
-        trendSection.series = [kdjSeries, macdSeries]
+        trendSection.seriesArray = [kdjSeries, macdSeries]
         
         style.sections = [priceSection, volumeSection, trendSection]
         

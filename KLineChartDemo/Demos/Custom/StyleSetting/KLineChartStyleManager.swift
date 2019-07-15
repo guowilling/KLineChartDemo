@@ -119,11 +119,11 @@ public extension CHKLineChartStyle {
         let downcolor = (UIColor.ch_hex(0xB1414C), true)
         let priceSection = CHSection()
         priceSection.backgroundColor = style.backgroundColor
-        priceSection.titleShowOutSide = false
-        priceSection.showTitle = false
-        priceSection.valueType = .master
+        priceSection.isShowTitleOutside = false
+        priceSection.isShowTitle = false
+        priceSection.type = .master
         priceSection.key = "price"
-        priceSection.hidden = false
+        priceSection.isHidden = false
         priceSection.ratios = 0
         priceSection.fixHeight = 176
         priceSection.yAxis.referenceStyle = .none
@@ -132,7 +132,7 @@ public extension CHKLineChartStyle {
         /// 时分线
         let timelineSeries = CHSeries.getTimelinePrice(color: UIColor.ch_hex(0xAE475C),
                                                        section: priceSection,
-                                                       showGuide: true,
+                                                               showUltimateValue: true,
                                                        ultimateValueStyle: .circle(UIColor.ch_hex(0xAE475C), true),
                                                        lineWidth: 2)
         timelineSeries.hidden = true
@@ -142,7 +142,7 @@ public extension CHKLineChartStyle {
                                                   downStyle: downcolor,
                                                   titleColor: UIColor(white: 0.5, alpha: 1),
                                                   section: priceSection,
-                                                  showGuide: true,
+                                                  showUltimateValue: true,
                                                   ultimateValueStyle: .arrow(UIColor(white: 0.5, alpha: 1)))
         
         let maColor = [UIColor.ch_hex(0x4E9CC1),
@@ -162,14 +162,14 @@ public extension CHKLineChartStyle {
                                                  colors: maColor,
                                                  section: priceSection)
         priceEMASeries.hidden = true
-        priceSection.series = [timelineSeries, priceSeries, priceMASeries, priceEMASeries]
+        priceSection.seriesArray = [timelineSeries, priceSeries, priceMASeries, priceEMASeries]
         
         let volumeSection = CHSection()
         volumeSection.backgroundColor = style.backgroundColor
-        volumeSection.valueType = .assistant
+        volumeSection.type = .assistant
         volumeSection.key = "volume"
-        volumeSection.hidden = false
-        volumeSection.showTitle = false
+        volumeSection.isHidden = false
+        volumeSection.isShowTitle = false
         volumeSection.ratios = 1
         volumeSection.yAxis.referenceStyle = .none
         volumeSection.yAxis.tickInterval = 2
@@ -186,16 +186,16 @@ public extension CHKLineChartStyle {
                                                    colors: maColor,
                                                    section: volumeSection)
         volumeEMASeries.hidden = true
-        volumeSection.series = [volumeSeries, volumeMASeries, volumeEMASeries]
+        volumeSection.seriesArray = [volumeSeries, volumeMASeries, volumeEMASeries]
         
         let trendSection = CHSection()
         trendSection.backgroundColor = style.backgroundColor
-        trendSection.valueType = .assistant
+        trendSection.type = .assistant
         trendSection.key = "analysis"
-        trendSection.hidden = false
-        trendSection.showTitle = false
+        trendSection.isHidden = false
+        trendSection.isShowTitle = false
         trendSection.ratios = 1
-        trendSection.paging = true
+        trendSection.isPageable = true
         trendSection.yAxis.referenceStyle = .none
         trendSection.yAxis.tickInterval = 2
         trendSection.padding = UIEdgeInsets(top: 10, left: 0, bottom: 8, right: 0)
@@ -212,7 +212,7 @@ public extension CHKLineChartStyle {
                                           section: trendSection)
         macdSeries.title = "MACD(12,26,9)"
         macdSeries.symmetrical = true
-        trendSection.series = [macdSeries, kdjSeries]
+        trendSection.seriesArray = [macdSeries, kdjSeries]
         
         style.sections = [priceSection, volumeSection, trendSection]
         
@@ -248,11 +248,11 @@ public extension CHKLineChartStyle {
         let downcolor = (UIColor.ch_hex(0xB1414C), true)
         let priceSection = CHSection()
         priceSection.backgroundColor = style.backgroundColor
-        priceSection.titleShowOutSide = false
-        priceSection.showTitle = false
-        priceSection.valueType = .master
+        priceSection.isShowTitleOutside = false
+        priceSection.isShowTitle = false
+        priceSection.type = .master
         priceSection.key = "price"
-        priceSection.hidden = false
+        priceSection.isHidden = false
         priceSection.ratios = 0
         priceSection.fixHeight = 176
         priceSection.yAxis.referenceStyle = .none
@@ -262,7 +262,7 @@ public extension CHKLineChartStyle {
         /// 时分线
         let timelineSeries = CHSeries.getTimelinePrice(color: UIColor.ch_hex(0xAE475C),
                                                        section: priceSection,
-                                                       showGuide: true,
+                                                               showUltimateValue: true,
                                                        ultimateValueStyle: .circle(UIColor.ch_hex(0xAE475C), true),
                                                        lineWidth: 2)
         timelineSeries.hidden = true
@@ -273,7 +273,7 @@ public extension CHKLineChartStyle {
             downStyle: downcolor,
             titleColor: UIColor(white: 0.5, alpha: 1),
             section: priceSection,
-            showGuide: true,
+            showUltimateValue: true,
             ultimateValueStyle: .tag(UIColor.white))
         
         let maColor = [UIColor.ch_hex(0xDDDDDD),
@@ -294,14 +294,14 @@ public extension CHKLineChartStyle {
             colors: maColor,
             section: priceSection)
         priceEMASeries.hidden = true
-        priceSection.series = [timelineSeries, priceSeries, priceMASeries, priceEMASeries]
+        priceSection.seriesArray = [timelineSeries, priceSeries, priceMASeries, priceEMASeries]
         
         let volumeSection = CHSection()
         volumeSection.backgroundColor = style.backgroundColor
-        volumeSection.valueType = .assistant
+        volumeSection.type = .assistant
         volumeSection.key = "volume"
-        volumeSection.hidden = false
-        volumeSection.showTitle = false
+        volumeSection.isHidden = false
+        volumeSection.isShowTitle = false
         volumeSection.ratios = 1
         volumeSection.yAxis.referenceStyle = .none
         volumeSection.yAxis.tickInterval = 1
@@ -323,16 +323,16 @@ public extension CHKLineChartStyle {
             colors: maColor,
             section: volumeSection)
         volumeEMASeries.hidden = true
-        volumeSection.series = [volumeSeries, volumeMASeries, volumeEMASeries]
+        volumeSection.seriesArray = [volumeSeries, volumeMASeries, volumeEMASeries]
         
         let trendSection = CHSection()
         trendSection.backgroundColor = style.backgroundColor
-        trendSection.valueType = .assistant
+        trendSection.type = .assistant
         trendSection.key = "analysis"
-        trendSection.hidden = false
-        trendSection.showTitle = false
+        trendSection.isHidden = false
+        trendSection.isShowTitle = false
         trendSection.ratios = 1
-        trendSection.paging = true
+        trendSection.isPageable = true
         trendSection.yAxis.referenceStyle = .none
         trendSection.yAxis.tickInterval = 2
         trendSection.padding = UIEdgeInsets(top: 10, left: 0, bottom: 8, right: 0)
@@ -349,7 +349,7 @@ public extension CHKLineChartStyle {
                                           section: trendSection)
         macdSeries.title = "MACD(12,26,9)"
         macdSeries.symmetrical = true
-        trendSection.series = [macdSeries, kdjSeries]
+        trendSection.seriesArray = [macdSeries, kdjSeries]
         
         style.sections = [priceSection, volumeSection, trendSection]
         
@@ -376,22 +376,22 @@ public extension CHKLineChartStyle {
         style.algorithms = [CHChartAlgorithm.timeline]
         
         let priceSection = CHSection()
-        priceSection.valueType = .master
+        priceSection.type = .master
         priceSection.key = "price"
         priceSection.backgroundColor = style.backgroundColor
-        priceSection.titleShowOutSide = false
-        priceSection.showTitle = false
-        priceSection.hidden = false
+        priceSection.isShowTitleOutside = false
+        priceSection.isShowTitle = false
+        priceSection.isHidden = false
         priceSection.ratios = 1
         priceSection.yAxis.tickInterval = 2
         priceSection.yAxis.referenceStyle = .solid(color: UIColor.ch_hex(0x8D7B62, alpha: 0.44))
         priceSection.padding = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         let timelineSeries = CHSeries.getTimelinePrice(color: UIColor.ch_hex(0xAE475C),
                                                        section: priceSection,
-                                                       showGuide: true,
+                                                               showUltimateValue: true,
                                                        ultimateValueStyle: .circle(UIColor.ch_hex(0xAE475C), true),
                                                        lineWidth: 2)
-        priceSection.series = [timelineSeries]
+        priceSection.seriesArray = [timelineSeries]
         
         style.sections = [priceSection]
         

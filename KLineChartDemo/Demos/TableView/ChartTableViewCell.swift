@@ -71,11 +71,11 @@ extension CHKLineChartStyle {
         
         let priceSection = CHSection()
         priceSection.backgroundColor = style.backgroundColor
-        priceSection.titleShowOutSide = false
-        priceSection.showTitle = false
-        priceSection.valueType = .master
+        priceSection.isShowTitleOutside = false
+        priceSection.isShowTitle = false
+        priceSection.type = .master
         priceSection.key = "price"
-        priceSection.hidden = false
+        priceSection.isHidden = false
         priceSection.ratios = 1
         priceSection.yAxis.referenceStyle = .solid(color: UIColor(white: 0.9, alpha: 1))
         priceSection.xAxis.referenceStyle = .solid(color: UIColor(white: 0.9, alpha: 1))
@@ -83,7 +83,7 @@ extension CHKLineChartStyle {
         
         let timelineSeries = CHSeries.getTimelinePrice(color: UIColor.ch_hex(0xAE475C),
                                                        section: priceSection,
-                                                       showGuide: true,
+                                                               showUltimateValue: true,
                                                        ultimateValueStyle: .circle(UIColor.ch_hex(0xAE475C), true),
                                                        lineWidth: 2)
         timelineSeries.hidden = true
@@ -97,7 +97,7 @@ extension CHKLineChartStyle {
                                                   downStyle: downColor,
                                                   titleColor: UIColor(white: 0.5, alpha: 1),
                                                   section: priceSection,
-                                                  showGuide: true,
+                                                  showUltimateValue: true,
                                                   ultimateValueStyle: .arrow(UIColor(white: 0.5, alpha: 1)))
         
         // MA 线
@@ -114,7 +114,7 @@ extension CHKLineChartStyle {
                                                  section: priceSection)
         priceEMASeries.hidden = true
         
-        priceSection.series = [timelineSeries, priceSeries, priceMASeries, priceEMASeries]
+        priceSection.seriesArray = [timelineSeries, priceSeries, priceMASeries, priceEMASeries]
         
         style.sections = [priceSection]
         

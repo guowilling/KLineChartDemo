@@ -15,15 +15,13 @@ extension UIColor {
     convenience init(hexString: String, alpha: CGFloat = 1.0) {
         let scanner = Scanner(string: hexString)
         scanner.scanLocation = 0
-        var rgbValue: UInt64 = 0
-        scanner.scanHexInt64(&rgbValue)
-        let r = (rgbValue & 0xff0000) >> 16
-        let g = (rgbValue & 0xff00) >> 8
-        let b = rgbValue & 0xff
+        var hexUInt: UInt64 = 0
+        scanner.scanHexInt64(&hexUInt)
         self.init(
-            red: CGFloat(r) / 0xff,
-            green: CGFloat(g) / 0xff,
-            blue: CGFloat(b) / 0xff, alpha: alpha
+            red: CGFloat((hexUInt & 0xff0000) >> 16) / 0xff,
+            green: CGFloat((hexUInt & 0xff00) >> 8) / 0xff,
+            blue: CGFloat(hexUInt & 0xff) / 0xff,
+            alpha: alpha
         )
     }
     

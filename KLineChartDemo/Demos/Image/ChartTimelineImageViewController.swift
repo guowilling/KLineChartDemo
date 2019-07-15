@@ -2,41 +2,41 @@
 import UIKit
 //import CHKLineChartKit
 
-class ChartImageViewController: UIViewController {
+class ChartTimelineImageViewController: UIViewController {
     
     @IBOutlet var tableView: UITableView!
     
-    var kLineChartDatas = [(Int, Double)]()
+    var trendImageData: [(Int, Double)] = []
     
     let imageSize: CGSize = CGSize(width: 80, height: 40)
     
-    let dataSize = 40
+    let dataSize = 24
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.fetchChartDatas(symbol: "BTC-USD", type: .min15)
+        self.fetchChartDatas(symbol: "BTC-USD", type: .hour1)
     }
     
     func fetchChartDatas(symbol: String, type: ChartPointDurationType) {
         ChartPointManager.shared.getKLineChartData(exPair: symbol, timeType: type) { [weak self] (success, chartPoints) in
             if success && chartPoints.count > 0 {
-                self?.kLineChartDatas = chartPoints.map { ($0.time, $0.closePrice) }
+                self?.trendImageData = chartPoints.map { ($0.time, $0.closePrice) }
                 self?.tableView.reloadData()
             }
         }
     }
 }
 
-extension ChartImageViewController: UITableViewDelegate, UITableViewDataSource {
+extension ChartTimelineImageViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.kLineChartDatas.count > 0 {
-            return self.kLineChartDatas.count / self.dataSize + 1
+        if self.trendImageData.count > 0 {
+            return self.trendImageData.count / self.dataSize + 1
         } else {
             return 0
         }
@@ -48,19 +48,19 @@ extension ChartImageViewController: UITableViewDelegate, UITableViewDataSource {
         
         let start = indexPath.row * self.dataSize
         var end = start + self.dataSize - 1
-        if end >= self.kLineChartDatas.count {
-            end = self.kLineChartDatas.count - 1
+        if end >= self.trendImageData.count {
+            end = self.trendImageData.count - 1
         }
-        let durationDatas = self.kLineChartDatas[start...end]
-        let duration = Date.ch_getTimeByStamp(durationDatas[start].0, format: "HH:mm") + "~" + Date.ch_getTimeByStamp(durationDatas[end].0, format: "HH:mm")
+        let durationDatas = self.trendImageData[start...end]
+        let duration = Date.ch_getTimeByStamp(durationDatas[start].0, format: "MM-dd HH:mm") + "~" + Date.ch_getTimeByStamp(durationDatas[end].0, format: "MM-dd HH:mm")
         cell?.textLabel?.text = duration
         
         let imageView = cell?.contentView.viewWithTag(100) as? UIImageView
         imageView?.image = CHChartImageGenerator.share.kLineImage(
             by: Array(durationDatas),
-            lineWidth: 1,
+            lineWidth: 1.5,
             backgroundColor: UIColor.white,
-            lineColor: UIColor.ch_hex(0xA4AAB3),
+            lineColor: UIColor.ch_hex(0x2F8AFF),
             size: imageSize
         )
         return cell!

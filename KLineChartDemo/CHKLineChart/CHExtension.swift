@@ -5,10 +5,12 @@ import UIKit
 public extension String {
     
     func ch_sizeWithConstrained(_ font: UIFont, constraintRect: CGSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)) -> CGSize {
-        let boundingRect = self.boundingRect(with: constraintRect,
-                                             options: NSStringDrawingOptions.usesLineFragmentOrigin,
-                                             attributes: [NSAttributedString.Key.font: font],
-                                             context: nil)
+        let boundingRect = self.boundingRect(
+            with: constraintRect,
+            options: NSStringDrawingOptions.usesLineFragmentOrigin,
+            attributes: [NSAttributedString.Key.font: font],
+            context: nil
+        )
         return boundingRect.size
     }
     
@@ -26,6 +28,14 @@ public extension UIColor {
             blue: CGFloat(hex & 0x0000FF) / 255.0,
             alpha: CGFloat(alpha)
         )
+    }
+    
+    class func ch_hexString(_ hexString: String, lpha: CGFloat = 1.0) -> UIColor {
+        let scanner = Scanner(string: hexString)
+        scanner.scanLocation = 0
+        var hexUInt: UInt64 = 0
+        scanner.scanHexInt64(&hexUInt)
+        return UIColor.ch_hex(UInt(hexUInt))
     }
 }
 

@@ -171,7 +171,7 @@ class ChartCustomViewController: UIViewController {
         self.optionView.frame = CGRect(x: 0, y: topView.frame.maxY, width: scrollView.frame.width, height: 30)
         
         scrollView.addSubview(self.chartView)
-        self.chartView.frame = CGRect(x: 0, y: optionView.frame.maxY, width: scrollView.frame.width, height: 450)
+        self.chartView.frame = CGRect(x: 0, y: optionView.frame.maxY, width: scrollView.frame.width, height: 500)
         
         scrollView.addSubview(self.bottomBar)
         self.bottomBar.frame = CGRect(x: 0, y: chartView.frame.maxY + 5, width: scrollView.frame.width, height: 44)
@@ -359,9 +359,9 @@ extension ChartCustomViewController: CHKLineChartDelegate {
         case 0:
             key = self.masterIndexes[self.selectedMasterIndex]
         default:
-            key = section.series[section.selectedIndex].key
+            key = section.seriesArray[section.selectedIndex].key
         }
-        guard let attributes = section.getTitleAttributesByIndex(index, seriesKey: key) else {
+        guard let attributes = section.getTitlesAndAttributesByIndex(index, seriesKey: key) else {
             return nil
         }
         var start = 0
@@ -428,35 +428,35 @@ extension ChartCustomViewController {
         let downcolor = (UIColor.ch_hex(styleManager.downColor), true)
         
         let priceSection = CHSection()
-        priceSection.backgroundColor = style.backgroundColor
-        priceSection.titleShowOutSide = true
-        priceSection.valueType = .master
+        priceSection.type = .master
         priceSection.key = "master"
-        priceSection.hidden = false
         priceSection.ratios = 3
+        priceSection.isHidden = false
+        priceSection.isShowTitleOutside = true
         priceSection.padding = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
+        priceSection.backgroundColor = style.backgroundColor
         
         /// 副图1
         let assistSection1 = CHSection()
-        assistSection1.backgroundColor = style.backgroundColor
-        assistSection1.valueType = .assistant
+        assistSection1.type = .assistant
         assistSection1.key = "assist1"
-        assistSection1.hidden = false
         assistSection1.ratios = 1
-        assistSection1.paging = false
+        assistSection1.isHidden = false
+        assistSection1.isPageable = false
         assistSection1.yAxis.tickInterval = 4
         assistSection1.padding = UIEdgeInsets(top: 16, left: 0, bottom: 8, right: 0)
+        assistSection1.backgroundColor = style.backgroundColor
         
         /// 副图2
         let assistSection2 = CHSection()
-        assistSection2.backgroundColor = style.backgroundColor
-        assistSection2.valueType = .assistant
+        assistSection2.type = .assistant
         assistSection2.key = "assist2"
-        assistSection2.hidden = false
         assistSection2.ratios = 1
-        assistSection2.paging = false
+        assistSection2.isHidden = false
+        assistSection2.isPageable = true
         assistSection2.yAxis.tickInterval = 4
         assistSection2.padding = UIEdgeInsets(top: 16, left: 0, bottom: 8, right: 0)
+        assistSection2.backgroundColor = style.backgroundColor
         
         /***** 添加主图固定线段 *****/
         
@@ -464,7 +464,7 @@ extension ChartCustomViewController {
         let timelineSeries = CHSeries.getTimelinePrice(
             color: UIColor.ch_hex(0xAE475C),
             section: priceSection,
-            showGuide: true,
+                    showUltimateValue: true,
             ultimateValueStyle: .circle(UIColor.ch_hex(0xAE475C), true),
             lineWidth: 2)
         timelineSeries.hidden = true
@@ -475,12 +475,12 @@ extension ChartCustomViewController {
             downStyle: downcolor,
             titleColor: UIColor(white: 0.8, alpha: 1),
             section: priceSection,
-            showGuide: true,
+            showUltimateValue: true,
             ultimateValueStyle: .arrow(UIColor(white: 0.8, alpha: 1)))
         priceSeries.showTitle = true
         priceSeries.chartModels.first?.ultimateValueStyle = .arrow(UIColor(white: 0.8, alpha: 1))
-        priceSection.series.append(timelineSeries)
-        priceSection.series.append(priceSeries)
+        priceSection.seriesArray.append(timelineSeries)
+        priceSection.seriesArray.append(priceSeries)
         
         /***** 读取用户配置线段 *****/
         
@@ -495,11 +495,11 @@ extension ChartCustomViewController {
         }
         
         style.sections.append(priceSection)
-        if assistSection1.series.count > 0 {
+        if assistSection1.seriesArray.count > 0 {
             style.sections.append(assistSection1)
         }
         
-        if assistSection2.series.count > 0 {
+        if assistSection2.seriesArray.count > 0 {
             style.sections.append(assistSection2)
         }
         

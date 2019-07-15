@@ -45,7 +45,7 @@
 		6E9068ED21CE776100C12760 /* ChartCustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068CC21CE776100C12760 /* ChartCustomViewController.swift */; };
 		6E9068EE21CE776100C12760 /* ChartTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068CD21CE776100C12760 /* ChartTableViewController.swift */; };
 		6E9068EF21CE776100C12760 /* StyleSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068CE21CE776100C12760 /* StyleSettingViewController.swift */; };
-		6E9068F021CE776100C12760 /* ChartImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068CF21CE776100C12760 /* ChartImageViewController.swift */; };
+		6E9068F021CE776100C12760 /* ChartTimelineImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9068CF21CE776100C12760 /* ChartTimelineImageViewController.swift */; };
 		BB4DFA15A37A70A6FB360FE3 /* Pods_KLineChartDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7215CC63C3300B18F75FB19 /* Pods_KLineChartDemo.framework */; };
 /* End PBXBuildFile section */
 
@@ -91,7 +91,7 @@
 		6E9068CC21CE776100C12760 /* ChartCustomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartCustomViewController.swift; sourceTree = "<group>"; };
 		6E9068CD21CE776100C12760 /* ChartTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartTableViewController.swift; sourceTree = "<group>"; };
 		6E9068CE21CE776100C12760 /* StyleSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StyleSettingViewController.swift; sourceTree = "<group>"; };
-		6E9068CF21CE776100C12760 /* ChartImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartImageViewController.swift; sourceTree = "<group>"; };
+		6E9068CF21CE776100C12760 /* ChartTimelineImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartTimelineImageViewController.swift; sourceTree = "<group>"; };
 		883AD1ABEF346C4E36FFAAC5 /* Pods-KLineChartDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KLineChartDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KLineChartDemo/Pods-KLineChartDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		E7215CC63C3300B18F75FB19 /* Pods_KLineChartDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KLineChartDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -171,7 +171,7 @@
 		199FF73522CF417200246FD0 /* Image */ = {
 			isa = PBXGroup;
 			children = (
-				6E9068CF21CE776100C12760 /* ChartImageViewController.swift */,
+				6E9068CF21CE776100C12760 /* ChartTimelineImageViewController.swift */,
 			);
 			path = Image;
 			sourceTree = "<group>";
@@ -397,7 +397,7 @@
 				1965DDEF22C1EC5900108066 /* ChartCustomOptionButtons.swift in Sources */,
 				6E9068ED21CE776100C12760 /* ChartCustomViewController.swift in Sources */,
 				6E9068E121CE776100C12760 /* Double+Exension.swift in Sources */,
-				6E9068F021CE776100C12760 /* ChartImageViewController.swift in Sources */,
+				6E9068F021CE776100C12760 /* ChartTimelineImageViewController.swift in Sources */,
 				6E9068EC21CE776100C12760 /* SeriesSettingListViewController.swift in Sources */,
 				6E9068E021CE776100C12760 /* SeriesParam.swift in Sources */,
 				6E9068E421CE776100C12760 /* String+Extension.swift in Sources */,

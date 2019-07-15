@@ -16,10 +16,10 @@ public enum CHChartItemTrend {
 open class CHChartItem: NSObject {
     
     open var time: Int = 0
-    open var openPrice: CGFloat = 0 // 开盘价
+    open var openPrice: CGFloat = 0  // 开盘价
     open var closePrice: CGFloat = 0 // 收盘价
-    open var lowPrice: CGFloat = 0 // 最低价
-    open var highPrice: CGFloat = 0 // 最高价
+    open var lowPrice: CGFloat = 0   // 最低价
+    open var highPrice: CGFloat = 0  // 最高价
     open var vol: CGFloat = 0
     open var value: CGFloat?
     
@@ -56,13 +56,16 @@ open class CHChartModel {
     open var plotPaddingExt: CGFloat =  0.165                 // 点与点之间, 间断所占点宽的比例
     weak var section: CHSection!
     
-    convenience init(upStyle: (color: UIColor, isSolid: Bool),
-                     downStyle: (color: UIColor, isSolid: Bool),
-                     title: String = "",
-                     titleColor: UIColor,
-                     datas: [CHChartItem] = [CHChartItem](),
-                     decimal: Int = 2,
-                     plotPaddingExt: CGFloat =  0.165) {
+    convenience init(
+        upStyle: (color: UIColor, isSolid: Bool),
+        downStyle: (color: UIColor, isSolid: Bool),
+        title: String = "",
+        titleColor: UIColor,
+        datas: [CHChartItem] = [CHChartItem](),
+        decimal: Int = 2,
+        plotPaddingExt: CGFloat = 0.165
+        )
+    {
         self.init()
         self.upStyle = upStyle
         self.downStyle = downStyle
@@ -78,8 +81,8 @@ open class CHChartModel {
     }
 }
 
-/// 点线样式模型
 open class CHLineModel: CHChartModel {
+    // MARK: - 点线样式模型
     open override func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer {
         let serieLayer = CAShapeLayer()
         
@@ -93,9 +96,9 @@ open class CHLineModel: CHChartModel {
         // 每个点的间隔宽度
         let plotWidth = (self.section.frame.size.width - self.section.padding.left - self.section.padding.right) / CGFloat(endIndex - startIndex)
         
-        var maxValue: CGFloat = 0                               // 最大值的项
+        var maxValue: CGFloat = 0                               // 最大值
         var maxPoint: CGPoint?                                  // 最大值所在坐标
-        var minValue: CGFloat = CGFloat.greatestFiniteMagnitude // 最小值的项
+        var minValue: CGFloat = CGFloat.greatestFiniteMagnitude // 最小值
         var minPoint: CGPoint?                                  // 最小值所在坐标
         
         var startPoint: CGPoint = CGPoint.zero
@@ -110,7 +113,7 @@ open class CHLineModel: CHChartModel {
                 continue // 无法计算的值不绘画
             }
             let ix = self.section.frame.origin.x + self.section.padding.left + CGFloat(i - startIndex) * plotWidth
-            let iys = self.section.getLocalY(value)
+            let iys = self.section.getY(with: value)
             let point = CGPoint(x: ix + plotWidth / 2, y: iys)
             
             if !isStartPoint {
@@ -124,12 +127,12 @@ open class CHLineModel: CHChartModel {
                 }
             }
             
-            // 记录最大值信息
+            // 记录最大值
             if value > maxValue {
                 maxValue = value
                 maxPoint = point
             }
-            // 记录最小值信息
+            // 记录最小值
             if value < minValue {
                 minValue = value
                 minPoint = point
@@ -152,6 +155,7 @@ open class CHLineModel: CHChartModel {
             serieLayer.addSublayer(minLayer)
         }
         
+        // SRCHANGE
         if seriesKey == CHSeriesKey.timeline {
             let path = UIBezierPath()
             let pathHeight = section.frame.size.height + section.frame.origin.y - section.padding.bottom
@@ -160,6 +164,7 @@ open class CHLineModel: CHChartModel {
             path.append(linePath)
             path.addLine(to: CGPoint(x: endPoint.x, y: pathHeight))
             path.addLine(to: CGPoint(x: startPoint.x, y: pathHeight))
+            path.lineJoinStyle = .round
             
             let maskLayer = CAShapeLayer()
             maskLayer.path = path.cgPath
@@ -174,9 +179,8 @@ open class CHLineModel: CHChartModel {
     }
 }
 
-/// 蜡烛样式模型
 open class CHCandleModel: CHChartModel {
-    
+    // MARK: - 蜡烛样式模型
     var drawShadow = true
     
     open override func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer {
@@ -188,9 +192,9 @@ open class CHCandleModel: CHChartModel {
         var plotPadding = plotWidth * self.plotPaddingExt
         plotPadding = plotPadding < 0.25 ? 0.25 : plotPadding
         
-        var maxValue: CGFloat = 0                               // 最大值的项
+        var maxValue: CGFloat = 0                               // 最大值
         var maxPoint: CGPoint?                                  // 最大值所在坐标
-        var minValue: CGFloat = CGFloat.greatestFiniteMagnitude // 最小值的项
+        var minValue: CGFloat = CGFloat.greatestFiniteMagnitude // 最小值
         var minPoint: CGPoint?                                  // 最小值所在坐标
         
         // 循环起始到终结
@@ -214,24 +218,24 @@ open class CHCandleModel: CHChartModel {
             
             let item = datas[i]
             // 具体的数值转为坐标系y轴值
-            let iyo = self.section.getLocalY(item.openPrice)
-            let iyc = self.section.getLocalY(item.closePrice)
-            let iyh = self.section.getLocalY(item.highPrice)
-            let iyl = self.section.getLocalY(item.lowPrice)
+            let iyo = self.section.getY(with: item.openPrice)
+            let iyc = self.section.getY(with: item.closePrice)
+            let iyh = self.section.getY(with: item.highPrice)
+            let iyl = self.section.getY(with: item.lowPrice)
 
             switch item.trend {
             case .equal:
-                // 开盘价=收盘价, 显示横线
+                // 开盘价 = 收盘价, 显示横线
                 shadowLayer.strokeColor = self.upStyle.color.cgColor
                 isSolid = true
             case .up:
-                // 收盘价>开盘价, 显示涨的颜色
+                // 收盘价 > 开盘价, 显示涨的颜色
                 shadowLayer.strokeColor = self.upStyle.color.cgColor
                 candleLayer.strokeColor = self.upStyle.color.cgColor
                 candleLayer.fillColor = self.upStyle.color.cgColor
                 isSolid = self.upStyle.isSolid
             case .down:
-                // 收盘价<开盘价, 显示跌的颜色
+                // 收盘价 < 开盘价, 显示跌的颜色
                 shadowLayer.strokeColor = self.downStyle.color.cgColor
                 candleLayer.strokeColor = self.downStyle.color.cgColor
                 candleLayer.fillColor = self.downStyle.color.cgColor
@@ -273,13 +277,12 @@ open class CHCandleModel: CHChartModel {
                 modelLayer.addSublayer(candleLayer)
             }
             
-            // 记录最大值信息
+            // 记录最大值
             if item.highPrice > maxValue {
                 maxValue = item.highPrice
                 maxPoint = CGPoint(x: ix + plotWidth / 2, y: iyh)
             }
-            
-            // 记录最小值信息
+            // 记录最小值
             if item.lowPrice < minValue {
                 minValue = item.lowPrice
                 minPoint = CGPoint(x: ix + plotWidth / 2, y: iyl)
@@ -294,7 +297,6 @@ open class CHCandleModel: CHChartModel {
             let maxLayer = self.drawGuideValue(value: highPrice, section: section, point: maxPoint!, trend: CHChartItemTrend.up)
             serieLayer.addSublayer(maxLayer)
         }
-        
         // 显示最小值
         if self.showMinVal && minValue != CGFloat.greatestFiniteMagnitude {
             let lowPrice = minValue.ch_toString(maxF: section.decimal)
@@ -306,9 +308,8 @@ open class CHCandleModel: CHChartModel {
     }
 }
 
-/// 交易量样式模型
 open class CHColumnModel: CHChartModel {
-    
+    // MARK: - 交易量样式模型
     open override func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer {
         let serieLayer = CAShapeLayer()
         let modelLayer = CAShapeLayer()
@@ -317,7 +318,7 @@ open class CHColumnModel: CHChartModel {
         var plotPadding = plotWidth * self.plotPaddingExt
         plotPadding = plotPadding < 0.25 ? 0.25 : plotPadding
         
-        let iybase = self.section.getLocalY(section.yAxis.baseValue)
+        let iybase = self.section.getY(with: section.yAxis.baseValue)
         
         for i in stride(from: startIndex, to: endIndex, by: 1) {
             if self.key != CHSeriesKey.volume {
@@ -332,7 +333,7 @@ open class CHColumnModel: CHChartModel {
             let item = datas[i]
 
             let ix = self.section.frame.origin.x + self.section.padding.left + CGFloat(i - startIndex) * plotWidth
-            let iyv = self.section.getLocalY(item.vol)
+            let iyv = self.section.getY(with: item.vol)
             
             switch item.trend {
             case .up, .equal:
@@ -363,9 +364,8 @@ open class CHColumnModel: CHChartModel {
     }
 }
 
-//// 柱状样式模型
 open class CHBarModel: CHChartModel {
-    
+    // MARK: - 柱状样式模型
     open override func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer{
         let serieLayer = CAShapeLayer()
         let modelLayer = CAShapeLayer()
@@ -374,7 +374,7 @@ open class CHBarModel: CHChartModel {
         var plotPadding = plotWidth * self.plotPaddingExt
         plotPadding = plotPadding < 0.25 ? 0.25 : plotPadding
         
-        let iybase = self.section.getLocalY(section.yAxis.baseValue)
+        let iybase = self.section.getY(with: section.yAxis.baseValue)
         
         for i in stride(from: startIndex, to: endIndex, by: 1) {
             var isSolid = true
@@ -386,7 +386,7 @@ open class CHBarModel: CHChartModel {
             let barLayer = CAShapeLayer()
             
             let ix = self.section.frame.origin.x + self.section.padding.left + CGFloat(i - startIndex) * plotWidth
-            let iyv = self.section.getLocalY(value!)
+            let iyv = self.section.getY(with: value!)
             
             if value! > 0 {
                 barLayer.strokeColor = self.upStyle.color.cgColor
@@ -422,9 +422,8 @@ open class CHBarModel: CHChartModel {
     }
 }
 
-/// 圆点样式模型
 open class CHRoundModel: CHChartModel {
-    
+    // MARK: - 圆点样式模型
     open override func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer {
         let serieLayer = CAShapeLayer()
         
@@ -452,7 +451,7 @@ open class CHRoundModel: CHChartModel {
             let item = datas[i]
             
             let ix = self.section.frame.origin.x + self.section.padding.left + CGFloat(i - startIndex) * plotWidth
-            let iys = self.section.getLocalY(value)
+            let iys = self.section.getY(with: value)
             
             let roundLayer = CAShapeLayer()
             let roundPoint = CGPoint(x: ix + plotPadding, y: iys)
@@ -507,8 +506,7 @@ open class CHRoundModel: CHChartModel {
 }
 
 public extension CHChartModel {
-    
-    /// 绘画最大最小值
+    // MARK: - 绘画最大最小值
     func drawGuideValue(value: String, section: CHSection, point: CGPoint, trend: CHChartItemTrend) -> CAShapeLayer {
         let guideValueLayer = CAShapeLayer()
         
@@ -527,7 +525,7 @@ public extension CHChartModel {
         } else {
             isLeft = 1
         }
-
+        
         var fillColor: UIColor = self.upStyle.color
         switch trend {
         case .up:
@@ -627,68 +625,91 @@ public extension CHChartModel {
     }
 }
 
-// MARK: - 样式工厂方法
 extension CHChartModel {
-    /// 生成一个点线样式
-    public class func getLine(_ color: UIColor, title: String, key: String) -> CHLineModel {
+    // MARK: - 样式工厂方法
+    
+    /// 生成点线样式
+    public class func getLine(
+        _ color: UIColor,
+        title: String,
+        key: String
+        ) -> CHLineModel
+    {
         let model = CHLineModel(
             upStyle: (color, true),
             downStyle: (color, true),
-            titleColor: color)
+            titleColor: color
+        )
         model.title = title
         model.key = key
         return model
     }
     
-    /// 生成一个蜡烛样式
-    public class func getCandle(upStyle: (color: UIColor, isSolid: Bool),
-                                downStyle: (color: UIColor, isSolid: Bool),
-                                titleColor: UIColor,
-                                key: String = CHSeriesKey.candle) -> CHCandleModel {
+    /// 生成蜡烛样式
+    public class func getCandle(
+        upStyle: (color: UIColor, isSolid: Bool),
+        downStyle: (color: UIColor, isSolid: Bool),
+        titleColor: UIColor,
+        key: String = CHSeriesKey.candle
+        ) -> CHCandleModel
+    {
         let model = CHCandleModel(
             upStyle: upStyle,
             downStyle: downStyle,
-            titleColor: titleColor)
+            titleColor: titleColor
+        )
         model.key = key
         return model
     }
     
-    /// 生成一个交易量样式
-    public class func getVolume(upStyle: (color: UIColor, isSolid: Bool),
-                         downStyle: (color: UIColor, isSolid: Bool),
-                         key: String = CHSeriesKey.volume) -> CHColumnModel {
+    /// 生成交易量样式
+    public class func getVolume(
+        upStyle: (color: UIColor, isSolid: Bool),
+        downStyle: (color: UIColor, isSolid: Bool),
+        key: String = CHSeriesKey.volume
+        ) -> CHColumnModel
+    {
         let model = CHColumnModel(
             upStyle: upStyle,
             downStyle: downStyle,
-            titleColor: UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1))
+            titleColor: UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
+        )
         model.title = NSLocalizedString("Vol", comment: "")
         model.key = key
         return model
     }
     
-    /// 生成一个柱状样式
-    public class func getBar(upStyle: (color: UIColor, isSolid: Bool),
-                      downStyle: (color: UIColor, isSolid: Bool),
-                      titleColor: UIColor, title: String, key: String) -> CHBarModel {
+    /// 生成柱状样式
+    public class func getBar(
+        upStyle: (color: UIColor, isSolid: Bool),
+        downStyle: (color: UIColor, isSolid: Bool),
+        titleColor: UIColor, title: String, key: String
+        ) -> CHBarModel
+    {
         let model = CHBarModel(
             upStyle: upStyle,
             downStyle: downStyle,
-            titleColor: titleColor)
+            titleColor: titleColor
+        )
         model.title = title
         model.key = key
         return model
     }
     
-    /// 生成一个圆点样式
-    public class func getRound(upStyle: (color: UIColor, isSolid: Bool),
-                        downStyle: (color: UIColor, isSolid: Bool),
-                        titleColor: UIColor, title: String,
-                        plotPaddingExt: CGFloat,
-                        key: String) -> CHRoundModel {
+    /// 生成圆点样式
+    public class func getRound(
+        upStyle: (color: UIColor, isSolid: Bool),
+        downStyle: (color: UIColor, isSolid: Bool),
+        titleColor: UIColor, title: String,
+        plotPaddingExt: CGFloat,
+        key: String
+        ) -> CHRoundModel
+    {
         let model = CHRoundModel(
             upStyle: upStyle,
             downStyle: downStyle,
-            titleColor: titleColor, plotPaddingExt: plotPaddingExt)
+            titleColor: titleColor, plotPaddingExt: plotPaddingExt
+        )
         model.title = title
         model.key = key
         return model

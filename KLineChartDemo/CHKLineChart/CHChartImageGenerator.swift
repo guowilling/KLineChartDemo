@@ -28,7 +28,8 @@ public class CHChartImageGenerator: NSObject {
         lineWidth: CGFloat = 1,
         backgroundColor: UIColor = UIColor.white,
         lineColor: UIColor = UIColor.lightGray,
-        size: CGSize) -> UIImage
+        size: CGSize
+        ) -> UIImage
     {
         self.values = values
         
@@ -37,7 +38,7 @@ public class CHChartImageGenerator: NSObject {
         let section = self.style.sections[0]
         section.backgroundColor = backgroundColor
         
-        let model = section.series[0].chartModels[0]
+        let model = section.seriesArray[0].chartModels[0]
         model.upStyle = (lineColor, true)
         model.downStyle = (lineColor, true)
         model.lineWidth = lineWidth
@@ -104,22 +105,22 @@ extension CHKLineChartStyle {
         
         let priceSection = CHSection()
         priceSection.backgroundColor = style.backgroundColor
-        priceSection.showTitle = false
-        priceSection.titleShowOutSide = false
-        priceSection.valueType = .master
+        priceSection.isShowTitle = false
+        priceSection.isShowTitleOutside = false
+        priceSection.type = .master
         priceSection.key = "price"
-        priceSection.hidden = false
+        priceSection.isHidden = false
         priceSection.ratios = 1
         priceSection.yAxis.referenceStyle = .none
         priceSection.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         let timelineSeries = CHSeries.getTimelinePrice(
             color: UIColor.ch_hex(0xA4AAB3),
             section: priceSection,
-            showGuide: true,
+                    showUltimateValue: true,
             ultimateValueStyle: .none,
             lineWidth: 1
         )
-        priceSection.series = [timelineSeries]
+        priceSection.seriesArray = [timelineSeries]
         style.sections = [priceSection]
         return style
     }
