@@ -8,7 +8,7 @@ class ChartTimelineImageViewController: UIViewController {
     
     var trendImageData: [(Int, Double)] = []
     
-    let imageSize: CGSize = CGSize(width: 80, height: 40)
+    let imageSize: CGSize = CGSize(width: 100, height: 44)
     
     let dataSize = 24
     
@@ -52,7 +52,7 @@ extension ChartTimelineImageViewController: UITableViewDelegate, UITableViewData
             end = self.trendImageData.count - 1
         }
         let durationDatas = self.trendImageData[start...end]
-        let duration = Date.ch_getTimeByStamp(durationDatas[start].0, format: "MM-dd HH:mm") + "~" + Date.ch_getTimeByStamp(durationDatas[end].0, format: "MM-dd HH:mm")
+        let duration = Date.ch_getTimeByStamp(durationDatas[start].0, format: "MM-dd HH") + "~" + Date.ch_getTimeByStamp(durationDatas[end].0, format: "MM-dd HH")
         cell?.textLabel?.text = duration
         
         let imageView = cell?.contentView.viewWithTag(100) as? UIImageView

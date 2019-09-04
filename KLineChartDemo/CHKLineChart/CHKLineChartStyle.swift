@@ -19,15 +19,15 @@ public enum CHUltimateValueStyle {
 open class CHKLineChartStyle {
     
     /// 分区样式
-    open var sections: [CHSection] = [CHSection]()
+    open var sections: [CHSection] = []
     
     /// 支持的指标算法
-    open var algorithms: [CHChartAlgorithmProtocol] = [CHChartAlgorithmProtocol]()
+    open var algorithms: [CHChartAlgorithmProtocol] = []
     
     /// 背景颜色
     open var backgroundColor: UIColor = UIColor.white
     
-    /// 显示边线宽度上左下右
+    /// 边线宽度上左下右
     open var borderWidth: (top: CGFloat, left: CGFloat, bottom: CGFloat, right: CGFloat) = (0.5, 0.5, 0.5, 0.5)
     
     /// 边距
@@ -42,10 +42,10 @@ open class CHKLineChartStyle {
     /// XY 轴上 Label 颜色
     open var textColor: UIColor = UIColor.clear
     
-    /// 是否显示选中的内容
+    /// 是否显示选中点
     open var showSelection: Bool = true
     
-    /// 选中点显示的背景颜色
+    /// 选中点的背景颜色
     open var selectedBGColor: UIColor = UIColor.clear
     
     /// 选中点时显示的 XY 轴上 Label 颜色

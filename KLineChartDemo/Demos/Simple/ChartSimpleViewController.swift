@@ -8,7 +8,7 @@ class ChartSimpleViewController: UIViewController {
     
     @IBOutlet weak var kLineChartView: CHKLineChartView!
     
-    var chartPoints = [ChartPoint]()
+    var chartPoints: [ChartPoint] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,12 +23,12 @@ class ChartSimpleViewController: UIViewController {
         self.indicatorView.startAnimating()
         self.indicatorView.isHidden = false
         ChartPointManager.shared.getKLineChartData(exPair: symbol, timeType: type) { [weak self] (success, chartPoints) in
+            self?.indicatorView.isHidden = true
+            self?.indicatorView.stopAnimating()
             if success && chartPoints.count > 0 {
                 self?.chartPoints = chartPoints
                 self?.kLineChartView.reloadData(toPosition: .tail)
             }
-            self?.indicatorView.stopAnimating()
-            self?.indicatorView.isHidden = true
         }
     }
 }
@@ -73,8 +73,4 @@ extension ChartSimpleViewController: CHKLineChartDelegate {
         return 16
     }
     
-    func kLineChart(chart: CHKLineChartView, didSelectAt index: Int, item: CHChartItem) {
-        NSLog("selected index = \(index)")
-        NSLog("selected item closePrice = \(item.closePrice)")
-    }
 }

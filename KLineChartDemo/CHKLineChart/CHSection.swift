@@ -50,7 +50,6 @@ open class CHSection: NSObject {
     var titleLayer: CHShapeLayer = CHShapeLayer()   // 标题的绘图层
     var titleView: UIView?                          // 用户自定义视图
     var sectionLayer: CHShapeLayer = CHShapeLayer() // 分区的绘图层
-    var maskLayer: CAShapeLayer?                    // 分时线下面的渐变遮罩
     
     convenience init(type: CHSectionType, key: String = "") {
         self.init()

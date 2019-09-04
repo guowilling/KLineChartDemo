@@ -196,6 +196,8 @@ class ChartCustomViewController: UIViewController {
         }
         
         scrollView.sendSubviewToBack(self.chartView)
+        
+        scrollView.contentSize = CGSize(width: 0, height: 777)
     }
     
     func fetchKLineChartData() {
@@ -376,6 +378,8 @@ extension ChartCustomViewController: CHKLineChartDelegate {
     }
     
     func kLineChart(chart: CHKLineChartView, didSelectAt index: Int, item: CHChartItem) {
+        NSLog("selected index = \(index)")
+        NSLog("selected item closePrice = \(item.closePrice)")
 //        let point = self.chartPoints[index]
 //        self.topView.update(point: point)
     }

@@ -359,11 +359,12 @@ public extension CHKLineChartStyle {
     /// 暗黑风格的点线简单样式
     static var simpleLineDark: CHKLineChartStyle {
         let style = CHKLineChartStyle()
+        style.algorithms = [CHChartAlgorithm.timeline]
+        style.backgroundColor = UIColor.ch_hex(0x383D49)
         style.labelFont = UIFont.systemFont(ofSize: 10)
         style.lineColor = UIColor.clear
         style.textColor = UIColor.ch_hex(0x8D7B62, alpha: 0.44)
         style.selectedTextColor = UIColor(white: 0.8, alpha: 1)
-        style.backgroundColor = UIColor.ch_hex(0x383D49)
         style.selectedBGColor = UIColor(white: 0.4, alpha: 1)
         style.padding = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
         style.yAxisShowPosition = .left
@@ -373,7 +374,6 @@ public extension CHKLineChartStyle {
         style.enablePan = false
         style.enableTap = false
         style.enablePinch = false
-        style.algorithms = [CHChartAlgorithm.timeline]
         
         let priceSection = CHSection()
         priceSection.type = .master
@@ -386,11 +386,13 @@ public extension CHKLineChartStyle {
         priceSection.yAxis.tickInterval = 2
         priceSection.yAxis.referenceStyle = .solid(color: UIColor.ch_hex(0x8D7B62, alpha: 0.44))
         priceSection.padding = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
-        let timelineSeries = CHSeries.getTimelinePrice(color: UIColor.ch_hex(0xAE475C),
-                                                       section: priceSection,
-                                                               showUltimateValue: true,
-                                                       ultimateValueStyle: .circle(UIColor.ch_hex(0xAE475C), true),
-                                                       lineWidth: 2)
+        let timelineSeries = CHSeries.getTimelinePrice(
+            color: UIColor.ch_hex(0xAE475C),
+            section: priceSection,
+            showUltimateValue: true,
+            ultimateValueStyle: .circle(UIColor.ch_hex(0xAE475C), true),
+            lineWidth: 2
+        )
         priceSection.seriesArray = [timelineSeries]
         
         style.sections = [priceSection]

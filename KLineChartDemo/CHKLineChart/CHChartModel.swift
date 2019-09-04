@@ -90,8 +90,10 @@ open class CHLineModel: CHChartModel {
         modelLayer.strokeColor = self.upStyle.color.cgColor
         modelLayer.fillColor = UIColor.clear.cgColor
         modelLayer.lineWidth = self.lineWidth
-        modelLayer.lineCap = CAShapeLayerLineCap.round
-        modelLayer.lineJoin = CAShapeLayerLineJoin.bevel
+        modelLayer.lineCap = .butt
+        modelLayer.lineJoin = .round
+        
+        let linePath = UIBezierPath()
         
         // 每个点的间隔宽度
         let plotWidth = (self.section.frame.size.width - self.section.padding.left - self.section.padding.right) / CGFloat(endIndex - startIndex)
@@ -101,12 +103,7 @@ open class CHLineModel: CHChartModel {
         var minValue: CGFloat = CGFloat.greatestFiniteMagnitude // 最小值
         var minPoint: CGPoint?                                  // 最小值所在坐标
         
-        var startPoint: CGPoint = CGPoint.zero
-        var endPoint: CGPoint = CGPoint.zero
-        
-        let linePath = UIBezierPath()
-        var isStartPoint = false
-        
+        var dataPoints: [CGPoint] = []
         // 循环起始到终结
         for i in stride(from: startIndex, to: endIndex, by: 1) {
             guard let value = self[i].value else {
@@ -115,17 +112,7 @@ open class CHLineModel: CHChartModel {
             let ix = self.section.frame.origin.x + self.section.padding.left + CGFloat(i - startIndex) * plotWidth
             let iys = self.section.getY(with: value)
             let point = CGPoint(x: ix + plotWidth / 2, y: iys)
-            
-            if !isStartPoint {
-                isStartPoint = true
-                linePath.move(to: point)
-                startPoint = point
-            } else {
-                linePath.addLine(to: point)
-                if i == endIndex - 1 {
-                    endPoint = point
-                }
-            }
+            dataPoints.append(point)
             
             // 记录最大值
             if value > maxValue {
@@ -137,6 +124,10 @@ open class CHLineModel: CHChartModel {
                 minValue = value
                 minPoint = point
             }
+        }
+        linePath.move(to: dataPoints[0])
+        for i in 1..<dataPoints.count {
+            linePath.addLine(to: dataPoints[i])
         }
         
         modelLayer.path = linePath.cgPath
@@ -153,26 +144,6 @@ open class CHLineModel: CHChartModel {
             let lowPrice = minValue.ch_toString(maxF: section.decimal)
             let minLayer = self.drawGuideValue(value: lowPrice, section: section, point: minPoint!, trend: CHChartItemTrend.down)
             serieLayer.addSublayer(minLayer)
-        }
-        
-        // SRCHANGE
-        if seriesKey == CHSeriesKey.timeline {
-            let path = UIBezierPath()
-            let pathHeight = section.frame.size.height + section.frame.origin.y - section.padding.bottom
-            path.move(to: CGPoint(x: startPoint.x, y: pathHeight))
-            path.addLine(to: startPoint)
-            path.append(linePath)
-            path.addLine(to: CGPoint(x: endPoint.x, y: pathHeight))
-            path.addLine(to: CGPoint(x: startPoint.x, y: pathHeight))
-            path.lineJoinStyle = .round
-            
-            let maskLayer = CAShapeLayer()
-            maskLayer.path = path.cgPath
-            maskLayer.fillColor = UIColor.white.cgColor
-            maskLayer.strokeColor = UIColor.clear.cgColor
-            maskLayer.lineWidth = 0.0
-            
-            section.maskLayer = maskLayer
         }
         
         return serieLayer

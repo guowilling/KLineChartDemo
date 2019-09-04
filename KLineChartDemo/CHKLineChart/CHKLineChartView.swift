@@ -903,14 +903,6 @@ extension CHKLineChartView {
             for serie in section.seriesArray {
                 let seriesLayer = self.drawSerie(serie)
                 section.sectionLayer.addSublayer(seriesLayer)
-                if !serie.hidden && serie.key == CHSeriesKey.timeline {
-                    let gradientLayer = CAGradientLayer()
-                    gradientLayer.frame = CGRect(x: 0, y: 0, width: section.frame.size.width, height: section.frame.size.height)
-//                    gradientLayer.frame = section.frame // 会产生偏移
-                    gradientLayer.colors = [UIColor.ch_hex(0x9D48FE, alpha: 0.3).cgColor, UIColor.clear.cgColor]
-                    gradientLayer.mask = section.maskLayer
-                    serie.seriesLayer.addSublayer(gradientLayer)
-                }
             }
         }
         self.drawLayer.addSublayer(section.sectionLayer)
