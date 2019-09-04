@@ -5,20 +5,20 @@ import UIKit
 ///
 /// - master: 主图
 /// - assistant: 副图
-public enum CHSectionType {
+public enum BMKLineSectionType {
     case master
     case assistant
 }
 
 /// 分区
-open class CHSection: NSObject {
+open class BMKLineSection: NSObject {
     
-    open var type: CHSectionType = .master
+    open var type: BMKLineSectionType = .master
     
     open var key = ""
     open var name: String = ""
     
-    open var seriesArray: [CHSeries] = []
+    open var seriesArray: [BMKLineSeries] = []
     
     open var isHidden: Bool = false
     
@@ -44,14 +44,14 @@ open class CHSection: NSObject {
     open var frame: CGRect = CGRect.zero
     open var padding: UIEdgeInsets = UIEdgeInsets.zero
     
-    open var yAxis: CHYAxis = CHYAxis()
-    open var xAxis: CHXAxis = CHXAxis()
+    open var yAxis: BMKLineYAxis = BMKLineYAxis()
+    open var xAxis: BMKLineXAxis = BMKLineXAxis()
     
-    var titleLayer: CHShapeLayer = CHShapeLayer()   // 标题的绘图层
+    var titleLayer: BMKLineShapeLayer = BMKLineShapeLayer()   // 标题的绘图层
     var titleView: UIView?                          // 用户自定义视图
-    var sectionLayer: CHShapeLayer = CHShapeLayer() // 分区的绘图层
+    var sectionLayer: BMKLineShapeLayer = BMKLineShapeLayer() // 分区的绘图层
     
-    convenience init(type: CHSectionType, key: String = "") {
+    convenience init(type: BMKLineSectionType, key: String = "") {
         self.init()
         
         self.type = type
@@ -59,7 +59,7 @@ open class CHSection: NSObject {
     }
 }
 
-extension CHSection {
+extension BMKLineSection {
     
     func removeSublayers() {
         self.sectionLayer.sublayers?.forEach({ $0.removeFromSuperlayer() })
@@ -78,8 +78,8 @@ extension CHSection {
     }
     
     /// 根据键值查找系列
-    public func getSeries(key: String) -> CHSeries? {
-        var series: CHSeries?
+    public func getSeries(key: String) -> BMKLineSeries? {
+        var series: BMKLineSeries?
         for s in self.seriesArray {
             if s.key == key {
                 series = s
@@ -100,7 +100,7 @@ extension CHSection {
     }
 }
 
-extension CHSection {
+extension BMKLineSection {
     /// 获取标签值对应在坐标系中的Y值
     public func getY(with value: CGFloat) -> CGFloat {
         let max = self.yAxis.max
@@ -137,7 +137,7 @@ extension CHSection {
     }
 }
 
-extension CHSection {
+extension BMKLineSection {
     
     public func drawTitle(_ selectedPointIndex: Int) {
         guard self.isShowTitle else {
@@ -169,7 +169,7 @@ extension CHSection {
         return self.getTitlesAndAttributesByIndex(selectedPointIndex, series: series)
     }
     
-    public func getTitlesAndAttributesByIndex(_ selectedPointIndex: Int, series: CHSeries) -> [(title: String, color: UIColor)]? {
+    public func getTitlesAndAttributesByIndex(_ selectedPointIndex: Int, series: BMKLineSeries) -> [(title: String, color: UIColor)]? {
         guard !series.hidden else {
             return nil
         }
@@ -190,8 +190,8 @@ extension CHSection {
             let item = model[selectedPointIndex]
             var title = ""
             switch model {
-            case is CHCandleModel:
-                if model.key != CHSeriesKey.candle {
+            case is BMCandleModel:
+                if model.key != BMKLineSeriesKey.candle {
                     continue
                 }
                 var amplitude: CGFloat = 0
@@ -199,23 +199,23 @@ extension CHSection {
                     amplitude = (item.closePrice - item.openPrice) / item.openPrice * 100
                 }
                 title += NSLocalizedString("O", comment: "") + ": " +
-                    item.openPrice.ch_toString(maxF: self.decimal) + "  "
+                    item.openPrice.bm_toString(maxF: self.decimal) + "  "
                 title += NSLocalizedString("H", comment: "") + ": " +
-                    item.highPrice.ch_toString(maxF: self.decimal) + "  "
+                    item.highPrice.bm_toString(maxF: self.decimal) + "  "
                 title += NSLocalizedString("L", comment: "") + ": " +
-                    item.lowPrice.ch_toString(maxF: self.decimal) + "  "
+                    item.lowPrice.bm_toString(maxF: self.decimal) + "  "
                 title += NSLocalizedString("C", comment: "") + ": " +
-                    item.closePrice.ch_toString(maxF: self.decimal) + "  "
+                    item.closePrice.bm_toString(maxF: self.decimal) + "  "
                 title += NSLocalizedString("R", comment: "") + ": " +
-                    amplitude.ch_toString(maxF: self.decimal) + "%   "
-            case is CHColumnModel:
-                if model.key != CHSeriesKey.volume {
+                    amplitude.bm_toString(maxF: self.decimal) + "%   "
+            case is BMColumnModel:
+                if model.key != BMKLineSeriesKey.volume {
                     continue
                 }
-                title += model.title + ": " + item.vol.ch_toString(maxF: self.decimal) + "  "
+                title += model.title + ": " + item.vol.bm_toString(maxF: self.decimal) + "  "
             default:
                 if item.value != nil {
-                    title += model.title + ": " + item.value!.ch_toString(maxF: self.decimal) + "  "
+                    title += model.title + ": " + item.value!.bm_toString(maxF: self.decimal) + "  "
                 }  else {
                     title += model.title + ": --  "
                 }
@@ -241,10 +241,10 @@ extension CHSection {
         let titleString = NSMutableAttributedString()
         for (title, color) in titlesAndAttributes {
             titleString.append(NSAttributedString(string: title))
-            let range = NSMakeRange(start, title.ch_length)
+            let range = NSMakeRange(start, title.bm_length)
             let colorAttribute = [NSAttributedString.Key.foregroundColor: color]
             titleString.addAttributes(colorAttribute, range: range)
-            start += title.ch_length
+            start += title.bm_length
         }
         self.drawTitleForHeader(title: titleString)
     }
@@ -258,7 +258,7 @@ extension CHSection {
         
         var yLocation: CGFloat = 0
         var containerWidth: CGFloat = 0
-        let textSize = title.string.ch_sizeWithConstrained(self.labelFont, constraintRect: CGSize(width: self.frame.width, height: CGFloat.greatestFiniteMagnitude))
+        let textSize = title.string.bm_sizeWithConstrained(self.labelFont, constraintRect: CGSize(width: self.frame.width, height: CGFloat.greatestFiniteMagnitude))
         
         if isShowTitleOutside {
             yLocation = self.frame.origin.y - textSize.height - 4
@@ -271,7 +271,7 @@ extension CHSection {
         let xLocation = self.frame.origin.x + self.padding.left + 2
         let point = CGPoint(x: xLocation, y: yLocation)
         
-        let titleText = CHTextLayer()
+        let titleText = BMKLineTextLayer()
         titleText.frame = CGRect(origin: point, size: CGSize(width: containerWidth, height: textSize.height + 20))
         //titleText.foregroundColor = self.titleColor.cgColor
         titleText.backgroundColor = UIColor.clear.cgColor
@@ -313,7 +313,7 @@ extension CHSection {
     }
 }
 
-extension CHSection {
+extension BMKLineSection {
     
     /// 建立Y坐标轴
     ///
@@ -321,7 +321,7 @@ extension CHSection {
     ///   - startIndex: 开始数据点
     ///   - endIndex: 结束数据点
     ///   - datas: 数据集合
-    func buildYAxis(startIndex: Int, endIndex: Int, datas: [CHChartItem]) {
+    func buildYAxis(startIndex: Int, endIndex: Int, datas: [BMKLineChartItem]) {
         self.yAxis.isUsed = false
         var baseValueSticky = false
         var symmetrical = false
@@ -381,7 +381,7 @@ extension CHSection {
         }
     }
     
-    func calculateYAxis(with chartModel: CHChartModel, startIndex: Int, endIndex: Int) {
+    func calculateYAxis(with chartModel: BMKLineChartModel, startIndex: Int, endIndex: Int) {
         let datas = chartModel.datas
         guard datas.count > 0 else {
             return
@@ -398,7 +398,7 @@ extension CHSection {
             let item = datas[i]
             
             switch chartModel {
-            case is CHCandleModel:
+            case is BMCandleModel:
                 let high = item.highPrice
                 let low = item.lowPrice
                 if high > self.yAxis.max {
@@ -407,7 +407,7 @@ extension CHSection {
                 if low < self.yAxis.min {
                     self.yAxis.min = low
                 }
-            case is CHLineModel, is CHBarModel:
+            case is BMLineModel, is BMBarModel:
                 if let value = chartModel[i].value {
                     if value > self.yAxis.max {
                         self.yAxis.max = value
@@ -416,7 +416,7 @@ extension CHSection {
                         self.yAxis.min = value
                     }
                 }
-            case is CHColumnModel:
+            case is BMColumnModel:
                 let vol = item.vol
                 if vol > self.yAxis.max {
                     self.yAxis.max = vol

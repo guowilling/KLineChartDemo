@@ -52,15 +52,15 @@ extension ChartTimelineImageViewController: UITableViewDelegate, UITableViewData
             end = self.trendImageData.count - 1
         }
         let durationDatas = self.trendImageData[start...end]
-        let duration = Date.ch_getTimeByStamp(durationDatas[start].0, format: "MM-dd HH") + "~" + Date.ch_getTimeByStamp(durationDatas[end].0, format: "MM-dd HH")
+        let duration = Date.bm_timeStringOfStamp(durationDatas[start].0, format: "MM-dd HH") + "~" + Date.bm_timeStringOfStamp(durationDatas[end].0, format: "MM-dd HH")
         cell?.textLabel?.text = duration
         
         let imageView = cell?.contentView.viewWithTag(100) as? UIImageView
-        imageView?.image = CHChartImageGenerator.share.kLineImage(
+        imageView?.image = BMKLineChartImageGenerator.shared.generateImage(
             by: Array(durationDatas),
             lineWidth: 1.5,
             backgroundColor: UIColor.white,
-            lineColor: UIColor.ch_hex(0x2F8AFF),
+            lineColor: UIColor.bm_hex(0x2F8AFF),
             size: imageSize
         )
         return cell!

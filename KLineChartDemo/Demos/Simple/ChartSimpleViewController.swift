@@ -6,7 +6,7 @@ class ChartSimpleViewController: UIViewController {
     
     @IBOutlet weak var indicatorView: UIActivityIndicatorView!
     
-    @IBOutlet weak var kLineChartView: CHKLineChartView!
+    @IBOutlet weak var kLineChartView: BMKLineChartView!
     
     var chartPoints: [ChartPoint] = []
     
@@ -33,43 +33,43 @@ class ChartSimpleViewController: UIViewController {
     }
 }
 
-extension ChartSimpleViewController: CHKLineChartDelegate {
+extension ChartSimpleViewController: BMKLineChartDelegate {
     
-    func numberOfPointsInKLineChart(chart: CHKLineChartView) -> Int {
+    func numberOfPointsInKLineChart(chart: BMKLineChartView) -> Int {
         return self.chartPoints.count
     }
     
-    func kLineChart(chart: CHKLineChartView, valueForPointAtIndex index: Int) -> CHChartItem {
+    func kLineChart(chart: BMKLineChartView, valueForPointAtIndex index: Int) -> BMKLineChartItem {
         let point = self.chartPoints[index]
-        let chartItem = CHChartItem()
+        let chartItem = BMKLineChartItem()
         chartItem.time = point.time
         chartItem.closePrice = CGFloat(point.closePrice)
         return chartItem
     }
     
-    func kLineChart(chart: CHKLineChartView, labelOnYAxisForValue value: CGFloat, atIndex index: Int, section: CHSection) -> String {
-        return value.ch_toString(maxF: section.decimal)
+    func kLineChart(chart: BMKLineChartView, labelOnYAxisForValue value: CGFloat, atIndex index: Int, section: BMKLineSection) -> String {
+        return value.bm_toString(maxF: section.decimal)
     }
     
-    func kLineChart(chart: CHKLineChartView, labelOnXAxisForIndex index: Int) -> String {
+    func kLineChart(chart: BMKLineChartView, labelOnXAxisForIndex index: Int) -> String {
         let point = self.chartPoints[index]
         let timestamp = point.time
-        var time = Date.ch_getTimeByStamp(timestamp, format: "HH:mm")
+        var time = Date.bm_timeStringOfStamp(timestamp, format: "HH:mm")
         if time == "00:00" {
-            time = Date.ch_getTimeByStamp(timestamp, format: "MM-dd")
+            time = Date.bm_timeStringOfStamp(timestamp, format: "MM-dd")
         }
         return time
     }
     
-    func kLineChart(chart: CHKLineChartView, decimalAt section: Int) -> Int {
+    func kLineChart(chart: BMKLineChartView, decimalAt section: Int) -> Int {
         return 2
     }
     
-    func widthForYAxisLabelInKLineChart(in chart: CHKLineChartView) -> CGFloat {
+    func widthForYAxisLabelInKLineChart(in chart: BMKLineChartView) -> CGFloat {
         return chart.DefaultYAxisLabelWidth
     }
     
-    func heightForXAxisInKLineChart(in chart: CHKLineChartView) -> CGFloat {
+    func heightForXAxisInKLineChart(in chart: BMKLineChartView) -> CGFloat {
         return 16
     }
     

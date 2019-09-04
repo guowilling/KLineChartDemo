@@ -1,29 +1,29 @@
 
 import UIKit
 
-public class CHChartImageGenerator: NSObject {
+public class BMKLineChartImageGenerator: NSObject {
 
     /// (时间戳, 收盘价格)
     public var values: [(Int, Double)] = []
     
-    public var chartView: CHKLineChartView!
+    public var chartView: BMKLineChartView!
     
-    public var style: CHKLineChartStyle = CHKLineChartStyle.timelineImgStyle
+    public var style: BMKLineChartStyle!
     
-    public static let share: CHChartImageGenerator = {
-        let generator = CHChartImageGenerator()
+    public static let shared: BMKLineChartImageGenerator = {
+        let generator = BMKLineChartImageGenerator()
         return generator
     }()
     
     public override init() {
         super.init()
         
-        self.chartView = CHKLineChartView(frame: CGRect.zero)
-        self.chartView.style = CHKLineChartStyle.timelineImgStyle
+        self.chartView = BMKLineChartView(frame: CGRect.zero)
         self.chartView.delegate = self
+        self.style = .timelineImgStyle
     }
     
-    public func kLineImage(
+    public func generateImage(
         by values: [(Int, Double)],
         lineWidth: CGFloat = 1,
         backgroundColor: UIColor = UIColor.white,
@@ -54,43 +54,44 @@ public class CHChartImageGenerator: NSObject {
     }
 }
 
-extension CHChartImageGenerator: CHKLineChartDelegate {
+extension BMKLineChartImageGenerator: BMKLineChartDelegate {
     
-    public func numberOfPointsInKLineChart(chart: CHKLineChartView) -> Int {
+    public func numberOfPointsInKLineChart(chart: BMKLineChartView) -> Int {
         return self.values.count
     }
     
-    public func kLineChart(chart: CHKLineChartView, valueForPointAtIndex index: Int) -> CHChartItem {
+    public func kLineChart(chart: BMKLineChartView, valueForPointAtIndex index: Int) -> BMKLineChartItem {
         let data = self.values[index]
-        let chartItem = CHChartItem()
+        let chartItem = BMKLineChartItem()
         chartItem.time = Int(data.0 / 1000)
         chartItem.closePrice = CGFloat(data.1)
         return chartItem
     }
     
-    public func widthForYAxisLabelInKLineChart(in chart: CHKLineChartView) -> CGFloat {
+    public func widthForYAxisLabelInKLineChart(in chart: BMKLineChartView) -> CGFloat {
         return chart.DefaultYAxisLabelWidth
     }
     
-    public func kLineChart(chart: CHKLineChartView, labelOnYAxisForValue value: CGFloat, atIndex index: Int, section: CHSection) -> String {
+    public func kLineChart(chart: BMKLineChartView, labelOnYAxisForValue value: CGFloat, atIndex index: Int, section: BMKLineSection) -> String {
         return ""
     }
     
-    public func kLineChart(chart: CHKLineChartView, labelOnXAxisForIndex index: Int) -> String {
+    public func kLineChart(chart: BMKLineChartView, labelOnXAxisForIndex index: Int) -> String {
         return ""
     }
     
-    public func heightForXAxisInKLineChart(in chart: CHKLineChartView) -> CGFloat {
+    public func heightForXAxisInKLineChart(in chart: BMKLineChartView) -> CGFloat {
         return 0
     }
 }
 
-extension CHKLineChartStyle {
-    public static var timelineImgStyle: CHKLineChartStyle {
-        let style = CHKLineChartStyle()
+extension BMKLineChartStyle {
+    
+    public static var timelineImgStyle: BMKLineChartStyle {
+        let style = BMKLineChartStyle()
         style.labelFont = UIFont.systemFont(ofSize: 10)
         style.lineColor = UIColor.clear
-        style.backgroundColor = UIColor.ch_hex(0xF5F5F5)
+        style.backgroundColor = UIColor.bm_hex(0xF5F5F5)
         style.textColor = UIColor(white: 0.8, alpha: 1)
         style.padding = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
         style.isInnerYAxis = true
@@ -101,9 +102,9 @@ extension CHKLineChartStyle {
         style.enablePan = false
         style.enableTap = false
         style.enablePinch = false
-        style.algorithms = [CHChartAlgorithm.timeline]
+        style.algorithms = [BMKLineIndexAlgorithm.timeline]
         
-        let priceSection = CHSection()
+        let priceSection = BMKLineSection()
         priceSection.backgroundColor = style.backgroundColor
         priceSection.isShowTitle = false
         priceSection.isShowTitleOutside = false
@@ -113,8 +114,8 @@ extension CHKLineChartStyle {
         priceSection.ratios = 1
         priceSection.yAxis.referenceStyle = .none
         priceSection.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        let timelineSeries = CHSeries.getTimelinePrice(
-            color: UIColor.ch_hex(0xA4AAB3),
+        let timelineSeries = BMKLineSeries.getTimelinePrice(
+            color: UIColor.bm_hex(0xA4AAB3),
             section: priceSection,
                     showUltimateValue: true,
             ultimateValueStyle: .none,

@@ -85,11 +85,11 @@ class KLineChartStyleManager: NSObject, Codable {
 }
 
 // MARK: - 扩展样式
-public extension CHKLineChartStyle {
+public extension BMKLineChartStyle {
     
     /// 自定义的明亮风格样式
-    static var customLight: CHKLineChartStyle {
-        let style = CHKLineChartStyle()
+    static var customLight: BMKLineChartStyle {
+        let style = BMKLineChartStyle()
         style.labelFont = UIFont.systemFont(ofSize: 10)
         style.lineColor = UIColor.clear
         style.selectedBGColor = UIColor(white: 0.4, alpha: 1)
@@ -100,24 +100,24 @@ public extension CHKLineChartStyle {
         style.isInnerYAxis = true
         style.showXAxisOnSection = 0
         style.yAxisShowPosition = .right
-        style.algorithms = [CHChartAlgorithm.timeline,
-                            CHChartAlgorithm.ma(5),
-                            CHChartAlgorithm.ma(10),
-                            CHChartAlgorithm.ma(30),
-                            CHChartAlgorithm.ema(5),
-                            CHChartAlgorithm.ema(10),
-                            CHChartAlgorithm.ema(12),
-                            CHChartAlgorithm.ema(26),
-                            CHChartAlgorithm.ema(30),
-                            CHChartAlgorithm.macd(12, 26, 9), // 计算 MACD, 必须先计算到同周期的 EMA
-                            CHChartAlgorithm.kdj(9, 3, 3),
-                            CHChartAlgorithm.rsi(6),
-                            CHChartAlgorithm.rsi(12),
-                            CHChartAlgorithm.rsi(24)]
+        style.algorithms = [BMKLineIndexAlgorithm.timeline,
+                            BMKLineIndexAlgorithm.ma(5),
+                            BMKLineIndexAlgorithm.ma(10),
+                            BMKLineIndexAlgorithm.ma(30),
+                            BMKLineIndexAlgorithm.ema(5),
+                            BMKLineIndexAlgorithm.ema(10),
+                            BMKLineIndexAlgorithm.ema(12),
+                            BMKLineIndexAlgorithm.ema(26),
+                            BMKLineIndexAlgorithm.ema(30),
+                            BMKLineIndexAlgorithm.macd(12, 26, 9), // 计算 MACD, 必须先计算到同周期的 EMA
+                            BMKLineIndexAlgorithm.kdj(9, 3, 3),
+                            BMKLineIndexAlgorithm.rsi(6),
+                            BMKLineIndexAlgorithm.rsi(12),
+                            BMKLineIndexAlgorithm.rsi(24)]
         
-        let upcolor = (UIColor.ch_hex(0x5BA267), true)
-        let downcolor = (UIColor.ch_hex(0xB1414C), true)
-        let priceSection = CHSection()
+        let upcolor = (UIColor.bm_hex(0x5BA267), true)
+        let downcolor = (UIColor.bm_hex(0xB1414C), true)
+        let priceSection = BMKLineSection()
         priceSection.backgroundColor = style.backgroundColor
         priceSection.isShowTitleOutside = false
         priceSection.isShowTitle = false
@@ -130,41 +130,41 @@ public extension CHKLineChartStyle {
         priceSection.padding = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         
         /// 时分线
-        let timelineSeries = CHSeries.getTimelinePrice(color: UIColor.ch_hex(0xAE475C),
+        let timelineSeries = BMKLineSeries.getTimelinePrice(color: UIColor.bm_hex(0xAE475C),
                                                        section: priceSection,
                                                                showUltimateValue: true,
-                                                       ultimateValueStyle: .circle(UIColor.ch_hex(0xAE475C), true),
+                                                       ultimateValueStyle: .circle(UIColor.bm_hex(0xAE475C), true),
                                                        lineWidth: 2)
         timelineSeries.hidden = true
         
         /// 蜡烛线
-        let priceSeries = CHSeries.getCandlePrice(upStyle: upcolor,
+        let priceSeries = BMKLineSeries.getCandlePrice(upStyle: upcolor,
                                                   downStyle: downcolor,
                                                   titleColor: UIColor(white: 0.5, alpha: 1),
                                                   section: priceSection,
                                                   showUltimateValue: true,
                                                   ultimateValueStyle: .arrow(UIColor(white: 0.5, alpha: 1)))
         
-        let maColor = [UIColor.ch_hex(0x4E9CC1),
-                       UIColor.ch_hex(0xF7A23B),
-                       UIColor.ch_hex(0xF600FF)]
+        let maColor = [UIColor.bm_hex(0x4E9CC1),
+                       UIColor.bm_hex(0xF7A23B),
+                       UIColor.bm_hex(0xF600FF)]
         
         /// MA
-        let priceMASeries = CHSeries.getPriceMA(isEMA: false,
+        let priceMASeries = BMKLineSeries.getPriceMA(isEMA: false,
                                                 num: [5,10,30],
                                                 colors: maColor,
                                                 section: priceSection)
         priceMASeries.hidden = false
         
         // EMA
-        let priceEMASeries = CHSeries.getPriceMA(isEMA: true,
+        let priceEMASeries = BMKLineSeries.getPriceMA(isEMA: true,
                                                  num: [5,10,30],
                                                  colors: maColor,
                                                  section: priceSection)
         priceEMASeries.hidden = true
         priceSection.seriesArray = [timelineSeries, priceSeries, priceMASeries, priceEMASeries]
         
-        let volumeSection = CHSection()
+        let volumeSection = BMKLineSection()
         volumeSection.backgroundColor = style.backgroundColor
         volumeSection.type = .assistant
         volumeSection.key = "volume"
@@ -174,21 +174,21 @@ public extension CHKLineChartStyle {
         volumeSection.yAxis.referenceStyle = .none
         volumeSection.yAxis.tickInterval = 2
         volumeSection.padding = UIEdgeInsets(top: 10, left: 0, bottom: 4, right: 0)
-        let volumeSeries = CHSeries.getDefaultVolume(upStyle: upcolor,
+        let volumeSeries = BMKLineSeries.getDefaultVolume(upStyle: upcolor,
                                                      downStyle: downcolor,
                                                      section: volumeSection)
-        let volumeMASeries = CHSeries.getVolumeMA(isEMA: false,
+        let volumeMASeries = BMKLineSeries.getVolumeMA(isEMA: false,
                                                   num: [5,10,30],
                                                   colors: maColor,
                                                   section: volumeSection)
-        let volumeEMASeries = CHSeries.getVolumeMA(isEMA: true,
+        let volumeEMASeries = BMKLineSeries.getVolumeMA(isEMA: true,
                                                    num: [5,10,30],
                                                    colors: maColor,
                                                    section: volumeSection)
         volumeEMASeries.hidden = true
         volumeSection.seriesArray = [volumeSeries, volumeMASeries, volumeEMASeries]
         
-        let trendSection = CHSection()
+        let trendSection = BMKLineSection()
         trendSection.backgroundColor = style.backgroundColor
         trendSection.type = .assistant
         trendSection.key = "analysis"
@@ -199,15 +199,15 @@ public extension CHKLineChartStyle {
         trendSection.yAxis.referenceStyle = .none
         trendSection.yAxis.tickInterval = 2
         trendSection.padding = UIEdgeInsets(top: 10, left: 0, bottom: 8, right: 0)
-        let kdjSeries = CHSeries.getKDJ(UIColor.ch_hex(0xDDDDDD),
-                                        dc: UIColor.ch_hex(0xF9EE30),
-                                        jc: UIColor.ch_hex(0xF600FF),
+        let kdjSeries = BMKLineSeries.getKDJ(UIColor.bm_hex(0xDDDDDD),
+                                        dc: UIColor.bm_hex(0xF9EE30),
+                                        jc: UIColor.bm_hex(0xF600FF),
                                         section: trendSection)
         kdjSeries.title = "KDJ(9,3,3)"
         
-        let macdSeries = CHSeries.getMACD(UIColor.ch_hex(0xDDDDDD),
-                                          deac: UIColor.ch_hex(0xF9EE30),
-                                          barc: UIColor.ch_hex(0xF600FF),
+        let macdSeries = BMKLineSeries.getMACD(UIColor.bm_hex(0xDDDDDD),
+                                          deac: UIColor.bm_hex(0xF9EE30),
+                                          barc: UIColor.bm_hex(0xF600FF),
                                           upStyle: upcolor, downStyle: downcolor,
                                           section: trendSection)
         macdSeries.title = "MACD(12,26,9)"
@@ -220,33 +220,33 @@ public extension CHKLineChartStyle {
     }
     
     /// 自定义暗黑风格的样式
-    static var customDark: CHKLineChartStyle {
-        let style = CHKLineChartStyle()
+    static var customDark: BMKLineChartStyle {
+        let style = BMKLineChartStyle()
         style.labelFont = UIFont.systemFont(ofSize: 10)
         style.lineColor = UIColor.clear
         style.selectedBGColor = UIColor(white: 0.4, alpha: 1)
         style.textColor = UIColor(white: 0.8, alpha: 1)
-        style.backgroundColor = UIColor.ch_hex(0x1D1C1C)
+        style.backgroundColor = UIColor.bm_hex(0x1D1C1C)
         style.selectedTextColor = UIColor(white: 0.8, alpha: 1)
         style.padding = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
         style.isInnerYAxis = true
         style.showXAxisOnSection = 0
         style.yAxisShowPosition = .right
-        style.algorithms = [CHChartAlgorithm.timeline,
-                            CHChartAlgorithm.ma(5),
-                            CHChartAlgorithm.ma(10),
-                            CHChartAlgorithm.ma(30),
-                            CHChartAlgorithm.ema(5),
-                            CHChartAlgorithm.ema(10),
-                            CHChartAlgorithm.ema(12),
-                            CHChartAlgorithm.ema(26),
-                            CHChartAlgorithm.ema(30),
-                            CHChartAlgorithm.macd(12, 26, 9),
-                            CHChartAlgorithm.kdj(9, 3, 3)]
+        style.algorithms = [BMKLineIndexAlgorithm.timeline,
+                            BMKLineIndexAlgorithm.ma(5),
+                            BMKLineIndexAlgorithm.ma(10),
+                            BMKLineIndexAlgorithm.ma(30),
+                            BMKLineIndexAlgorithm.ema(5),
+                            BMKLineIndexAlgorithm.ema(10),
+                            BMKLineIndexAlgorithm.ema(12),
+                            BMKLineIndexAlgorithm.ema(26),
+                            BMKLineIndexAlgorithm.ema(30),
+                            BMKLineIndexAlgorithm.macd(12, 26, 9),
+                            BMKLineIndexAlgorithm.kdj(9, 3, 3)]
         
-        let upcolor = (UIColor.ch_hex(0x5BA267), true)
-        let downcolor = (UIColor.ch_hex(0xB1414C), true)
-        let priceSection = CHSection()
+        let upcolor = (UIColor.bm_hex(0x5BA267), true)
+        let downcolor = (UIColor.bm_hex(0xB1414C), true)
+        let priceSection = BMKLineSection()
         priceSection.backgroundColor = style.backgroundColor
         priceSection.isShowTitleOutside = false
         priceSection.isShowTitle = false
@@ -260,15 +260,15 @@ public extension CHKLineChartStyle {
         priceSection.padding = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         
         /// 时分线
-        let timelineSeries = CHSeries.getTimelinePrice(color: UIColor.ch_hex(0xAE475C),
+        let timelineSeries = BMKLineSeries.getTimelinePrice(color: UIColor.bm_hex(0xAE475C),
                                                        section: priceSection,
                                                                showUltimateValue: true,
-                                                       ultimateValueStyle: .circle(UIColor.ch_hex(0xAE475C), true),
+                                                       ultimateValueStyle: .circle(UIColor.bm_hex(0xAE475C), true),
                                                        lineWidth: 2)
         timelineSeries.hidden = true
         
         /// 蜡烛线
-        let priceSeries = CHSeries.getCandlePrice(
+        let priceSeries = BMKLineSeries.getCandlePrice(
             upStyle: upcolor,
             downStyle: downcolor,
             titleColor: UIColor(white: 0.5, alpha: 1),
@@ -276,19 +276,19 @@ public extension CHKLineChartStyle {
             showUltimateValue: true,
             ultimateValueStyle: .tag(UIColor.white))
         
-        let maColor = [UIColor.ch_hex(0xDDDDDD),
-                       UIColor.ch_hex(0xF9EE30),
-                       UIColor.ch_hex(0xF600FF)]
+        let maColor = [UIColor.bm_hex(0xDDDDDD),
+                       UIColor.bm_hex(0xF9EE30),
+                       UIColor.bm_hex(0xF600FF)]
         
         // MA
-        let priceMASeries = CHSeries.getPriceMA(isEMA: false,
+        let priceMASeries = BMKLineSeries.getPriceMA(isEMA: false,
             num: [5,10,30],
             colors:maColor,
             section: priceSection)
         priceMASeries.hidden = false
         
         // EMA
-        let priceEMASeries = CHSeries.getPriceMA(
+        let priceEMASeries = BMKLineSeries.getPriceMA(
             isEMA: true,
             num: [5,10,30],
             colors: maColor,
@@ -296,7 +296,7 @@ public extension CHKLineChartStyle {
         priceEMASeries.hidden = true
         priceSection.seriesArray = [timelineSeries, priceSeries, priceMASeries, priceEMASeries]
         
-        let volumeSection = CHSection()
+        let volumeSection = BMKLineSection()
         volumeSection.backgroundColor = style.backgroundColor
         volumeSection.type = .assistant
         volumeSection.key = "volume"
@@ -306,18 +306,18 @@ public extension CHKLineChartStyle {
         volumeSection.yAxis.referenceStyle = .none
         volumeSection.yAxis.tickInterval = 1
         volumeSection.padding = UIEdgeInsets(top: 10, left: 0, bottom: 4, right: 0)
-        let volumeSeries = CHSeries.getDefaultVolume(
+        let volumeSeries = BMKLineSeries.getDefaultVolume(
             upStyle: upcolor,
             downStyle: downcolor,
             section: volumeSection)
         
-        let volumeMASeries = CHSeries.getVolumeMA(
+        let volumeMASeries = BMKLineSeries.getVolumeMA(
             isEMA: false,
             num: [5,10,30],
             colors: maColor,
             section: volumeSection)
         
-        let volumeEMASeries = CHSeries.getVolumeMA(
+        let volumeEMASeries = BMKLineSeries.getVolumeMA(
             isEMA: true,
             num: [5,10,30],
             colors: maColor,
@@ -325,7 +325,7 @@ public extension CHKLineChartStyle {
         volumeEMASeries.hidden = true
         volumeSection.seriesArray = [volumeSeries, volumeMASeries, volumeEMASeries]
         
-        let trendSection = CHSection()
+        let trendSection = BMKLineSection()
         trendSection.backgroundColor = style.backgroundColor
         trendSection.type = .assistant
         trendSection.key = "analysis"
@@ -336,16 +336,16 @@ public extension CHKLineChartStyle {
         trendSection.yAxis.referenceStyle = .none
         trendSection.yAxis.tickInterval = 2
         trendSection.padding = UIEdgeInsets(top: 10, left: 0, bottom: 8, right: 0)
-        let kdjSeries = CHSeries.getKDJ(UIColor.ch_hex(0xDDDDDD),
-                                        dc: UIColor.ch_hex(0xF9EE30),
-                                        jc: UIColor.ch_hex(0xF600FF),
+        let kdjSeries = BMKLineSeries.getKDJ(UIColor.bm_hex(0xDDDDDD),
+                                        dc: UIColor.bm_hex(0xF9EE30),
+                                        jc: UIColor.bm_hex(0xF600FF),
                                         section: trendSection)
         kdjSeries.title = "KDJ(9,3,3)"
         
-        let macdSeries = CHSeries.getMACD(UIColor.ch_hex(0xDDDDDD),
-                                          deac: UIColor.ch_hex(0xF9EE30),
-                                          barc: UIColor.ch_hex(0xF600FF),
-                                          upStyle: (UIColor.ch_hex(0x5BA267), false), downStyle: downcolor,
+        let macdSeries = BMKLineSeries.getMACD(UIColor.bm_hex(0xDDDDDD),
+                                          deac: UIColor.bm_hex(0xF9EE30),
+                                          barc: UIColor.bm_hex(0xF600FF),
+                                          upStyle: (UIColor.bm_hex(0x5BA267), false), downStyle: downcolor,
                                           section: trendSection)
         macdSeries.title = "MACD(12,26,9)"
         macdSeries.symmetrical = true
@@ -357,13 +357,13 @@ public extension CHKLineChartStyle {
     }
     
     /// 暗黑风格的点线简单样式
-    static var simpleLineDark: CHKLineChartStyle {
-        let style = CHKLineChartStyle()
-        style.algorithms = [CHChartAlgorithm.timeline]
-        style.backgroundColor = UIColor.ch_hex(0x383D49)
+    static var simpleLineDark: BMKLineChartStyle {
+        let style = BMKLineChartStyle()
+        style.algorithms = [BMKLineIndexAlgorithm.timeline]
+        style.backgroundColor = UIColor.bm_hex(0x383D49)
         style.labelFont = UIFont.systemFont(ofSize: 10)
         style.lineColor = UIColor.clear
-        style.textColor = UIColor.ch_hex(0x8D7B62, alpha: 0.44)
+        style.textColor = UIColor.bm_hex(0x8D7B62, alpha: 0.44)
         style.selectedTextColor = UIColor(white: 0.8, alpha: 1)
         style.selectedBGColor = UIColor(white: 0.4, alpha: 1)
         style.padding = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
@@ -375,7 +375,7 @@ public extension CHKLineChartStyle {
         style.enableTap = false
         style.enablePinch = false
         
-        let priceSection = CHSection()
+        let priceSection = BMKLineSection()
         priceSection.type = .master
         priceSection.key = "price"
         priceSection.backgroundColor = style.backgroundColor
@@ -384,13 +384,13 @@ public extension CHKLineChartStyle {
         priceSection.isHidden = false
         priceSection.ratios = 1
         priceSection.yAxis.tickInterval = 2
-        priceSection.yAxis.referenceStyle = .solid(color: UIColor.ch_hex(0x8D7B62, alpha: 0.44))
+        priceSection.yAxis.referenceStyle = .solid(color: UIColor.bm_hex(0x8D7B62, alpha: 0.44))
         priceSection.padding = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
-        let timelineSeries = CHSeries.getTimelinePrice(
-            color: UIColor.ch_hex(0xAE475C),
+        let timelineSeries = BMKLineSeries.getTimelinePrice(
+            color: UIColor.bm_hex(0xAE475C),
             section: priceSection,
             showUltimateValue: true,
-            ultimateValueStyle: .circle(UIColor.ch_hex(0xAE475C), true),
+            ultimateValueStyle: .circle(UIColor.bm_hex(0xAE475C), true),
             lineWidth: 2
         )
         priceSection.seriesArray = [timelineSeries]

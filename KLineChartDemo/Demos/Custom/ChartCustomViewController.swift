@@ -11,13 +11,13 @@ class ChartCustomViewController: UIViewController {
     let times: [ChartPointDurationType] = [.min5, .min15, .hour1, .hour6, .day]
     
     /// 主图线段
-    let masterLines: [String] = [CHSeriesKey.candle, CHSeriesKey.timeline]
+    let masterLines: [String] = [BMKLineSeriesKey.candle, BMKLineSeriesKey.timeline]
     
     /// 主图指标
-    let masterIndexes: [String] = [CHSeriesKey.ma, CHSeriesKey.ema, CHSeriesKey.boll, CHSeriesKey.sar, Hide]
+    let masterIndexes: [String] = [BMKLineSeriesKey.ma, BMKLineSeriesKey.ema, BMKLineSeriesKey.boll, BMKLineSeriesKey.sar, Hide]
     
     /// 副图指标
-    let assistIndexes: [String] = [CHSeriesKey.volume, CHSeriesKey.macd, CHSeriesKey.kdj, CHSeriesKey.rsi, Hide]
+    let assistIndexes: [String] = [BMKLineSeriesKey.volume, BMKLineSeriesKey.macd, BMKLineSeriesKey.kdj, BMKLineSeriesKey.rsi, Hide]
     
     /// 选择交易对
     let exPairs: [String] = ["BTC-USD", "ETH-USD", "LTC-USD", "LTC-BTC", "ETH-BTC"]
@@ -46,8 +46,8 @@ class ChartCustomViewController: UIViewController {
     /// X 轴的前一天, 用于对比是否夸日
     var chartXAxisPrevDay: String = ""
     
-    lazy var chartView: CHKLineChartView = {
-        let view = CHKLineChartView(frame: .zero)
+    lazy var chartView: BMKLineChartView = {
+        let view = BMKLineChartView(frame: .zero)
         view.style = self.loadUserStyle()
         view.delegate = self
         return view
@@ -292,19 +292,19 @@ extension ChartCustomViewController {
     }
 }
 
-extension ChartCustomViewController: CHKLineChartDelegate {
+extension ChartCustomViewController: BMKLineChartDelegate {
     
-    func initialRangeInKLineChart(in chart: CHKLineChartView) -> Int {
+    func initialRangeInKLineChart(in chart: BMKLineChartView) -> Int {
         return 50
     }
     
-    func numberOfPointsInKLineChart(chart: CHKLineChartView) -> Int {
+    func numberOfPointsInKLineChart(chart: BMKLineChartView) -> Int {
         return self.chartPoints.count
     }
     
-    func kLineChart(chart: CHKLineChartView, valueForPointAtIndex index: Int) -> CHChartItem {
+    func kLineChart(chart: BMKLineChartView, valueForPointAtIndex index: Int) -> BMKLineChartItem {
         let point = self.chartPoints[index]
-        let item = CHChartItem()
+        let item = BMKLineChartItem()
         item.time = point.time
         item.openPrice = CGFloat(point.openPrice)
         item.highPrice = CGFloat(point.highPrice)
@@ -314,24 +314,24 @@ extension ChartCustomViewController: CHKLineChartDelegate {
         return item
     }
     
-    func kLineChart(chart: CHKLineChartView, labelOnYAxisForValue value: CGFloat, atIndex index: Int, section: CHSection) -> String {
+    func kLineChart(chart: BMKLineChartView, labelOnYAxisForValue value: CGFloat, atIndex index: Int, section: BMKLineSection) -> String {
         var lable = ""
         if section.key == "volume" {
             if value / 1000 > 1 {
-                lable = (value / 1000).ch_toString(maxF: section.decimal) + "K"
+                lable = (value / 1000).bm_toString(maxF: section.decimal) + "K"
             } else {
-                lable = value.ch_toString(maxF: section.decimal)
+                lable = value.bm_toString(maxF: section.decimal)
             }
         } else {
-            lable = value.ch_toString(maxF: section.decimal)
+            lable = value.bm_toString(maxF: section.decimal)
         }
         return lable
     }
     
-    func kLineChart(chart: CHKLineChartView, labelOnXAxisForIndex index: Int) -> String {
+    func kLineChart(chart: BMKLineChartView, labelOnXAxisForIndex index: Int) -> String {
         let timestamp = self.chartPoints[index].time
-        let dayText = Date.ch_getTimeByStamp(timestamp, format: "MM-dd")
-        let timeText = Date.ch_getTimeByStamp(timestamp, format: "HH:mm")
+        let dayText = Date.bm_timeStringOfStamp(timestamp, format: "MM-dd")
+        let timeText = Date.bm_timeStringOfStamp(timestamp, format: "HH:mm")
         var lable = ""
         if dayText != self.chartXAxisPrevDay && index > 0 {
             lable = dayText
@@ -342,7 +342,7 @@ extension ChartCustomViewController: CHKLineChartDelegate {
         return lable
     }
     
-    func kLineChart(chart: CHKLineChartView, decimalAt section: Int) -> Int {
+    func kLineChart(chart: BMKLineChartView, decimalAt section: Int) -> Int {
         if section == 0 {
             return 4
         } else {
@@ -350,11 +350,11 @@ extension ChartCustomViewController: CHKLineChartDelegate {
         }
     }
     
-    func widthForYAxisLabelInKLineChart(in chart: CHKLineChartView) -> CGFloat {
+    func widthForYAxisLabelInKLineChart(in chart: BMKLineChartView) -> CGFloat {
         return 60
     }
     
-    func kLineChart(chart: CHKLineChartView, titleForHeaderInSection section: CHSection, index: Int, item: CHChartItem) -> NSAttributedString? {
+    func kLineChart(chart: BMKLineChartView, titleForHeaderInSection section: BMKLineSection, index: Int, item: BMKLineChartItem) -> NSAttributedString? {
         let titleString = NSMutableAttributedString()
         var key = ""
         switch section.index {
@@ -369,22 +369,22 @@ extension ChartCustomViewController: CHKLineChartDelegate {
         var start = 0
         for (title, color) in attributes {
             titleString.append(NSAttributedString(string: title))
-            let range = NSMakeRange(start, title.ch_length)
+            let range = NSMakeRange(start, title.bm_length)
             let colorAttribute = [NSAttributedString.Key.foregroundColor: color]
             titleString.addAttributes(colorAttribute, range: range)
-            start += title.ch_length
+            start += title.bm_length
         }
         return titleString
     }
     
-    func kLineChart(chart: CHKLineChartView, didSelectAt index: Int, item: CHChartItem) {
+    func kLineChart(chart: BMKLineChartView, didSelectAt index: Int, item: BMKLineChartItem) {
         NSLog("selected index = \(index)")
         NSLog("selected item closePrice = \(item.closePrice)")
 //        let point = self.chartPoints[index]
 //        self.topView.update(point: point)
     }
     
-    func kLineChart(chart: CHKLineChartView, didFlipPageSeries section: CHSection, series: CHSeries, seriesIndex: Int) {
+    func kLineChart(chart: BMKLineChartView, didFlipPageSeries section: BMKLineSection, series: BMKLineSeries, seriesIndex: Int) {
         switch section.index {
         case 1:
             self.selectedAssistIndex1 = self.assistIndexes.firstIndex(of: series.key) ?? self.selectedAssistIndex1
@@ -400,13 +400,13 @@ extension ChartCustomViewController {
     /// 读取用户自定义样式
     ///
     /// - Returns: CHKLineChartStyle
-    func loadUserStyle() -> CHKLineChartStyle {
+    func loadUserStyle() -> BMKLineChartStyle {
 //        return CHKLineChartStyle.customDark
 //        return CHKLineChartStyle.customLight  
         
         let styleManager = KLineChartStyleManager.shared
         
-        let style = CHKLineChartStyle()
+        let style = BMKLineChartStyle()
         style.labelFont = UIFont.systemFont(ofSize: 10)
         style.lineColor = UIColor(hex: styleManager.lineColor)
         style.textColor = UIColor(hex: styleManager.textColor)
@@ -423,15 +423,15 @@ extension ChartCustomViewController {
             style.padding = UIEdgeInsets(top: 16, left: 8, bottom: 4, right: 0)
         }
         
-        style.algorithms.append(CHChartAlgorithm.timeline)
+        style.algorithms.append(BMKLineIndexAlgorithm.timeline)
         
         /***** 配置分区样式 *****/
         
         /// 主图
-        let upcolor = (UIColor.ch_hex(styleManager.upColor), true)
-        let downcolor = (UIColor.ch_hex(styleManager.downColor), true)
+        let upcolor = (UIColor.bm_hex(styleManager.upColor), true)
+        let downcolor = (UIColor.bm_hex(styleManager.downColor), true)
         
-        let priceSection = CHSection()
+        let priceSection = BMKLineSection()
         priceSection.type = .master
         priceSection.key = "master"
         priceSection.ratios = 3
@@ -441,7 +441,7 @@ extension ChartCustomViewController {
         priceSection.backgroundColor = style.backgroundColor
         
         /// 副图1
-        let assistSection1 = CHSection()
+        let assistSection1 = BMKLineSection()
         assistSection1.type = .assistant
         assistSection1.key = "assist1"
         assistSection1.ratios = 1
@@ -452,7 +452,7 @@ extension ChartCustomViewController {
         assistSection1.backgroundColor = style.backgroundColor
         
         /// 副图2
-        let assistSection2 = CHSection()
+        let assistSection2 = BMKLineSection()
         assistSection2.type = .assistant
         assistSection2.key = "assist2"
         assistSection2.ratios = 1
@@ -465,16 +465,16 @@ extension ChartCustomViewController {
         /***** 添加主图固定线段 *****/
         
         /// 时分线
-        let timelineSeries = CHSeries.getTimelinePrice(
-            color: UIColor.ch_hex(0xAE475C),
+        let timelineSeries = BMKLineSeries.getTimelinePrice(
+            color: UIColor.bm_hex(0xAE475C),
             section: priceSection,
                     showUltimateValue: true,
-            ultimateValueStyle: .circle(UIColor.ch_hex(0xAE475C), true),
+            ultimateValueStyle: .circle(UIColor.bm_hex(0xAE475C), true),
             lineWidth: 2)
         timelineSeries.hidden = true
         
         /// 蜡烛线
-        let priceSeries = CHSeries.getCandlePrice(
+        let priceSeries = BMKLineSeries.getCandlePrice(
             upStyle: upcolor,
             downStyle: downcolor,
             titleColor: UIColor(white: 0.8, alpha: 1),

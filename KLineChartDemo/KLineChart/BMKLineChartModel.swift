@@ -6,14 +6,14 @@ import UIKit
 /// - up: 涨
 /// - down: 跌
 /// - equal: 平
-public enum CHChartItemTrend {
+public enum BMKLineChartItemTrend {
     case up
     case down
     case equal
 }
 
 /// 图表数据元素
-open class CHChartItem: NSObject {
+open class BMKLineChartItem: NSObject {
     
     open var time: Int = 0
     open var openPrice: CGFloat = 0  // 开盘价
@@ -26,7 +26,7 @@ open class CHChartItem: NSObject {
     /// 扩展值用于记录各种技术指标
     open var extVal: [String: CGFloat] = [String: CGFloat]()
     
-    open var trend: CHChartItemTrend {
+    open var trend: BMKLineChartItemTrend {
         if closePrice == openPrice {
             return .equal
         }
@@ -39,9 +39,9 @@ open class CHChartItem: NSObject {
 }
 
 /// 图表数据模型
-open class CHChartModel {
+open class BMKLineChartModel {
     
-    open var datas: [CHChartItem] = [CHChartItem]()
+    open var datas: [BMKLineChartItem] = []
     open var upStyle: (color: UIColor, isSolid: Bool) = (.green, true)
     open var downStyle: (color: UIColor, isSolid: Bool) = (.red, true)
     open var title: String = ""                               // 标题
@@ -51,17 +51,17 @@ open class CHChartModel {
     open var showMinVal: Bool = false                         // 是否显示最小值
     open var useTitleColor = true
     open var key: String = ""
-    open var ultimateValueStyle: CHUltimateValueStyle = .none // 最大最小值显示样式
+    open var ultimateValueStyle: BMUltimateValueStyle = .none // 最大最小值显示样式
     open var lineWidth: CGFloat = 0.6                         // 线段宽度
     open var plotPaddingExt: CGFloat =  0.165                 // 点与点之间, 间断所占点宽的比例
-    weak var section: CHSection!
+    weak var section: BMKLineSection!
     
     convenience init(
         upStyle: (color: UIColor, isSolid: Bool),
         downStyle: (color: UIColor, isSolid: Bool),
         title: String = "",
         titleColor: UIColor,
-        datas: [CHChartItem] = [CHChartItem](),
+        datas: [BMKLineChartItem] = [BMKLineChartItem](),
         decimal: Int = 2,
         plotPaddingExt: CGFloat = 0.165
         )
@@ -81,7 +81,7 @@ open class CHChartModel {
     }
 }
 
-open class CHLineModel: CHChartModel {
+open class BMLineModel: BMKLineChartModel {
     // MARK: - 点线样式模型
     open override func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer {
         let serieLayer = CAShapeLayer()
@@ -135,14 +135,14 @@ open class CHLineModel: CHChartModel {
         
         // 显示最大值
         if self.showMaxVal && maxValue != 0 {
-            let highPrice = maxValue.ch_toString(maxF: section.decimal)
-            let maxLayer = self.drawGuideValue(value: highPrice, section: section, point: maxPoint!, trend: CHChartItemTrend.up)
+            let highPrice = maxValue.bm_toString(maxF: section.decimal)
+            let maxLayer = self.drawGuideValue(value: highPrice, section: section, point: maxPoint!, trend: BMKLineChartItemTrend.up)
             serieLayer.addSublayer(maxLayer)
         }
         // 显示最小值
         if self.showMinVal && minValue != CGFloat.greatestFiniteMagnitude {
-            let lowPrice = minValue.ch_toString(maxF: section.decimal)
-            let minLayer = self.drawGuideValue(value: lowPrice, section: section, point: minPoint!, trend: CHChartItemTrend.down)
+            let lowPrice = minValue.bm_toString(maxF: section.decimal)
+            let minLayer = self.drawGuideValue(value: lowPrice, section: section, point: minPoint!, trend: BMKLineChartItemTrend.down)
             serieLayer.addSublayer(minLayer)
         }
         
@@ -150,7 +150,7 @@ open class CHLineModel: CHChartModel {
     }
 }
 
-open class CHCandleModel: CHChartModel {
+open class BMCandleModel: BMKLineChartModel {
     // MARK: - 蜡烛样式模型
     var drawShadow = true
     
@@ -170,7 +170,7 @@ open class CHCandleModel: CHChartModel {
         
         // 循环起始到终结
         for i in stride(from: startIndex, to: endIndex, by: 1) {
-            if self.key != CHSeriesKey.candle { // 如果不是蜡烛柱类型, 要读取具体的数值再绘制
+            if self.key != BMKLineSeriesKey.candle { // 如果不是蜡烛柱类型, 要读取具体的数值再绘制
                 if self[i].value == nil {
                     continue // 无法计算的值不绘画
                 }
@@ -264,14 +264,14 @@ open class CHCandleModel: CHChartModel {
         
         // 显示最大值
         if self.showMaxVal && maxValue != 0 {
-            let highPrice = maxValue.ch_toString(maxF: section.decimal)
-            let maxLayer = self.drawGuideValue(value: highPrice, section: section, point: maxPoint!, trend: CHChartItemTrend.up)
+            let highPrice = maxValue.bm_toString(maxF: section.decimal)
+            let maxLayer = self.drawGuideValue(value: highPrice, section: section, point: maxPoint!, trend: BMKLineChartItemTrend.up)
             serieLayer.addSublayer(maxLayer)
         }
         // 显示最小值
         if self.showMinVal && minValue != CGFloat.greatestFiniteMagnitude {
-            let lowPrice = minValue.ch_toString(maxF: section.decimal)
-            let minLayer = self.drawGuideValue(value: lowPrice, section: section, point: minPoint!, trend: CHChartItemTrend.down)
+            let lowPrice = minValue.bm_toString(maxF: section.decimal)
+            let minLayer = self.drawGuideValue(value: lowPrice, section: section, point: minPoint!, trend: BMKLineChartItemTrend.down)
             serieLayer.addSublayer(minLayer)
         }
         
@@ -279,7 +279,7 @@ open class CHCandleModel: CHChartModel {
     }
 }
 
-open class CHColumnModel: CHChartModel {
+open class BMColumnModel: BMKLineChartModel {
     // MARK: - 交易量样式模型
     open override func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer {
         let serieLayer = CAShapeLayer()
@@ -292,7 +292,7 @@ open class CHColumnModel: CHChartModel {
         let iybase = self.section.getY(with: section.yAxis.baseValue)
         
         for i in stride(from: startIndex, to: endIndex, by: 1) {
-            if self.key != CHSeriesKey.volume {
+            if self.key != BMKLineSeriesKey.volume {
                 if self[i].value == nil {
                     continue
                 }
@@ -335,7 +335,7 @@ open class CHColumnModel: CHChartModel {
     }
 }
 
-open class CHBarModel: CHChartModel {
+open class BMBarModel: BMKLineChartModel {
     // MARK: - 柱状样式模型
     open override func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer{
         let serieLayer = CAShapeLayer()
@@ -393,7 +393,7 @@ open class CHBarModel: CHChartModel {
     }
 }
 
-open class CHRoundModel: CHChartModel {
+open class BMRoundModel: BMKLineChartModel {
     // MARK: - 圆点样式模型
     open override func drawSerie(seriesKey: String? = nil, _ startIndex: Int, endIndex: Int) -> CAShapeLayer {
         let serieLayer = CAShapeLayer()
@@ -461,14 +461,14 @@ open class CHRoundModel: CHChartModel {
         serieLayer.addSublayer(modelLayer)
         
         if self.showMaxVal && maxValue != 0 {
-            let highPrice = maxValue.ch_toString(maxF: section.decimal)
-            let maxLayer = self.drawGuideValue(value: highPrice, section: section, point: maxPoint!, trend: CHChartItemTrend.up)
+            let highPrice = maxValue.bm_toString(maxF: section.decimal)
+            let maxLayer = self.drawGuideValue(value: highPrice, section: section, point: maxPoint!, trend: BMKLineChartItemTrend.up)
             serieLayer.addSublayer(maxLayer)
         }
         
         if self.showMinVal && minValue != CGFloat.greatestFiniteMagnitude {
-            let lowPrice = minValue.ch_toString(maxF: section.decimal)
-            let minLayer = self.drawGuideValue(value: lowPrice, section: section, point: minPoint!, trend: CHChartItemTrend.down)
+            let lowPrice = minValue.bm_toString(maxF: section.decimal)
+            let minLayer = self.drawGuideValue(value: lowPrice, section: section, point: minPoint!, trend: BMKLineChartItemTrend.down)
             serieLayer.addSublayer(minLayer)
         }
         
@@ -476,12 +476,12 @@ open class CHRoundModel: CHChartModel {
     }
 }
 
-public extension CHChartModel {
+public extension BMKLineChartModel {
     // MARK: - 绘画最大最小值
-    func drawGuideValue(value: String, section: CHSection, point: CGPoint, trend: CHChartItemTrend) -> CAShapeLayer {
+    func drawGuideValue(value: String, section: BMKLineSection, point: CGPoint, trend: BMKLineChartItemTrend) -> CAShapeLayer {
         let guideValueLayer = CAShapeLayer()
         
-        let fontSize = value.ch_sizeWithConstrained(section.labelFont)
+        let fontSize = value.bm_sizeWithConstrained(section.labelFont)
         let arrowLineWidth: CGFloat = 4
         var isUp: CGFloat = -1
         var isLeft: CGFloat = -1
@@ -581,8 +581,8 @@ public extension CHChartModel {
         }
         
         if isShowValue {
-            let textSize = value.ch_sizeWithConstrained(section.labelFont)
-            let valueText = CHTextLayer()
+            let textSize = value.bm_sizeWithConstrained(section.labelFont)
+            let valueText = BMKLineTextLayer()
             valueText.frame = CGRect(origin: CGPoint(x: maxPriceStartX, y: maxPriceStartY), size: textSize)
             valueText.string = value
             valueText.fontSize = section.labelFont.pointSize
@@ -596,7 +596,7 @@ public extension CHChartModel {
     }
 }
 
-extension CHChartModel {
+extension BMKLineChartModel {
     // MARK: - 样式工厂方法
     
     /// 生成点线样式
@@ -604,9 +604,9 @@ extension CHChartModel {
         _ color: UIColor,
         title: String,
         key: String
-        ) -> CHLineModel
+        ) -> BMLineModel
     {
-        let model = CHLineModel(
+        let model = BMLineModel(
             upStyle: (color, true),
             downStyle: (color, true),
             titleColor: color
@@ -621,10 +621,10 @@ extension CHChartModel {
         upStyle: (color: UIColor, isSolid: Bool),
         downStyle: (color: UIColor, isSolid: Bool),
         titleColor: UIColor,
-        key: String = CHSeriesKey.candle
-        ) -> CHCandleModel
+        key: String = BMKLineSeriesKey.candle
+        ) -> BMCandleModel
     {
-        let model = CHCandleModel(
+        let model = BMCandleModel(
             upStyle: upStyle,
             downStyle: downStyle,
             titleColor: titleColor
@@ -637,10 +637,10 @@ extension CHChartModel {
     public class func getVolume(
         upStyle: (color: UIColor, isSolid: Bool),
         downStyle: (color: UIColor, isSolid: Bool),
-        key: String = CHSeriesKey.volume
-        ) -> CHColumnModel
+        key: String = BMKLineSeriesKey.volume
+        ) -> BMColumnModel
     {
-        let model = CHColumnModel(
+        let model = BMColumnModel(
             upStyle: upStyle,
             downStyle: downStyle,
             titleColor: UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
@@ -655,9 +655,9 @@ extension CHChartModel {
         upStyle: (color: UIColor, isSolid: Bool),
         downStyle: (color: UIColor, isSolid: Bool),
         titleColor: UIColor, title: String, key: String
-        ) -> CHBarModel
+        ) -> BMBarModel
     {
-        let model = CHBarModel(
+        let model = BMBarModel(
             upStyle: upStyle,
             downStyle: downStyle,
             titleColor: titleColor
@@ -674,9 +674,9 @@ extension CHChartModel {
         titleColor: UIColor, title: String,
         plotPaddingExt: CGFloat,
         key: String
-        ) -> CHRoundModel
+        ) -> BMRoundModel
     {
-        let model = CHRoundModel(
+        let model = BMRoundModel(
             upStyle: upStyle,
             downStyle: downStyle,
             titleColor: titleColor, plotPaddingExt: plotPaddingExt
@@ -687,8 +687,8 @@ extension CHChartModel {
     }
 }
 
-extension CHChartModel {
-    public subscript (index: Int) -> CHChartItem {
+extension BMKLineChartModel {
+    public subscript (index: Int) -> BMKLineChartItem {
         let item = self.datas[index]
         item.value = item.extVal[self.key]
         return item

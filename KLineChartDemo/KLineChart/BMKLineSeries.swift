@@ -1,7 +1,7 @@
 
 import UIKit
 
-public struct CHSeriesKey {
+public struct BMKLineSeriesKey {
     public static let candle = "Candle"
     public static let timeline = "Timeline"
     public static let volume = "Volume"
@@ -15,26 +15,26 @@ public struct CHSeriesKey {
 }
 
 /// 系列
-/// 图表中一个要显示的线段都是以一个 CHSeries 进行封装
-/// 蜡烛图线段: 包含一个蜡烛图点线模型(CHCandleModel)
-/// 时分线段: 包含一个线点线模型(CHLineModel)
-/// 交易量线段: 包含一个交易量点线模型(CHColumnModel)
-/// MA/EMA 线段: 包含一个线点线模型(CHLineModel)
-/// KDJ 线段: 包含3个线点线模型(CHLineModel), 3个点线的数值根据 KDJ 指标算法计算所得
-/// MACD 线段: 包含2个线点线模型(CHLineModel), 1个条形点线模型(CHBarModel)
-open class CHSeries: NSObject {
+/// 图表中一个要显示的线段都是以一个 Series 进行封装
+/// 蜡烛图线段: 包含一个蜡烛图点线模型(CandleModel)
+/// 时分线段: 包含一个线点线模型(LineModel)
+/// 交易量线段: 包含一个交易量点线模型(ColumnModel)
+/// MA/EMA 线段: 包含一个线点线模型(LineModel)
+/// KDJ 线段: 包含3个线点线模型(LineModel), 3个点线的数值根据 KDJ 指标算法计算所得
+/// MACD 线段: 包含2个线点线模型(LineModel), 1个条形点线模型(BarModel)
+open class BMKLineSeries: NSObject {
     
     open var key = ""
     open var title: String = ""
-    open var chartModels = [CHChartModel]() // 每个系列可能包含多个点线模型
+    open var chartModels = [BMKLineChartModel]() // 每个系列可能包含多个点线模型
     open var hidden: Bool = false           // 是否隐藏
     open var showTitle: Bool = true         // 是否显示标题文本
     open var baseValueSticky = false        // 是否以固定基值显示最小或最大值, 若超过范围
     open var symmetrical = false            // 是否以固定基值为中位数, 对称显示最大最小值
     
-    public var algorithms: [CHChartAlgorithmProtocol] = []
+    public var algorithms: [BMKLineIndexAlgorithmProtocol] = []
     
-    var seriesLayer: CHShapeLayer = CHShapeLayer()
+    var seriesLayer: BMKLineShapeLayer = BMKLineShapeLayer()
     
     func removeSublayers() {
         self.seriesLayer.sublayers?.forEach({ $0.removeFromSuperlayer() })
@@ -43,7 +43,7 @@ open class CHSeries: NSObject {
 }
 
 // MARK: - 工厂方法
-extension CHSeries {
+extension BMKLineSeries {
     
     /// 返回一个标准的分时价格系列样式
     ///
@@ -56,18 +56,18 @@ extension CHSeries {
     /// - Returns: 线系列模型
     public class func getTimelinePrice(
         color: UIColor,
-        section: CHSection,
+        section: BMKLineSection,
         showUltimateValue: Bool = false,
-        ultimateValueStyle: CHUltimateValueStyle = .none,
+        ultimateValueStyle: BMUltimateValueStyle = .none,
         lineWidth: CGFloat = 1
-        ) -> CHSeries
+        ) -> BMKLineSeries
     {
-        let series = CHSeries()
-        series.key = CHSeriesKey.timeline
-        let line = CHChartModel.getLine(
+        let series = BMKLineSeries()
+        series.key = BMKLineSeriesKey.timeline
+        let line = BMKLineChartModel.getLine(
             color,
             title: NSLocalizedString("Price", comment: ""),
-            key: "\(CHSeriesKey.timeline)_\(CHSeriesKey.timeline)"
+            key: "\(BMKLineSeriesKey.timeline)_\(BMKLineSeriesKey.timeline)"
         )
         line.section = section
         line.useTitleColor = false
@@ -84,14 +84,14 @@ extension CHSeries {
         upStyle: (color: UIColor, isSolid: Bool),
         downStyle: (color: UIColor, isSolid: Bool),
         titleColor: UIColor,
-        section: CHSection,
+        section: BMKLineSection,
         showUltimateValue: Bool = false,
-        ultimateValueStyle: CHUltimateValueStyle = .none
-        ) -> CHSeries
+        ultimateValueStyle: BMUltimateValueStyle = .none
+        ) -> BMKLineSeries
     {
-        let series = CHSeries()
-        series.key = CHSeriesKey.candle
-        let candle = CHChartModel.getCandle(
+        let series = BMKLineSeries()
+        series.key = BMKLineSeriesKey.candle
+        let candle = BMKLineChartModel.getCandle(
             upStyle: upStyle,
             downStyle: downStyle,
             titleColor: titleColor
@@ -109,12 +109,12 @@ extension CHSeries {
     public class func getDefaultVolume(
         upStyle: (color: UIColor, isSolid: Bool),
         downStyle: (color: UIColor, isSolid: Bool),
-        section: CHSection
-        ) -> CHSeries
+        section: BMKLineSection
+        ) -> BMKLineSeries
     {
-        let series = CHSeries()
-        series.key = CHSeriesKey.volume
-        let volume = CHChartModel.getVolume(upStyle: upStyle, downStyle: downStyle)
+        let series = BMKLineSeries()
+        series.key = BMKLineSeriesKey.volume
+        let volume = BMKLineChartModel.getVolume(upStyle: upStyle, downStyle: downStyle)
         volume.section = section
         volume.useTitleColor = false
         series.chartModels = [volume]
@@ -126,10 +126,10 @@ extension CHSeries {
         isEMA: Bool = false,
         num: [Int],
         colors: [UIColor],
-        section: CHSection
-        ) -> CHSeries
+        section: BMKLineSection
+        ) -> BMKLineSeries
     {
-        let valueKey = CHSeriesKey.volume
+        let valueKey = BMKLineSeriesKey.volume
         let series = self.getMA(
             isEMA: isEMA,
             num: num,
@@ -147,16 +147,16 @@ extension CHSeries {
         isEMA: Bool = false,
         num: [Int],
         colors: [UIColor],
-        section: CHSection) -> CHSeries
+        section: BMKLineSection) -> BMKLineSeries
     {
-        let series = CHSeries()
-        series.key = CHSeriesKey.volume
-        let volumeSeries = CHSeries.getDefaultVolume(
+        let series = BMKLineSeries()
+        series.key = BMKLineSeriesKey.volume
+        let volumeSeries = BMKLineSeries.getDefaultVolume(
             upStyle: upStyle,
             downStyle: downStyle,
             section: section
         )
-        let volumeMASeries = CHSeries.getVolumeMA(
+        let volumeMASeries = BMKLineSeries.getVolumeMA(
             isEMA: isEMA,
             num: num,
             colors: colors,
@@ -172,10 +172,10 @@ extension CHSeries {
         isEMA: Bool = false,
         num: [Int],
         colors: [UIColor],
-        section: CHSection
-        ) -> CHSeries
+        section: BMKLineSection
+        ) -> BMKLineSeries
     {
-        let valueKey = CHSeriesKey.timeline
+        let valueKey = BMKLineSeriesKey.timeline
         let series = self.getMA(
             isEMA: isEMA,
             num: num,
@@ -192,19 +192,19 @@ extension CHSeries {
         num: [Int],
         colors: [UIColor],
         valueKey: String,
-        section: CHSection
-        ) -> CHSeries
+        section: BMKLineSection
+        ) -> BMKLineSeries
     {
         var key = ""
         if isEMA {
-            key = CHSeriesKey.ema
+            key = BMKLineSeriesKey.ema
         } else {
-            key = CHSeriesKey.ma
+            key = BMKLineSeriesKey.ma
         }
-        let series = CHSeries()
+        let series = BMKLineSeries()
         series.key = key
         for (i, n) in num.enumerated() {
-            let ma = CHChartModel.getLine(colors[i], title: "\(key)\(n)", key: "\(key)_\(n)_\(valueKey)")
+            let ma = BMKLineChartModel.getLine(colors[i], title: "\(key)\(n)", key: "\(key)_\(n)_\(valueKey)")
             ma.section = section
             series.chartModels.append(ma)
         }
@@ -216,16 +216,16 @@ extension CHSeries {
         _ bollc: UIColor,
         ubc: UIColor,
         lbc: UIColor,
-        section: CHSection
-        ) -> CHSeries
+        section: BMKLineSection
+        ) -> BMKLineSeries
     {
-        let series = CHSeries()
-        series.key = CHSeriesKey.boll
-        let boll = CHChartModel.getLine(bollc, title: "BOLL", key: "\(CHSeriesKey.boll)_BOLL")
+        let series = BMKLineSeries()
+        series.key = BMKLineSeriesKey.boll
+        let boll = BMKLineChartModel.getLine(bollc, title: "BOLL", key: "\(BMKLineSeriesKey.boll)_BOLL")
         boll.section = section
-        let ub = CHChartModel.getLine(ubc, title: "UB", key: "\(CHSeriesKey.boll)_UB")
+        let ub = BMKLineChartModel.getLine(ubc, title: "UB", key: "\(BMKLineSeriesKey.boll)_UB")
         ub.section = section
-        let lb = CHChartModel.getLine(lbc, title: "LB", key: "\(CHSeriesKey.boll)_LB")
+        let lb = BMKLineChartModel.getLine(lbc, title: "LB", key: "\(BMKLineSeriesKey.boll)_LB")
         lb.section = section
         series.chartModels = [boll, ub, lb]
         return series
@@ -238,21 +238,21 @@ extension CHSeries {
         barc: UIColor,
         upStyle: (color: UIColor, isSolid: Bool),
         downStyle: (color: UIColor, isSolid: Bool),
-        section: CHSection
-        ) -> CHSeries
+        section: BMKLineSection
+        ) -> BMKLineSeries
     {
-        let series = CHSeries()
-        series.key = CHSeriesKey.macd
-        let dif = CHChartModel.getLine(difc, title: "DIF", key: "\(CHSeriesKey.macd)_DIF")
+        let series = BMKLineSeries()
+        series.key = BMKLineSeriesKey.macd
+        let dif = BMKLineChartModel.getLine(difc, title: "DIF", key: "\(BMKLineSeriesKey.macd)_DIF")
         dif.section = section
-        let dea = CHChartModel.getLine(deac, title: "DEA", key: "\(CHSeriesKey.macd)_DEA")
+        let dea = BMKLineChartModel.getLine(deac, title: "DEA", key: "\(BMKLineSeriesKey.macd)_DEA")
         dea.section = section
-        let bar = CHChartModel.getBar(
+        let bar = BMKLineChartModel.getBar(
             upStyle: upStyle,
             downStyle: downStyle,
             titleColor: barc,
             title: "MACD",
-            key: "\(CHSeriesKey.macd)_BAR"
+            key: "\(BMKLineSeriesKey.macd)_BAR"
         )
         bar.section = section
         series.chartModels = [bar, dif, dea]
@@ -264,16 +264,16 @@ extension CHSeries {
         _ kc: UIColor,
         dc: UIColor,
         jc: UIColor,
-        section: CHSection
-        ) -> CHSeries
+        section: BMKLineSection
+        ) -> BMKLineSeries
     {
-        let series = CHSeries()
-        series.key = CHSeriesKey.kdj
-        let k = CHChartModel.getLine(kc, title: "K", key: "\(CHSeriesKey.kdj)_K")
+        let series = BMKLineSeries()
+        series.key = BMKLineSeriesKey.kdj
+        let k = BMKLineChartModel.getLine(kc, title: "K", key: "\(BMKLineSeriesKey.kdj)_K")
         k.section = section
-        let d = CHChartModel.getLine(dc, title: "D", key: "\(CHSeriesKey.kdj)_D")
+        let d = BMKLineChartModel.getLine(dc, title: "D", key: "\(BMKLineSeriesKey.kdj)_D")
         d.section = section
-        let j = CHChartModel.getLine(jc, title: "J", key: "\(CHSeriesKey.kdj)_J")
+        let j = BMKLineChartModel.getLine(jc, title: "J", key: "\(BMKLineSeriesKey.kdj)_J")
         j.section = section
         series.chartModels = [k, d, j]
         return series
@@ -283,16 +283,16 @@ extension CHSeries {
     public class func getRSI(
         num: [Int],
         colors: [UIColor],
-        section: CHSection
-        ) -> CHSeries
+        section: BMKLineSection
+        ) -> BMKLineSeries
     {
-        let series = CHSeries()
-        series.key = CHSeriesKey.rsi
+        let series = BMKLineSeries()
+        series.key = BMKLineSeriesKey.rsi
         for (i, n) in num.enumerated() {
-            let ma = CHChartModel.getLine(
+            let ma = BMKLineChartModel.getLine(
                 colors[i],
                 title: "\(series.key)\(n)",
-                key: "\(series.key)_\(n)_\(CHSeriesKey.timeline)"
+                key: "\(series.key)_\(n)_\(BMKLineSeriesKey.timeline)"
             )
             ma.section = section
             series.chartModels.append(ma)
@@ -306,18 +306,18 @@ extension CHSeries {
         downStyle: (color: UIColor, isSolid: Bool),
         titleColor: UIColor,
         plotPaddingExt: CGFloat = 0.3,
-        section: CHSection
-        ) -> CHSeries
+        section: BMKLineSection
+        ) -> BMKLineSeries
     {
-        let series = CHSeries()
-        series.key = CHSeriesKey.sar
-        let sar = CHChartModel.getRound(
+        let series = BMKLineSeries()
+        series.key = BMKLineSeriesKey.sar
+        let sar = BMKLineChartModel.getRound(
             upStyle: upStyle,
             downStyle: downStyle,
             titleColor: titleColor,
             title: "SAR",
             plotPaddingExt: plotPaddingExt,
-            key: "\(CHSeriesKey.sar)"
+            key: "\(BMKLineSeriesKey.sar)"
         )
         sar.section = section
         sar.useTitleColor = true

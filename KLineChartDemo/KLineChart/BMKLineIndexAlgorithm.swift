@@ -1,15 +1,15 @@
 
 import UIKit
 
-public protocol CHChartAlgorithmProtocol {
+public protocol BMKLineIndexAlgorithmProtocol {
     /// 传入 K 线数据模型集合, 完成指标数据计算
     ///
     /// - Parameter datas: K 线数据模型集合
     /// - Returns: 返回处理后的集合, 指标的计算结果记录在模型的 extVal 字典中
-    func calculateIndex(_ items: [CHChartItem]) -> [CHChartItem]
+    func calculateIndex(_ items: [BMKLineChartItem]) -> [BMKLineChartItem]
 }
 
-public enum CHChartAlgorithm: CHChartAlgorithmProtocol {
+public enum BMKLineIndexAlgorithm: BMKLineIndexAlgorithmProtocol {
     
     case none                       // 无算法
     case timeline                   // 时分
@@ -26,25 +26,25 @@ public enum CHChartAlgorithm: CHChartAlgorithmProtocol {
         case .none:
             return ""
         case .timeline:
-            return "\(CHSeriesKey.timeline)_\(name)"
+            return "\(BMKLineSeriesKey.timeline)_\(name)"
         case .ma(let num):
-            return "\(CHSeriesKey.ma)_\(num)_\(name)"
+            return "\(BMKLineSeriesKey.ma)_\(num)_\(name)"
         case .ema(let num):
-            return "\(CHSeriesKey.ema)_\(num)_\(name)"
+            return "\(BMKLineSeriesKey.ema)_\(num)_\(name)"
         case .boll(_, _):
-            return "\(CHSeriesKey.boll)_\(name)"
+            return "\(BMKLineSeriesKey.boll)_\(name)"
         case .macd(_, _, _):
-            return "\(CHSeriesKey.macd)_\(name)"
+            return "\(BMKLineSeriesKey.macd)_\(name)"
         case .kdj(_, _, _):
-            return "\(CHSeriesKey.kdj)_\(name)"
+            return "\(BMKLineSeriesKey.kdj)_\(name)"
         case .sar(_, _, _):
-            return "\(CHSeriesKey.sar)\(name)"
+            return "\(BMKLineSeriesKey.sar)\(name)"
         case .rsi(let num):
-            return "\(CHSeriesKey.rsi)_\(num)_\(name)"
+            return "\(BMKLineSeriesKey.rsi)_\(num)_\(name)"
         }
     }
     
-    public func calculateIndex(_ items: [CHChartItem]) -> [CHChartItem] {
+    public func calculateIndex(_ items: [BMKLineChartItem]) -> [BMKLineChartItem] {
         switch self {
         case .none:
             return items
@@ -68,24 +68,24 @@ public enum CHChartAlgorithm: CHChartAlgorithmProtocol {
     }
 }
 
-extension CHChartAlgorithm {
+extension BMKLineIndexAlgorithm {
     // MARK: - Timeline
-    fileprivate func calculateTimeline(items: [CHChartItem]) -> [CHChartItem] {
+    fileprivate func calculateTimeline(items: [BMKLineChartItem]) -> [BMKLineChartItem] {
         for (_, item) in items.enumerated() {
-            item.extVal["\(self.key(CHSeriesKey.timeline))"] = item.closePrice
-            item.extVal["\(self.key(CHSeriesKey.volume))"] = item.vol
+            item.extVal["\(self.key(BMKLineSeriesKey.timeline))"] = item.closePrice
+            item.extVal["\(self.key(BMKLineSeriesKey.volume))"] = item.vol
         }
         return items
     }
 }
 
-extension CHChartAlgorithm {
+extension BMKLineIndexAlgorithm {
     // MARK: - MA
-    fileprivate func calculateMA(_ num: Int, items: [CHChartItem]) -> [CHChartItem] {
+    fileprivate func calculateMA(_ num: Int, items: [BMKLineChartItem]) -> [BMKLineChartItem] {
         for (index, item) in items.enumerated() {
             let value = self.getMAValue(num, index: index, items: items)
-            item.extVal["\(self.key(CHSeriesKey.timeline))"] = value.0
-            item.extVal["\(self.key(CHSeriesKey.volume))"] = value.1
+            item.extVal["\(self.key(BMKLineSeriesKey.timeline))"] = value.0
+            item.extVal["\(self.key(BMKLineSeriesKey.volume))"] = value.1
         }
         return items
     }
@@ -97,7 +97,7 @@ extension CHChartAlgorithm {
     ///   - index: 数据索引
     ///   - items: 数据集合
     /// - Returns: MA(价格, 交易量)
-    private func getMAValue(_ num: Int, index: Int, items: [CHChartItem]) -> (CGFloat?, CGFloat?) {
+    private func getMAValue(_ num: Int, index: Int, items: [BMKLineChartItem]) -> (CGFloat?, CGFloat?) {
         var priceVal: CGFloat = 0
         var volVal: CGFloat = 0
         if index + 1 >= num {
@@ -122,10 +122,10 @@ extension CHChartAlgorithm {
     }
 }
 
-extension CHChartAlgorithm {
+extension BMKLineIndexAlgorithm {
     // MARK: - EMA
     // EMA(N) = 2 / (N + 1 ) * (C - 昨日 EMA) + 昨日 EMA
-    fileprivate func calculateEMA(_ num: Int, items: [CHChartItem]) -> [CHChartItem] {
+    fileprivate func calculateEMA(_ num: Int, items: [BMKLineChartItem]) -> [BMKLineChartItem] {
         var prev_ema_price: CGFloat = 0
         var prev_ema_vol: CGFloat = 0
         for (index, item) in items.enumerated() {
@@ -140,8 +140,8 @@ extension CHChartAlgorithm {
                 ema_price = c
                 ema_vol = v
             }
-            item.extVal["\(self.key(CHSeriesKey.timeline))"] = ema_price
-            item.extVal["\(self.key(CHSeriesKey.volume))"] = ema_vol
+            item.extVal["\(self.key(BMKLineSeriesKey.timeline))"] = ema_price
+            item.extVal["\(self.key(BMKLineSeriesKey.volume))"] = ema_vol
             prev_ema_price = ema_price
             prev_ema_vol = ema_vol
         }
@@ -149,7 +149,7 @@ extension CHChartAlgorithm {
     }
 }
 
-extension CHChartAlgorithm {
+extension BMKLineIndexAlgorithm {
     // MARK: - BOLL
     
     /// 计算公式:
@@ -175,7 +175,7 @@ extension CHChartAlgorithm {
     ///   - k: 参数默认为2
     ///   - items: 待处理的数据
     /// - Returns: 处理后的数据
-    fileprivate func calculateBOLL(_ num: Int, k: Int = 2, items: [CHChartItem]) -> [CHChartItem] {
+    fileprivate func calculateBOLL(_ num: Int, k: Int = 2, items: [BMKLineChartItem]) -> [BMKLineChartItem] {
         var md: CGFloat = 0, mb: CGFloat = 0, up: CGFloat = 0, dn: CGFloat = 0
         for (index, item) in items.enumerated() {
             md = self.getBOLLSTDValue(num, index: index, items: items)
@@ -190,7 +190,7 @@ extension CHChartAlgorithm {
     }
     
     /// 计算布林线中的 MA 平方差
-    private func getBOLLSTDValue(_ num: Int, index: Int, items: [CHChartItem]) -> CGFloat {
+    private func getBOLLSTDValue(_ num: Int, index: Int, items: [BMKLineChartItem]) -> CGFloat {
         var dx: CGFloat = 0, md: CGFloat = 0
         let ma = self.getMA(num, index: index, items: items).0 ?? 0
         if index + 1 >= num {
@@ -211,9 +211,9 @@ extension CHChartAlgorithm {
     }
 }
 
-extension CHChartAlgorithm {
+extension BMKLineIndexAlgorithm {
     // MARK: - MACD
-    fileprivate func calculateMACD(_ p1: Int, p2: Int,p3: Int, items: [CHChartItem]) -> [CHChartItem] {
+    fileprivate func calculateMACD(_ p1: Int, p2: Int,p3: Int, items: [BMKLineChartItem]) -> [BMKLineChartItem] {
         var pre_dea: CGFloat = 0
         for (index, item) in items.enumerated() {
             // EMA（p1）= 2 /（p1+1）*（C-昨日EMA）+ 昨日EMA
@@ -237,9 +237,9 @@ extension CHChartAlgorithm {
     }
 }
 
-extension CHChartAlgorithm {
+extension BMKLineIndexAlgorithm {
     // MARK: - KDJ
-    fileprivate func calculateKDJ(_ p1: Int, p2: Int,p3: Int, items: [CHChartItem]) -> [CHChartItem] {
+    fileprivate func calculateKDJ(_ p1: Int, p2: Int,p3: Int, items: [BMKLineChartItem]) -> [BMKLineChartItem] {
         var prev_k: CGFloat = 50
         var prev_d: CGFloat = 50
         for (index, item) in items.enumerated() {
@@ -259,7 +259,7 @@ extension CHChartAlgorithm {
         return items
     }
     
-    private func getRSVValue(_ num: Int, index: Int, items: [CHChartItem]) -> CGFloat? {
+    private func getRSVValue(_ num: Int, index: Int, items: [BMKLineChartItem]) -> CGFloat? {
         var rsv: CGFloat = 0
         let c = items[index].closePrice
         var h = items[index].highPrice
@@ -291,7 +291,7 @@ extension CHChartAlgorithm {
     }
 }
 
-extension CHChartAlgorithm {
+extension BMKLineIndexAlgorithm {
     // MARK: - SAR
     
     /// - Parameter num: 基准周期数 N
@@ -299,9 +299,9 @@ extension CHChartAlgorithm {
     /// - Parameter maxAF: 加速因子 AF 最大值
     /// - Parameter datas: 待处理的数据
     /// - Returns: 处理后的数据
-    fileprivate func calculateSAR(_ num: Int, minAF: CGFloat, maxAF: CGFloat, items: [CHChartItem]) -> [CHChartItem] {
+    fileprivate func calculateSAR(_ num: Int, minAF: CGFloat, maxAF: CGFloat, items: [BMKLineChartItem]) -> [BMKLineChartItem] {
         var sar: CGFloat = 0, af: CGFloat = minAF, ep: CGFloat = 0
-        var pre_data: CHChartItem!
+        var pre_data: BMKLineChartItem!
         var isUP: Bool = true
         
         // SAR 指标至少2条数据才显示
@@ -384,7 +384,7 @@ extension CHChartAlgorithm {
     ///   - isUP: 趋势
     ///   - datas: 数据集合
     /// - Returns: (SAR 最终值, 是否行情反转)
-    func getFinalSARValue(num: Int, sar: CGFloat, index: Int, isUP: Bool, items: [CHChartItem]) -> (CGFloat, Bool) {
+    func getFinalSARValue(num: Int, sar: CGFloat, index: Int, isUP: Bool, items: [BMKLineChartItem]) -> (CGFloat, Bool) {
         var finalSAR: CGFloat = sar
         var finalIsUP: Bool = isUP
         var start = index
@@ -411,9 +411,9 @@ extension CHChartAlgorithm {
     }
 }
 
-extension CHChartAlgorithm {
+extension BMKLineIndexAlgorithm {
     // MARK: - RSI
-    fileprivate func calculateRSI(_ num: Int, items: [CHChartItem]) -> [CHChartItem] {
+    fileprivate func calculateRSI(_ num: Int, items: [BMKLineChartItem]) -> [BMKLineChartItem] {
         let defaultVal: CGFloat = 100
         let index = num - 1
         var sum: CGFloat = 0
@@ -438,12 +438,12 @@ extension CHChartAlgorithm {
             if (i < index) {
                 rsi = defaultVal
             }
-            item.extVal["\(self.key(CHSeriesKey.timeline))"] = rsi
+            item.extVal["\(self.key(BMKLineSeriesKey.timeline))"] = rsi
         }
         return items
     }
     
-    fileprivate func getAandBValue(_ a: Int, _ b: Int, items: [CHChartItem]) -> [CGFloat] {
+    fileprivate func getAandBValue(_ a: Int, _ b: Int, items: [BMKLineChartItem]) -> [CGFloat] {
         var sum: CGFloat = 0
         var dif: CGFloat = 0
         var closeT: CGFloat!
@@ -469,20 +469,21 @@ extension CHChartAlgorithm {
     }
 }
 
-extension CHChartAlgorithm {
-    fileprivate func getEMA(_ num: Int, index: Int, items: [CHChartItem]) -> (CGFloat?, CGFloat?) {
-        let ema = CHChartAlgorithm.ema(num)
+extension BMKLineIndexAlgorithm {
+    
+    fileprivate func getEMA(_ num: Int, index: Int, items: [BMKLineChartItem]) -> (CGFloat?, CGFloat?) {
+        let ema = BMKLineIndexAlgorithm.ema(num)
         let item = items[index]
-        let ema_price = item.extVal["\(ema.key(CHSeriesKey.timeline))"]
-        let ema_vol = item.extVal["\(ema.key(CHSeriesKey.volume))"]
+        let ema_price = item.extVal["\(ema.key(BMKLineSeriesKey.timeline))"]
+        let ema_vol = item.extVal["\(ema.key(BMKLineSeriesKey.volume))"]
         return (ema_price, ema_vol)
     }
     
-    fileprivate func getMA(_ num: Int, index: Int, items: [CHChartItem]) -> (CGFloat?, CGFloat?) {
-        let ma = CHChartAlgorithm.ma(num)
+    fileprivate func getMA(_ num: Int, index: Int, items: [BMKLineChartItem]) -> (CGFloat?, CGFloat?) {
+        let ma = BMKLineIndexAlgorithm.ma(num)
         let item = items[index]
-        let ma_price = item.extVal["\(ma.key(CHSeriesKey.timeline))"]
-        let ma_vol = item.extVal["\(ma.key(CHSeriesKey.volume))"]
+        let ma_price = item.extVal["\(ma.key(BMKLineSeriesKey.timeline))"]
+        let ma_vol = item.extVal["\(ma.key(BMKLineSeriesKey.volume))"]
         return (ma_price, ma_vol)
     }
 }

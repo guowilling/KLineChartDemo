@@ -13,7 +13,7 @@ class ChartTableViewController: UIViewController {
     let exPairs: [String] = ["BTC-USD", "ETH-USD", "LTC-USD", "LTC-BTC", "ETH-BTC", "BCH-BTC"]
     
     var kLineDatas = [String: [ChartPoint]]()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -46,10 +46,13 @@ extension ChartTableViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ChartTableViewCell.identifier) as! ChartTableViewCell
         cell.selectionStyle = .none
+        
         let currencyType = self.exPairs[indexPath.row]
         cell.currency = currencyType
+        
         let selectedTime = self.selectedTimeIndex[indexPath.row]
         cell.segTimes.selectedSegmentIndex = selectedTime
+        
         if let datas = self.kLineDatas[currencyType], datas.count > 0 {
             cell.indicatorView.isHidden = true
             cell.indicatorView.stopAnimating()

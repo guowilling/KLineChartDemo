@@ -6,7 +6,7 @@ import UIKit
 /// - head: 头部
 /// - tail: 尾部
 /// - none: 不处理
-public enum CHChartViewScrollPosition {
+public enum BMKLineChartViewScrollPosition {
     case head, tail, none
 }
 
@@ -14,53 +14,53 @@ public enum CHChartViewScrollPosition {
 ///
 /// - free: 显示在选中点
 /// - onClosePrice: 显示在收盘价
-public enum CHChartSelectedPosition {
+public enum BMKLineChartSelectedPosition {
     case free
     case onClosePrice
 }
 
-@objc public protocol CHKLineChartDelegate: class {
+@objc public protocol BMKLineChartDelegate: class {
     
-    func numberOfPointsInKLineChart(chart: CHKLineChartView) -> Int
+    func numberOfPointsInKLineChart(chart: BMKLineChartView) -> Int
     
-    func kLineChart(chart: CHKLineChartView, valueForPointAtIndex index: Int) -> CHChartItem
+    func kLineChart(chart: BMKLineChartView, valueForPointAtIndex index: Int) -> BMKLineChartItem
     
     /// 图表 Y 轴的显示的内容
-    func kLineChart(chart: CHKLineChartView, labelOnYAxisForValue value: CGFloat, atIndex index: Int, section: CHSection) -> String
+    func kLineChart(chart: BMKLineChartView, labelOnYAxisForValue value: CGFloat, atIndex index: Int, section: BMKLineSection) -> String
     
     /// 图表 X 轴的显示的内容
-    @objc optional func kLineChart(chart: CHKLineChartView, labelOnXAxisForIndex index: Int) -> String
+    @objc optional func kLineChart(chart: BMKLineChartView, labelOnXAxisForIndex index: Int) -> String
     
     /// 配置各个分区小数位保留数
-    @objc optional func kLineChart(chart: CHKLineChartView, decimalAt section: Int) -> Int
+    @objc optional func kLineChart(chart: BMKLineChartView, decimalAt section: Int) -> Int
     
     /// 设置 Y 轴标签的宽度
-    @objc optional func widthForYAxisLabelInKLineChart(in chart: CHKLineChartView) -> CGFloat
+    @objc optional func widthForYAxisLabelInKLineChart(in chart: BMKLineChartView) -> CGFloat
     
     /// 设置 X 轴标签的高度
-    @objc optional func heightForXAxisInKLineChart(in chart: CHKLineChartView) -> CGFloat
+    @objc optional func heightForXAxisInKLineChart(in chart: BMKLineChartView) -> CGFloat
     
     /// 响应点击图表事件
-    @objc optional func kLineChart(chart: CHKLineChartView, didSelectAt index: Int, item: CHChartItem)
+    @objc optional func kLineChart(chart: BMKLineChartView, didSelectAt index: Int, item: BMKLineChartItem)
     
     /// 初始化图表时的显示范围长度
-    @objc optional func initialRangeInKLineChart(in chart: CHKLineChartView) -> Int
+    @objc optional func initialRangeInKLineChart(in chart: BMKLineChartView) -> Int
     
     /// 自定义选择点时出现的标签样式
-    @objc optional func kLineChart(chart: CHKLineChartView, labelOfYAxis yAxis: UILabel, labelOfXAxis: UILabel)
+    @objc optional func kLineChart(chart: BMKLineChartView, labelOfYAxis yAxis: UILabel, labelOfXAxis: UILabel)
     
     /// 自定义分区的头部视图
-    @objc optional func kLineChart(chart: CHKLineChartView, viewForHeaderInSection section: Int) -> UIView?
+    @objc optional func kLineChart(chart: BMKLineChartView, viewForHeaderInSection section: Int) -> UIView?
     
     /// 自定义分区的头部显示内容
-    @objc optional func kLineChart(chart: CHKLineChartView, titleForHeaderInSection section: CHSection, index: Int, item: CHChartItem) -> NSAttributedString?
+    @objc optional func kLineChart(chart: BMKLineChartView, titleForHeaderInSection section: BMKLineSection, index: Int, item: BMKLineChartItem) -> NSAttributedString?
     
-    @objc optional func kLineChart(chart: CHKLineChartView, didFlipPageSeries section: CHSection, series: CHSeries, seriesIndex: Int)
+    @objc optional func kLineChart(chart: BMKLineChartView, didFlipPageSeries section: BMKLineSection, series: BMKLineSeries, seriesIndex: Int)
     
-    @objc optional func didFinishKLineChartRefresh(chart: CHKLineChartView)
+    @objc optional func didFinishKLineChartRefresh(chart: BMKLineChartView)
 }
 
-open class CHKLineChartView: UIView {
+open class BMKLineChartView: UIView {
     
     let MinRange = 15
     let MaxRange = 150
@@ -75,23 +75,23 @@ open class CHKLineChartView: UIView {
     @IBInspectable open var textColor: UIColor = UIColor(white: 0.8, alpha: 1)
     @IBInspectable open var xAxisPerInterval: Int = 4
     
-    @IBOutlet open weak var delegate: CHKLineChartDelegate?
+    @IBOutlet open weak var delegate: BMKLineChartDelegate?
     
-    open var algorithms: [CHChartAlgorithmProtocol] = [CHChartAlgorithmProtocol]()
+    open var algorithms: [BMKLineIndexAlgorithmProtocol] = [BMKLineIndexAlgorithmProtocol]()
     
     open var yAxisLabelWidth: CGFloat = 0
     
     open var padding: UIEdgeInsets = UIEdgeInsets.zero
     
-    open var yAxisShowPosition = CHYAxisShowPosition.right
+    open var yAxisShowPosition = BMKLineYAxisShowPosition.right
     
     open var isInnerYAxis: Bool = false
     
-    open var selectedPosition: CHChartSelectedPosition = .onClosePrice
+    open var selectedPosition: BMKLineChartSelectedPosition = .onClosePrice
     
-    open var scrollToPosition: CHChartViewScrollPosition = .none
+    open var scrollToPosition: BMKLineChartViewScrollPosition = .none
     
-    open var sections = [CHSection]()
+    open var sections = [BMKLineSection]()
     
     open var selectedPointIndex: Int = -1
     
@@ -135,7 +135,7 @@ open class CHKLineChartView: UIView {
     
     open var labelSize = CGSize(width: 30, height: 15)
     
-    var datas: [CHChartItem] = []
+    var datas: [BMKLineChartItem] = []
     
     open var selectedBGColor: UIColor = UIColor(white: 0.4, alpha: 1)    
     open var selectedTextColor: UIColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
@@ -148,7 +148,7 @@ open class CHKLineChartView: UIView {
     
     lazy var dynamicAnimator: UIDynamicAnimator = UIDynamicAnimator(referenceView: self)
     
-    lazy var dynamicItem = CHDynamicItem()
+    lazy var dynamicItem = BMKLineDynamicItem()
     
     /// 用于处理滚动图表时的线性减速行为
     weak var decelerationBehavior: UIDynamicItemBehavior?
@@ -159,9 +159,9 @@ open class CHKLineChartView: UIView {
     weak var springBehavior: UIAttachmentBehavior?
     
     /// 图表绘制层
-    var drawLayer: CHShapeLayer = CHShapeLayer()
+    var drawLayer: BMKLineShapeLayer = BMKLineShapeLayer()
     
-    open var style: CHKLineChartStyle! {
+    open var style: BMKLineChartStyle! {
         didSet {
             // SRTEST
             self.backgroundColor = self.style.backgroundColor
@@ -287,7 +287,7 @@ open class CHKLineChartView: UIView {
     }
     
     /// 点击位置所在的分区
-    func getSectionByTouchPoint(_ point: CGPoint) -> (Int, CHSection?) {
+    func getSectionByTouchPoint(_ point: CGPoint) -> (Int, BMKLineSection?) {
         for (i, section) in self.sections.enumerated() {
             if section.frame.contains(point) {
                 return (i, section)
@@ -297,9 +297,9 @@ open class CHKLineChartView: UIView {
     }
     
     /// 显示X轴坐标的分区
-    func getSecionWhichShowXAxis() -> CHSection? {
+    func getSecionWhichShowXAxis() -> BMKLineSection? {
         let visiableSection = self.sections.filter { !$0.isHidden }
-        var showSection: CHSection?
+        var showSection: BMKLineSection?
         for (i, section) in visiableSection.enumerated() {
             if section.index == self.showXAxisOnSection {
                 showSection = section
@@ -367,11 +367,11 @@ open class CHKLineChartView: UIView {
                     vY = point.y
                     yVal = section!.getValue(with: point.y)
                 case .onClosePrice:
-                    if let series = section?.getSeries(key: CHSeriesKey.candle), !series.hidden {
+                    if let series = section?.getSeries(key: BMKLineSeriesKey.candle), !series.hidden {
                         yVal = item.closePrice
-                    } else if let series = section?.getSeries(key: CHSeriesKey.timeline), !series.hidden {
+                    } else if let series = section?.getSeries(key: BMKLineSeriesKey.timeline), !series.hidden {
                         yVal = item.closePrice
-                    } else if let series = section?.getSeries(key: CHSeriesKey.volume), !series.hidden {
+                    } else if let series = section?.getSeries(key: BMKLineSeriesKey.volume), !series.hidden {
                         yVal = item.vol
                     }
                     vY = section!.getY(with: yVal)
@@ -391,8 +391,8 @@ open class CHKLineChartView: UIView {
                 self.selectedYAxisLabel?.text = String(format: format, yVal)
                 self.selectedYAxisLabel?.frame = CGRect(x: yAxisStartX, y: vY - self.labelSize.height / 2, width: self.yAxisLabelWidth, height: self.labelSize.height)
                 
-                let time = Date.ch_getTimeByStamp(item.time, format: "yyyy-MM-dd HH:mm")
-                let size = time.ch_sizeWithConstrained(self.labelFont)
+                let time = Date.bm_timeStringOfStamp(item.time, format: "yyyy-MM-dd HH:mm")
+                let size = time.bm_sizeWithConstrained(self.labelFont)
                 self.selectedXAxisLabel?.text = time
                 
                 // 判断是否超过左右边界
@@ -446,7 +446,7 @@ open class CHKLineChartView: UIView {
 }
 
 // MARK: - 绘图图层方法
-extension CHKLineChartView {
+extension BMKLineChartView {
     
     func removeSublayers() {
         for section in self.sections {
@@ -563,7 +563,7 @@ extension CHKLineChartView {
             self.selectedPointIndex = self.rangeTo - 1
         }
         
-        let backgroundLayer = CHShapeLayer()
+        let backgroundLayer = BMKLineShapeLayer()
         let backgroundPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height), cornerRadius: 0)
         backgroundLayer.path = backgroundPath.cgPath
         backgroundLayer.fillColor = self.backgroundColor?.cgColor
@@ -575,7 +575,7 @@ extension CHKLineChartView {
     /// 初始化各个分区
     ///
     /// - Parameter complete: 初始化分区后, 绘制每个分区
-    fileprivate func buildSections(_ complete:(_ section: CHSection, _ index: Int) -> Void) {
+    fileprivate func buildSections(_ complete:(_ section: BMKLineSection, _ index: Int) -> Void) {
         var height = self.frame.size.height - (self.padding.top + self.padding.bottom)
         let xAxisHeight = self.delegate?.heightForXAxisInKLineChart?(in: self) ?? self.DefaultXAxisHegiht
         height = height - xAxisHeight
@@ -632,10 +632,10 @@ extension CHKLineChartView {
     }
     
     /// 准备绘制X轴上的标签
-    fileprivate func drawXAxis(_ section: CHSection) -> [(CGRect, String)] {
+    fileprivate func drawXAxis(_ section: BMKLineSection) -> [(CGRect, String)] {
         var xAxisToDraw = [(CGRect, String)]()
         
-        let xAxis = CHShapeLayer()
+        let xAxis = BMKLineShapeLayer()
         
         var startX: CGFloat = section.frame.origin.x + section.padding.left
         let endX: CGFloat = section.frame.origin.x + section.frame.size.width - section.padding.right
@@ -656,7 +656,7 @@ extension CHKLineChartView {
         
         for i in stride(from: self.rangeFrom, to: self.rangeTo, by: xTickInterval) { // for var i = self.rangeFrom; i < self.rangeTo; i = i + xTickInterval
             let xLabel = self.delegate?.kLineChart?(chart: self, labelOnXAxisForIndex: i) ?? ""
-            var textSize = xLabel.ch_sizeWithConstrained(self.labelFont)
+            var textSize = xLabel.bm_sizeWithConstrained(self.labelFont)
             textSize.width = textSize.width + 4
             var xPox = startX - textSize.width / 2 + perPlotWidth / 2
             if xPox < 0 {
@@ -669,7 +669,7 @@ extension CHKLineChartView {
             
             // 绘制辅助线
             let referencePath = UIBezierPath()
-            let referenceLayer = CHShapeLayer()
+            let referenceLayer = BMKLineShapeLayer()
             referenceLayer.lineWidth = self.lineWidth
             switch section.xAxis.referenceStyle {
             case let .dash(color: dashColor, pattern: pattern):
@@ -703,7 +703,7 @@ extension CHKLineChartView {
     /// - Parameters:
     ///   - section: 绘制在那个分区
     ///   - xAxisToDraw: 待绘制内容
-    fileprivate func drawXAxisLabel(_ section: CHSection, xAxisToDraw: [(CGRect, String)]) {
+    fileprivate func drawXAxisLabel(_ section: BMKLineSection, xAxisToDraw: [(CGRect, String)]) {
         guard self.isShowXAxisLabel else {
             return
         }
@@ -711,10 +711,10 @@ extension CHKLineChartView {
             return
         }
         let startY = section.frame.maxY
-        let xAxis = CHShapeLayer()
+        let xAxis = BMKLineShapeLayer()
         for (var barLabelRect, xLabel) in xAxisToDraw {
             barLabelRect.origin.y = startY
-            let xLabelText = CHTextLayer()
+            let xLabelText = BMKLineTextLayer()
             xLabelText.frame = barLabelRect
             xLabelText.string = xLabel
             xLabelText.alignmentMode = CATextLayerAlignmentMode.center
@@ -728,10 +728,10 @@ extension CHKLineChartView {
     }
     
     /// 绘制分区
-    fileprivate func drawSection(_ section: CHSection) {
+    fileprivate func drawSection(_ section: BMKLineSection) {
         // 分区背景
         let sectionPath = UIBezierPath(rect: section.frame)
-        let sectionLayer = CHShapeLayer()
+        let sectionLayer = BMKLineShapeLayer()
         sectionLayer.fillColor = section.backgroundColor.cgColor
         sectionLayer.path = sectionPath.cgPath
         self.drawLayer.addSublayer(sectionLayer)
@@ -761,7 +761,7 @@ extension CHKLineChartView {
                                                         width: self.borderWidth.left,
                                                         height: section.frame.size.height)))
         }
-        let borderLayer = CHShapeLayer()
+        let borderLayer = BMKLineShapeLayer()
         borderLayer.path = borderPath.cgPath
         borderLayer.lineWidth = self.lineWidth
         borderLayer.fillColor = self.lineColor.cgColor
@@ -769,14 +769,14 @@ extension CHKLineChartView {
     }
     
     /// 初始化分区上各个线的Y轴
-    fileprivate func initYAxis(_ section: CHSection) {
+    fileprivate func initYAxis(_ section: BMKLineSection) {
         if section.seriesArray.count > 0 {
             section.buildYAxis(startIndex: self.rangeFrom, endIndex: self.rangeTo, datas: self.datas)
         }
     }
     
     /// 准备绘制Y轴坐标
-    fileprivate func drawYAxis(_ section: CHSection) -> [(CGRect, String)] {
+    fileprivate func drawYAxis(_ section: BMKLineSection) -> [(CGRect, String)] {
         var yAxisToDraw = [(CGRect, String)]()
         var valueToDraw = Set<CGFloat>()
         
@@ -826,7 +826,7 @@ extension CHKLineChartView {
             }
             
             let referencePath = UIBezierPath()
-            let referenceLayer = CHShapeLayer()
+            let referenceLayer = BMKLineShapeLayer()
             referenceLayer.lineWidth = self.lineWidth
             
             if section.type == .master {
@@ -881,7 +881,7 @@ extension CHKLineChartView {
             alignmentMode = CATextLayerAlignmentMode.left
         }
         for (yLabelRect, strValue) in yAxisToDraw {
-            let yAxisLabel = CHTextLayer()
+            let yAxisLabel = BMKLineTextLayer()
             yAxisLabel.frame = yLabelRect
             yAxisLabel.string = strValue
             yAxisLabel.fontSize = self.labelFont.pointSize
@@ -894,7 +894,7 @@ extension CHKLineChartView {
     }
     
     /// 绘制分区的点线
-    func drawChart(_ section: CHSection) {
+    func drawChart(_ section: BMKLineSection) {
         if section.isPageable { // 如果分区以分页显示, 绘制当前系列
             let serie = section.seriesArray[section.selectedIndex]
             let seriesLayer = self.drawSerie(serie)
@@ -909,7 +909,7 @@ extension CHKLineChartView {
     }
     
     /// 绘制分区上的系列点线
-    func drawSerie(_ serie: CHSeries) -> CHShapeLayer {
+    func drawSerie(_ serie: BMKLineSeries) -> BMKLineShapeLayer {
         if !serie.hidden {
             for model in serie.chartModels {
                 let serieLayer = model.drawSerie(seriesKey: serie.key, self.rangeFrom, endIndex: self.rangeTo)
@@ -921,10 +921,10 @@ extension CHKLineChartView {
 }
 
 // MARK: - Public Methods
-extension CHKLineChartView {
+extension BMKLineChartView {
     
     /// 刷新图表
-    public func reloadData(toPosition: CHChartViewScrollPosition = .none, resetData: Bool = true) {
+    public func reloadData(toPosition: BMKLineChartViewScrollPosition = .none, resetData: Bool = true) {
         self.scrollToPosition = toPosition
         if resetData {
             self.resetData()
@@ -933,7 +933,7 @@ extension CHKLineChartView {
     }
     
     /// 刷新图表风格
-    public func resetStyle(style: CHKLineChartStyle) {
+    public func resetStyle(style: BMKLineChartStyle) {
         self.style = style
         self.showSelection = false
         self.reloadData()
@@ -945,7 +945,7 @@ extension CHKLineChartView {
     ///   - key: key == "" 时显示或隐藏分区全部线系列
     ///   - inSection: inSection == -1时, 显示或隐藏全部分区
     public func setSerie(hidden: Bool, by key: String = "", inSection: Int = -1) {
-        var hideSections = [CHSection]()
+        var hideSections = [BMKLineSection]()
         if inSection < 0 {
             hideSections = self.sections
         } else {
@@ -1086,7 +1086,7 @@ extension CHKLineChartView {
         UIGraphicsEndImageContext()
         return capturedImage!
     }
-
+    
     /// 自定义分区头部标题显示内容
     ///
     /// - Parameters:
@@ -1104,7 +1104,7 @@ extension CHKLineChartView {
     /// - Parameters:
     ///   - series: 线系列
     ///   - section: 分区位置
-    open func addSeries(_ series: CHSeries, inSection section: Int) {
+    open func addSeries(_ series: BMKLineSeries, inSection section: Int) {
         guard let section = self.sections[safe: section] else {
             return
         }
@@ -1127,7 +1127,7 @@ extension CHKLineChartView {
 }
 
 // MARK: - 手势
-extension CHKLineChartView: UIGestureRecognizerDelegate {
+extension BMKLineChartView: UIGestureRecognizerDelegate {
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         switch gestureRecognizer {
