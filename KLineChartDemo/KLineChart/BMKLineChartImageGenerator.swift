@@ -98,7 +98,7 @@ extension BMKLineChartStyle {
         style.yAxisShowPosition = .none
         style.showXAxisOnSection = 0
         style.showXAxisLabel = false
-        style.isShowAll = true
+        style.isShowPlotAll = true
         style.enablePan = false
         style.enableTap = false
         style.enablePinch = false

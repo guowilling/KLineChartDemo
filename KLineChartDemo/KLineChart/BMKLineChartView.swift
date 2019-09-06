@@ -77,7 +77,7 @@ open class BMKLineChartView: UIView {
     
     @IBOutlet open weak var delegate: BMKLineChartDelegate?
     
-    open var algorithms: [BMKLineIndexAlgorithmProtocol] = [BMKLineIndexAlgorithmProtocol]()
+    open var algorithms: [BMKLineIndexAlgorithmProtocol] = []
     
     open var yAxisLabelWidth: CGFloat = 0
     
@@ -91,7 +91,7 @@ open class BMKLineChartView: UIView {
     
     open var scrollToPosition: BMKLineChartViewScrollPosition = .none
     
-    open var sections = [BMKLineSection]()
+    open var sections:[BMKLineSection] = []
     
     open var selectedPointIndex: Int = -1
     
@@ -119,7 +119,7 @@ open class BMKLineChartView: UIView {
     
     open var isShowXAxisLabel: Bool = true
     
-    open var isShowAll: Bool = false
+    open var isShowPlotAll: Bool = false
     
     open var borderWidth: (top: CGFloat, left: CGFloat, bottom: CGFloat, right: CGFloat) = (0.25, 0.25, 0.25, 0.25)
     
@@ -181,7 +181,7 @@ open class BMKLineChartView: UIView {
             self.enablePan = self.style.enablePan
             self.showSelection = self.style.showSelection
             self.showXAxisOnSection = self.style.showXAxisOnSection
-            self.isShowAll = self.style.isShowAll
+            self.isShowPlotAll = self.style.isShowPlotAll
             self.isShowXAxisLabel = self.style.showXAxisLabel
             self.borderWidth = self.style.borderWidth
         }
@@ -445,7 +445,7 @@ open class BMKLineChartView: UIView {
     }
 }
 
-// MARK: - 绘图图层方法
+// MARK: - 绘图图层
 extension BMKLineChartView {
     
     func removeSublayers() {
@@ -468,7 +468,7 @@ extension BMKLineChartView {
             return
         }
         // 待绘制的X坐标标签
-        var xAxisToDraw = [(CGRect, String)]()
+        var xAxisToDraw: [(CGRect, String)] = []
         
         // 建立每个分区
         self.buildSections { (section, index) in
@@ -482,13 +482,13 @@ extension BMKLineChartView {
             // 绘制每个区域
             self.drawSection(section)
             
-            // 绘制X轴坐标系, 先绘制辅助线, 记录标签位置, 返回保存等到最后才在需要显示的分区上绘制
+            // 绘制X轴坐标系, 先绘制辅助线, 记录标签位置返回并保存, 等到最后才在需要显示的分区上绘制
             xAxisToDraw = self.drawXAxis(section)
             
             // 绘制Y轴坐标系, 最后的Y轴标签等到绘制完线段才绘制
             let yAxisToDraw = self.drawYAxis(section)
             
-            // 绘制图表的点线
+            // 绘制图表的系列点线
             self.drawChart(section)
             
             // 绘制Y轴坐标上的标签
@@ -505,7 +505,7 @@ extension BMKLineChartView {
                 if let titleString = self.delegate?.kLineChart?(chart: self, titleForHeaderInSection: section, index: self.selectedPointIndex, item: self.datas[self.selectedPointIndex]) {
                     section.drawTitleForHeader(title: titleString)
                 } else {
-                    section.drawTitle(self.selectedPointIndex) // 显示范围最后一个点的数据
+                    section.drawTitle(self.selectedPointIndex) // 显示范围内最后一个点的数据
                 }
             }
         }
@@ -526,7 +526,7 @@ extension BMKLineChartView {
         }
         
         if plotCount > 0 {
-            if self.isShowAll { // 显示全部数据
+            if self.isShowPlotAll { // 显示全部数据
                 self.range = self.plotCount
                 self.rangeFrom = 0
                 self.rangeTo = self.plotCount
@@ -568,7 +568,7 @@ extension BMKLineChartView {
         backgroundLayer.path = backgroundPath.cgPath
         backgroundLayer.fillColor = self.backgroundColor?.cgColor
         self.drawLayer.addSublayer(backgroundLayer)
-
+        
         return self.datas.count > 0 ? true : false
     }
     
@@ -599,8 +599,8 @@ extension BMKLineChartView {
             if section.isHidden {
                 continue
             }
-            if section.fixHeight > 0 {
-                heightOfSection = section.fixHeight
+            if section.fixedHeight > 0 {
+                heightOfSection = section.fixedHeight
                 height = height - heightOfSection
             } else {
                 heightOfSection = height * CGFloat(section.ratios) / CGFloat(total)
@@ -893,15 +893,15 @@ extension BMKLineChartView {
         }
     }
     
-    /// 绘制分区的点线
+    /// 绘制分区的系列点线
     func drawChart(_ section: BMKLineSection) {
         if section.isPageable { // 如果分区以分页显示, 绘制当前系列
-            let serie = section.seriesArray[section.selectedIndex]
-            let seriesLayer = self.drawSerie(serie)
+            let series = section.seriesArray[section.selectedIndex]
+            let seriesLayer = self.drawSeries(series)
             section.sectionLayer.addSublayer(seriesLayer)
         } else { // 不分页显示, 绘制全部系列
             for serie in section.seriesArray {
-                let seriesLayer = self.drawSerie(serie)
+                let seriesLayer = self.drawSeries(serie)
                 section.sectionLayer.addSublayer(seriesLayer)
             }
         }
@@ -909,7 +909,7 @@ extension BMKLineChartView {
     }
     
     /// 绘制分区上的系列点线
-    func drawSerie(_ serie: BMKLineSeries) -> BMKLineShapeLayer {
+    func drawSeries(_ serie: BMKLineSeries) -> BMKLineShapeLayer {
         if !serie.hidden {
             for model in serie.chartModels {
                 let serieLayer = model.drawSerie(seriesKey: serie.key, self.rangeFrom, endIndex: self.rangeTo)
@@ -937,6 +937,24 @@ extension BMKLineChartView {
         self.style = style
         self.showSelection = false
         self.reloadData()
+    }
+    
+    /// 通过主键隐藏或显示分区
+    public func setSection(hidden: Bool, byKey key: String) {
+        for section in self.sections {
+            if section.key == key && section.type == .assistant { // 副图才能隐藏
+                section.isHidden = hidden
+                break
+            }
+        }
+    }
+    
+    /// 通过索引隐藏或显示分区
+    public func setSection(hidden: Bool, byIndex index: Int) {
+        guard let section = self.sections[safe: index], section.type == .assistant else { // 副图才能隐藏
+            return
+        }
+        section.isHidden = hidden
     }
     
     /// 通过主键隐藏或显示线系列
@@ -974,24 +992,6 @@ extension BMKLineChartView {
                 }
             }
         }
-    }
-    
-    /// 通过主键隐藏或显示分区
-    public func setSection(hidden: Bool, byKey key: String) {
-        for section in self.sections {
-            if section.key == key && section.type == .assistant { // 副图才能隐藏
-                section.isHidden = hidden
-                break
-            }
-        }
-    }
-    
-    /// 通过索引隐藏或显示分区
-    public func setSection(hidden: Bool, byIndex index: Int) {
-        guard let section = self.sections[safe: index], section.type == .assistant else { // 副图才能隐藏
-            return
-        }
-        section.isHidden = hidden
     }
     
     /// 缩放图表

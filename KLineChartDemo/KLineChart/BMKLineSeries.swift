@@ -26,11 +26,11 @@ open class BMKLineSeries: NSObject {
     
     open var key = ""
     open var title: String = ""
-    open var chartModels = [BMKLineChartModel]() // 每个系列可能包含多个点线模型
-    open var hidden: Bool = false           // 是否隐藏
-    open var showTitle: Bool = true         // 是否显示标题文本
-    open var baseValueSticky = false        // 是否以固定基值显示最小或最大值, 若超过范围
-    open var symmetrical = false            // 是否以固定基值为中位数, 对称显示最大最小值
+    open var chartModels: [BMKLineChartModel] = [] // 每个系列可能包含多个点线模型
+    open var hidden: Bool = false                // 是否隐藏
+    open var showTitle: Bool = true              // 是否显示标题文本
+    open var baseValueSticky = false             // 是否以固定基值显示最小或最大值, 若超过范围
+    open var symmetrical = false                 // 是否以固定基值为中位数, 对称显示最大最小值
     
     public var algorithms: [BMKLineIndexAlgorithmProtocol] = []
     

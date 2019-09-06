@@ -100,7 +100,7 @@ extension BMKLineChartStyle {
         style.yAxisShowPosition = .right
         style.showXAxisLabel = true
         style.borderWidth = (0.5, 0, 0.5, 0)
-        style.isShowAll = true
+        style.isShowPlotAll = true
         style.enablePan = false
         style.enableTap = false
         style.enablePinch = false

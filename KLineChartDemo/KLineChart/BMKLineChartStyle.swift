@@ -71,7 +71,7 @@ open class BMKLineChartStyle {
     open var showXAxisLabel: Bool = true
     
     /// 是否显示所有内容
-    open var isShowAll: Bool = false
+    open var isShowPlotAll: Bool = false
     
     public init() {}
 }

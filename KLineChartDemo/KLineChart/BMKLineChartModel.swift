@@ -20,11 +20,11 @@ open class BMKLineChartItem: NSObject {
     open var closePrice: CGFloat = 0 // 收盘价
     open var lowPrice: CGFloat = 0   // 最低价
     open var highPrice: CGFloat = 0  // 最高价
-    open var vol: CGFloat = 0
+    open var vol: CGFloat = 0        // 交易量
     open var value: CGFloat?
     
     /// 扩展值用于记录各种技术指标
-    open var extVal: [String: CGFloat] = [String: CGFloat]()
+    open var extVal: [String: CGFloat] = [:]
     
     open var trend: BMKLineChartItemTrend {
         if closePrice == openPrice {
@@ -176,8 +176,10 @@ open class BMCandleModel: BMKLineChartModel {
                 }
             }
             var isSolid = true
+            
             let candleLayer = CAShapeLayer()
             var candlePath: UIBezierPath?
+            
             let shadowLayer = CAShapeLayer()
             let shadowPath = UIBezierPath()
             shadowPath.lineWidth = 0

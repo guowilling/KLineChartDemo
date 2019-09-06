@@ -39,16 +39,16 @@ open class BMKLineSection: NSObject {
     open var selectedIndex: Int = 0
     open var index: Int = 0
     
-    open var ratios: Int = 0         // 该分区占整个图表的比列, 0代表采用固定高度
-    open var fixHeight: CGFloat = 0  // 固定高度, 0代表通过 ratios 计算高度
+    open var ratios: Int = 0 // 该分区占整个图表的比列, 0代表采用固定高度
+    open var fixedHeight: CGFloat = 0 // 固定高度, 0代表通过 ratios 计算高度
     open var frame: CGRect = CGRect.zero
     open var padding: UIEdgeInsets = UIEdgeInsets.zero
     
     open var yAxis: BMKLineYAxis = BMKLineYAxis()
     open var xAxis: BMKLineXAxis = BMKLineXAxis()
     
-    var titleLayer: BMKLineShapeLayer = BMKLineShapeLayer()   // 标题的绘图层
-    var titleView: UIView?                          // 用户自定义视图
+    var titleView: UIView? // 用户自定义标题视图
+    var titleLayer: BMKLineShapeLayer = BMKLineShapeLayer() // 标题的绘图层
     var sectionLayer: BMKLineShapeLayer = BMKLineShapeLayer() // 分区的绘图层
     
     convenience init(type: BMKLineSectionType, key: String = "") {

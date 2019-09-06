@@ -125,7 +125,7 @@ public extension BMKLineChartStyle {
         priceSection.key = "price"
         priceSection.isHidden = false
         priceSection.ratios = 0
-        priceSection.fixHeight = 176
+        priceSection.fixedHeight = 176
         priceSection.yAxis.referenceStyle = .none
         priceSection.padding = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         
@@ -254,7 +254,7 @@ public extension BMKLineChartStyle {
         priceSection.key = "price"
         priceSection.isHidden = false
         priceSection.ratios = 0
-        priceSection.fixHeight = 176
+        priceSection.fixedHeight = 176
         priceSection.yAxis.referenceStyle = .none
         priceSection.yAxis.tickInterval = 3
         priceSection.padding = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
@@ -370,7 +370,7 @@ public extension BMKLineChartStyle {
         style.yAxisShowPosition = .left
         style.showXAxisOnSection = 0
         style.isInnerYAxis = true
-        style.isShowAll = true
+        style.isShowPlotAll = true
         style.enablePan = false
         style.enableTap = false
         style.enablePinch = false
