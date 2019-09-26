@@ -25,13 +25,13 @@ public enum BMKLineChartSelectedPosition {
     
     func kLineChart(chart: BMKLineChartView, valueForPointAtIndex index: Int) -> BMKLineChartItem
     
-    /// 图表 Y 轴的显示的内容
+    /// 图表 Y 轴显示的内容
     func kLineChart(chart: BMKLineChartView, labelOnYAxisForValue value: CGFloat, atIndex index: Int, section: BMKLineSection) -> String
     
-    /// 图表 X 轴的显示的内容
+    /// 图表 X 轴显示的内容
     @objc optional func kLineChart(chart: BMKLineChartView, labelOnXAxisForIndex index: Int) -> String
     
-    /// 配置各个分区小数位保留数
+    /// 各个分区保留几位小数
     @objc optional func kLineChart(chart: BMKLineChartView, decimalAt section: Int) -> Int
     
     /// 设置 Y 轴标签的宽度
@@ -575,7 +575,7 @@ extension BMKLineChartView {
     /// 初始化各个分区
     ///
     /// - Parameter complete: 初始化分区后, 绘制每个分区
-    fileprivate func buildSections(_ complete:(_ section: BMKLineSection, _ index: Int) -> Void) {
+    fileprivate func buildSections(_ completion: (_ section: BMKLineSection, _ index: Int) -> Void) {
         var height = self.frame.size.height - (self.padding.top + self.padding.bottom)
         let xAxisHeight = self.delegate?.heightForXAxisInKLineChart?(in: self) ?? self.DefaultXAxisHegiht
         height = height - xAxisHeight
@@ -627,7 +627,7 @@ extension BMKLineChartView {
                 offsetY = offsetY + xAxisHeight
             }
             
-            complete(section, index)
+            completion(section, index)
         }
     }
     
@@ -1050,9 +1050,9 @@ extension BMKLineChartView {
     
     /// 平移图表
     public func moveChart(by interval: Int, direction: Bool) {
-        if (interval > 0) {
+        if interval > 0 {
             if direction { // 向右拖往后查看数据
-                if self.plotCount > (self.rangeTo-self.rangeFrom) {
+                if self.plotCount > (self.rangeTo - self.rangeFrom) {
                     if self.rangeFrom - interval >= 0 {
                         self.rangeFrom -= interval
                         self.rangeTo -= interval
@@ -1063,7 +1063,7 @@ extension BMKLineChartView {
                     self.drawLayerView()
                 }
             } else { // 向左拖往前查看数据
-                if self.plotCount > (self.rangeTo-self.rangeFrom) {
+                if self.plotCount > (self.rangeTo - self.rangeFrom) {
                     if self.rangeTo + interval <= self.plotCount {
                         self.rangeFrom += interval
                         self.rangeTo += interval
@@ -1196,7 +1196,7 @@ extension BMKLineChartView: UIGestureRecognizerDelegate {
             return
         }
         
-        let location = sender.location(in: self)
+//        let location = sender.location(in: self)
         let translation = sender.translation(in: self)
         let velocity = sender.velocity(in: self)
         let plotWidth = (section.frame.size.width - section.padding.left - section.padding.right) / CGFloat(self.rangeTo - self.rangeFrom)
@@ -1206,11 +1206,12 @@ extension BMKLineChartView: UIGestureRecognizerDelegate {
             self.dynamicAnimator.removeAllBehaviors()
         case .changed:
             let distance = abs(translation.x)
+            print("pan distance: \(distance)")
             if distance > plotWidth {
                 let isRight = translation.x > 0 ? true : false
                 let interval = lroundf(abs(Float(distance / plotWidth)))
                 self.moveChart(by: interval, direction: isRight)
-                sender.setTranslation(CGPoint(x: 0, y: 0), in: self)
+                sender.setTranslation(CGPoint.zero, in: self)
             }
         case .ended, .cancelled:
             self.decelerationStartX = 0
@@ -1218,7 +1219,7 @@ extension BMKLineChartView: UIGestureRecognizerDelegate {
             let decelerationBehavior = UIDynamicItemBehavior(items: [self.dynamicItem])
             decelerationBehavior.addLinearVelocity(velocity, for: self.dynamicItem)
             decelerationBehavior.resistance = 2.0
-            decelerationBehavior.action = { [weak self]() -> Void in
+            decelerationBehavior.action = { [weak self] () -> Void in
                 if self?.rangeFrom == 0 || self?.rangeTo == self?.plotCount {
                     return
                 }

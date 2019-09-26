@@ -56,7 +56,7 @@
 		199FF72922CF017D00246FD0 /* ChartCustomTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartCustomTopView.swift; sourceTree = "<group>"; };
 		199FF72B22CF3A6D00246FD0 /* ChartCustomOptionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartCustomOptionView.swift; sourceTree = "<group>"; };
 		28BBDDB6E8E257F55798BE15 /* Pods-KLineChartDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KLineChartDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-KLineChartDemo/Pods-KLineChartDemo.release.xcconfig"; sourceTree = "<group>"; };
-		6E90689621CE76F700C12760 /* KLineChartDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KLineChartDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E90689621CE76F700C12760 /* MatrixKLine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MatrixKLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E90689921CE76F700C12760 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6E90689E21CE76F700C12760 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6E9068A021CE76F900C12760 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -200,7 +200,7 @@
 		6E90689721CE76F700C12760 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6E90689621CE76F700C12760 /* KLineChartDemo.app */,
+				6E90689621CE76F700C12760 /* MatrixKLine.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -281,7 +281,7 @@
 			);
 			name = KLineChartDemo;
 			productName = KLineChartDemo;
-			productReference = 6E90689621CE76F700C12760 /* KLineChartDemo.app */;
+			productReference = 6E90689621CE76F700C12760 /* MatrixKLine.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -547,17 +547,18 @@
 			baseConfigurationReference = 883AD1ABEF346C4E36FFAAC5 /* Pods-KLineChartDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = TKMGP28YAK;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C3Z769QS55;
 				INFOPLIST_FILE = KLineChartDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.willing.KLineChartDemo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = Universal_dev_pp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.willing.kline;
+				PRODUCT_NAME = MatrixKLine;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -568,17 +569,18 @@
 			baseConfigurationReference = 28BBDDB6E8E257F55798BE15 /* Pods-KLineChartDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = TKMGP28YAK;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C3Z769QS55;
 				INFOPLIST_FILE = KLineChartDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.willing.KLineChartDemo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = Universal_dev_pp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.willing.kline;
+				PRODUCT_NAME = MatrixKLine;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

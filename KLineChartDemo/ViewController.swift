@@ -10,7 +10,7 @@ class ViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     
     let demos: [Int: (String, String, Bool)] = [
-        0: ("最佳例子", "ChartCustomViewController", false),
+        0: ("完整例子", "ChartCustomViewController", false),
         1: ("简单例子", "ChartFullViewController", true),
         2: ("图片例子", "ChartImageViewController", true),
         3: ("列表例子", "ChartInTableViewController", true),

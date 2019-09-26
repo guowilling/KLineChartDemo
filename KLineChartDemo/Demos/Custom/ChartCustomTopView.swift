@@ -9,7 +9,7 @@
 import UIKit
 
 class ChartCustomTopView: UIView {
-
+    
     private lazy var coinPriceLabel: UILabel = {
         let label = UILabel()
         label.text = "--"

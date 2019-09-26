@@ -195,7 +195,7 @@ open class BMCandleModel: BMKLineChartModel {
             let iyc = self.section.getY(with: item.closePrice)
             let iyh = self.section.getY(with: item.highPrice)
             let iyl = self.section.getY(with: item.lowPrice)
-
+            
             switch item.trend {
             case .equal:
                 // 开盘价 = 收盘价, 显示横线

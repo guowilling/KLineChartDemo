@@ -14,10 +14,18 @@ class ChartCustomViewController: UIViewController {
     let masterLines: [String] = [BMKLineSeriesKey.candle, BMKLineSeriesKey.timeline]
     
     /// 主图指标
-    let masterIndexes: [String] = [BMKLineSeriesKey.ma, BMKLineSeriesKey.ema, BMKLineSeriesKey.boll, BMKLineSeriesKey.sar, Hide]
+    let masterIndexes: [String] = [BMKLineSeriesKey.ma,
+                                   BMKLineSeriesKey.ema,
+                                   BMKLineSeriesKey.boll,
+                                   BMKLineSeriesKey.sar,
+                                   Hide]
     
     /// 副图指标
-    let assistIndexes: [String] = [BMKLineSeriesKey.volume, BMKLineSeriesKey.macd, BMKLineSeriesKey.kdj, BMKLineSeriesKey.rsi, Hide]
+    let assistIndexes: [String] = [BMKLineSeriesKey.volume,
+                                   BMKLineSeriesKey.macd,
+                                   BMKLineSeriesKey.kdj,
+                                   BMKLineSeriesKey.rsi,
+                                   Hide]
     
     /// 选择交易对
     let exPairs: [String] = ["BTC-USD", "ETH-USD", "LTC-USD", "LTC-BTC", "ETH-BTC"]
